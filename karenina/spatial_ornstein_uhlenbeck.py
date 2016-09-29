@@ -63,18 +63,12 @@ class Process(object):
         self.History.append(start_coord)
         self.Params = params
         self.ProcessType = motion
-        #print "Initial History:",self.History
         self.Perturbations = []
-        #print "Process initial self.Params:",self.Params
  
     def update(self,dt):
         curr_params = copy(self.Params)
-        #print "Self.ProcessType:",self.ProcessType
-        #print "Process.update (Curr Base Parameters):",curr_params
         for p in self.Perturbations:
             curr_params = p.updateParams(curr_params)
-
-        #print "Process.update (Perturbed PARAMETERS):",curr_params
         if self.ProcessType == "Brownian":
             self.bm_update(dt,delta=curr_params["delta"])
         
@@ -135,19 +129,25 @@ class Perturbation(object):
     def __init__(self,start,end,params,update_mode="replace",axes=["x","y","z"]):
         """Alter a simulation to impose a press disturbance, 
            shifting the microbiome torwards a new configuration
-           start --inclusive timepoint to start perturbation
-           end -- inclusive timepoint to end perturbation
+           
+           start --inclusive timepoint to start perturbation.  Note that this is read at the 
+             Experiment level, not by underlying Process objects.
+           
+           end -- inclusive timepoint to end perturbation. Note that this is read at the 
+             Experiment level, not by underlying Process objects.
+
            params -- dict of parameter values altered by the disturbance
+           
            mode -- how the perturbation updates parameter values.
                 'replace' -- replace old value with new one
                 'add' -- add new value to old one
                 'multiply' -- multiply the two values
-            axes -- axes to which the perturbation applies
+           
+           axes -- axes to which the perturbation applies
         """
         self.Start = start
         self.End = end
         self.Params = params
-        print "PERTURBATION PARAMS:",self.Params
         self.UpdateMode = update_mode
         self.Axes = axes
     
