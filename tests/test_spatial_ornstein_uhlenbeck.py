@@ -11,7 +11,7 @@ __status__ = "Development"
 
 import unittest 
 from warnings import catch_warnings
-from karenina.spatial_ornstein_uhlenbeck  import Process,Individual,Experiment
+from karenina.spatial_ornstein_uhlenbeck  import Process,Individual,Experiment,Perturbation
 import numpy.testing as npt
   
 """
@@ -25,7 +25,7 @@ class TestProcess(unittest.TestCase):
 
     def setUp(self):
         self.TestProcesses ={}
-        #Note that each Process is 1d
+        #Note that each Process is 1-D, so only one coordinate is provided
         
         #typical parameters
         start_coord = 0.0
@@ -39,10 +39,10 @@ class TestProcess(unittest.TestCase):
         #This should mean that the process ALWAYS revers to its attractor
         #at every timestep.  So delta shouldn't matter.  
         params = {"lambda":1.0,"delta":0.0,"mu":attractor_pos}
-        stable_process = Process(start_coord,attractor_pos,\
+        stable_process = Process(start_coord,\
           motion=process_type,params=params)
         self.TestProcesses["stable_process"]=stable_process
-
+        
     def test_stable_process_update(self):
         """A stable OU process (lambda =1) is invariable in position"""
         
@@ -54,8 +54,40 @@ class TestProcess(unittest.TestCase):
         end_coord = stable_process.Coord
         npt.assert_almost_equal(start_coord,end_coord)
 
+    def test_perturb_stable_process(self):
+        """Perturb a stable process to seek a new attractor"""
+        stable_process = self.TestProcesses["stable_process"]
+        start_coord = stable_process.Coord
+        
+        a_long_time = 1000
+        
+        for i in range(a_long_time):
+            stable_process.update(1.0)
+        unperturbed_coord = stable_process.Coord
 
-         
+        #Start and end shouldn't matter as these are just
+        #stored in 'dumb' variables accessed by external objects
+        perturbation = Perturbation(start=0,end=0,params={"delta":1.0,"lambda":0.0},update_mode="replace")
+        stable_process.Perturbations.append(perturbation)
+        for i in range(a_long_time):
+            stable_process.update(1.0)
+        end_coord = stable_process.Coord
+
+
+        #We will test that Perturbations actually update
+        #process parameters during simulation elsewhere
+        
+        #Here I just want to confirm that the unstable process 
+        #which becomes pure Brownian motion 
+        #diverges more over time than the stable process  
+        stable_change = abs(unperturbed_coord - start_coord)
+        print stable_change
+
+        unstable_change = abs(end_coord - unperturbed_coord)
+        print unstable_change
+
+        self.assertTrue(stable_change < unstable_change)
+ 
         
 if __name__ == '__main__':
     unittest.main()
