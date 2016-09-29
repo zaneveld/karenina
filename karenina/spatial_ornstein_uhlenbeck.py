@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 
 from __future__ import division
 
@@ -26,7 +26,7 @@ from numpy import array
 from copy import copy
 script_info = {}
 script_info['brief_description'] = "This script simulates microbial community change over time in PCoA-space using Brownian Motion or Ornstein-Uhlenbeck models."
-script_info['script_description'] = ""
+script_info['script_description'] = "This script simulates microbiome change over time using Ornstein-Uhlenbeck (OU) models.  These are similar to Brownian motion models, with the exception that they include reversion to a mean"
 script_info['script_usage'] = [
                                ("","Simulate microbiomes using default parameters .", "%prog -o ./simulation_results")
                                 ]
@@ -50,8 +50,7 @@ script_info['version'] = __version__
 
 class Process(object):
     """Represents a 1d process in a Euclidean space"""
-    def __init__(self,start_coord,\
-        attractor_pos = 0.0, motion = "Ornstein-Uhlenbeck",\
+    def __init__(self,start_coord, motion = "Ornstein-Uhlenbeck",\
         history = None,params={"L":0.20,"delta":0.25}):
         """
         start_coords - float starting coordinate for the particle
@@ -66,16 +65,16 @@ class Process(object):
         self.ProcessType = motion
         #print "Initial History:",self.History
         self.Perturbations = []
-        print "Process initial self.Params:",self.Params
+        #print "Process initial self.Params:",self.Params
  
     def update(self,dt):
         curr_params = copy(self.Params)
         #print "Self.ProcessType:",self.ProcessType
-        print "Process.update (Curr Base Parameters):",curr_params
+        #print "Process.update (Curr Base Parameters):",curr_params
         for p in self.Perturbations:
             curr_params = p.updateParams(curr_params)
 
-        print "Process.update (Perturbed PARAMETERS):",curr_params
+        #print "Process.update (Perturbed PARAMETERS):",curr_params
         if self.ProcessType == "Brownian":
             self.bm_update(dt,delta=curr_params["delta"])
         
@@ -122,7 +121,6 @@ class Process(object):
     
     def ou_update(self,dt,mu,\
         L,delta,min_bound=-1.0,max_bound=1.0):
-        print "mu:",mu
         curr_coord = self.Coord
         self.History.append(self.Coord)
         change = self.ou_change(dt=dt,mu=mu,L=L,delta=delta)
