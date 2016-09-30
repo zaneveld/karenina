@@ -131,12 +131,14 @@ class TestPerturbation(unittest.TestCase):
         set_low_lambda = Perturbation(perturbation_start,perturbation_end,params={"lambda":0.005},update_mode = "replace")
         set_zero_lambda = Perturbation(perturbation_start,perturbation_end,params={"lambda":0.0},update_mode = "replace")
         double_lambda = Perturbation(perturbation_start,perturbation_end,params={"lambda":2.0},update_mode = "multiply")
+        double_lambda_and_mu = Perturbation(perturbation_start,perturbation_end,params={"lambda":2.0,"mu":2.0},update_mode = "multiply")
         halve_lambda = Perturbation(perturbation_start,perturbation_end,params={"lambda":0.5},update_mode = "multiply")
         add_to_lambda = Perturbation(perturbation_start,perturbation_end,params={"lambda":0.1},update_mode = "add")
         subtract_from_lambda = Perturbation(perturbation_start,perturbation_end,params={"lambda":0.1},update_mode = "add")
-
+        set_high_lambda_low_delta = Perturbation(perturbation_start,perturbation_end,params={"lambda":0.5,"delta":0.1},update_mode = "replace")
         self.TestPerturbations ={"set_low_lambda":set_low_lambda,"set_zero_lambda":set_zero_lambda,"double_lambda":double_lambda,\
-          "halve_lambda":halve_lambda,"add_to_lambda":add_to_lambda,"subtract_from_lambda":subtract_from_lambda}
+          "halve_lambda":halve_lambda,"add_to_lambda":add_to_lambda,"subtract_from_lambda":subtract_from_lambda,\
+          "set_high_lambda_low_delta":set_high_lambda_low_delta,"double_lambda_and_mu":double_lambda_and_mu}
 
         
 
@@ -190,8 +192,24 @@ class TestPerturbation(unittest.TestCase):
         exp = {"mu":0.1,"lambda":0.125,"delta":0.18}
         self.assertEqual(obs,exp)
 
+    def test_updateParam_updates_multiple_params(self):
+        """Perturbation.updateParams updates a single parameter correctly"""
+
+        base_params = {"mu":0.1,"lambda":0.25,"delta":0.18}
+        
+        curr_perturbation = self.TestPerturbations["set_high_lambda_low_delta"]
+        obs = curr_perturbation.updateParams(base_params)
+        exp = {"mu":0.1,"lambda":0.5,"delta":0.1}
+        self.assertEqual(obs,exp)
+
+        curr_perturbation = self.TestPerturbations["double_lambda_and_mu"]
+        obs = curr_perturbation.updateParams(base_params)
+        exp = {"mu":0.2,"lambda":0.5,"delta":0.18}
+        self.assertEqual(obs,exp)
 
 
+         
+    
 
 if __name__ == '__main__':
     unittest.main()
