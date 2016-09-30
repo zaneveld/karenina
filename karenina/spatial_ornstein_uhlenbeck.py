@@ -143,7 +143,8 @@ class Perturbation(object):
                 'add' -- add new value to old one
                 'multiply' -- multiply the two values
            
-           axes -- axes to which the perturbation applies
+           axes -- axes to which the perturbation applies.  Like Start and End this is a 
+            'dumb' value, read externally by the Experiment object
         """
         self.Start = start
         self.End = end
@@ -163,8 +164,11 @@ class Perturbation(object):
             update_f = self.updateByMultiplication
         else: 
             raise ValueError("Invalid update mode for perturbation: %s" %self.UpdateMode)
- 
-        new_params = params
+
+        #If we set new_params = params
+        #we modify the input dict, which
+        #isn't what we want 
+        new_params = copy(params)
         for k,v in self.Params.iteritems():
             new_params[k] = update_f(params[k],v)
         
