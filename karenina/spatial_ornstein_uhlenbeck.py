@@ -186,7 +186,7 @@ class Perturbation(object):
 class Individual(object):
     def __init__(self,subject_id,coords=["x","y","z"],metadata={},params={},interindividual_variation=0.01):
         self.SubjectId = subject_id
-        self.Metadta = metadata
+        self.Metadata = metadata
         self.MovementProcesses = {}
         self.BaseParams = params 
         for c in coords:
