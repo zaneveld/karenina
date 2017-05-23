@@ -42,7 +42,8 @@ script_info['optional_options'] = [\
     make_option('-d','--perturbation_duration',default=100,type="int",help='Duration that the perturbation lasts. [default: %default]'),
     make_option('--interindividual_variation',default=0.01,type="float",help='Starting variability between individuals. [default: %default]'),
     make_option('--delta',default=0.25,type="float",help='Starting delta parameter for Brownian motion and Ornstein-Uhlenbeck processes. A higher number indicates more variability over time. [default: %default]'),
-    make_option('--L',default=0.20,type="float",help='Starting lambda parameter for Ornstein-Uhlenbeck processes. A higher number indicates a greater tendancy to revert to the mean value. [default: %default]'),
+    make_option('-l','--L',default=0.20,type="float",help='Starting lambda parameter for Ornstein-Uhlenbeck processes. A higher number indicates a greater tendancy to revert to the mean value. [default: %default]'),
+    make_option('--fixed_start_pos',default=None,type="string",help='Starting x,y,z position for all points, as comma separated floating point values, e.g. 0.0,0.1,0.2. If not supplied, starting positions will be randomized based on the interindividual_variation parameter [default: %default]')
     ]
 
 script_info['version'] = __version__
@@ -193,11 +194,15 @@ class Individual(object):
             #print "STARTING PROCESS for Axis:",c
             
             #simulate minor interindividual variation
-            
-            start_coord =  (random()-0.50) * 2.0 * ( interindividual_variation)
+            if c in params.keys():
+                start_coord = params[c]
+            else:      
+                start_coord =  (random()-0.50) *\
+                     2.0 * ( interindividual_variation)
             #print "START COORD %s: %f" %(c,start_coord)
 
-            #For OU processes, assume the process reverts to its starting coordinate
+            #For OU processes, assume the process reverts
+            # to its starting coordinate
             curr_params = params
             curr_params["mu"] = start_coord
             print "start_coord:",start_coord
@@ -242,8 +247,6 @@ class Individual(object):
             for t in range(n_timepoints):
                 mu = self.MovementProcesses[c].StartCoord
                 self.MovementProcesses[c].update(dt=1.0)
-        if self.check_identity(): 
-            raise ValueError("Coordinate histories identical (DEBUGGING)")   
 
     def get_data(self,n_timepoints):
         result = []
@@ -342,9 +345,11 @@ def save_simulation_movie(individuals, output_folder, n_individuals,n_timepoints
     ax = p3.Axes3D(fig)
 
     data = get_timeseries_data(individuals,0, n_timepoints)
+    colors = [i.BaseParams["color"] for i in individuals]
+    print("Individual colors:",colors)
     print "Movie raw data:",data
     # NOTE: Can't pass empty arrays into 3d version of plot()
-    lines = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1])[0] for dat in data]
+    lines = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1],c=colors[i])[0] for i,dat in enumerate(data)]
 
     # Setting the axes properties
     ax.set_xlim3d([-1.0, 1.0])
@@ -448,14 +453,25 @@ class Experiment(object):
             self.Treatments[i]["n_individuals"] = n
         
         self.NTimepoints = n_timepoints
-        
+
+        colors = ['fuchsia','cyan','darkorange','blue','yellow']
         #Set up the experimental subjects
         for treatment_idx,treatment in enumerate(self.Treatments):
+            
+            #Set a color for each treatment 
             individuals = []
+            params = copy(self.BaseParams)
+
+            if treatment_idx < len(colors):
+                params['color'] = colors[treatment_idx]
+            else:
+                params['color'] = 'lightgray'
+        
             for i in range(treatment["n_individuals"]):
+                
                 curr_subject_id = "%s_%i" %(treatment["treatment_name"],i)
                 curr_subject = Individual(subject_id = curr_subject_id,
-                  params = self.BaseParams,\
+                  params = params,\
                   metadata={"treatment":treatment["treatment_name"]},\
                   interindividual_variation=interindividual_variation)
                 individuals.append(curr_subject)
@@ -516,30 +532,36 @@ class Experiment(object):
         """
 
         for treatment in self.Treatments:
-            for curr_subject in treatment["individuals"]:
-                print curr_subject.SubjectId
-                print treatment["perturbations"]
-                print treatment["active_perturbations"] 
-                for perturbation in treatment["perturbations"]:
-                    #Apply new perturbations.         
-                    if perturbation.isActive(t) and perturbation not in treatment["active_perturbations"]:
+            for perturbation in treatment["perturbations"]:
+                apply_to_individuals = False
+                remove_from_individuals = False 
+                #Record whether to activate perturbation
+                if perturbation.isActive(t) and\
+                    perturbation not in treatment["active_perturbations"]:
+                    apply_to_individuals = True
+                    treatment["active_perturbations"].append(perturbation)
+                
+                #Record whether to deactivate perturbation
+                if perturbation in treatment["active_perturbations"] and\
+                    not perturbation.isActive(t):
+                    remove_from_indviduals = True
+                    treatment["active_perturbations"].remove(perturbation)
+                                   
+                #Apply new perturbations and remove old ones
+                for curr_subject in treatment["individuals"]:
+                    if apply_to_individuals:         
                         curr_subject.applyPerturbation(perturbation)
-                        treatment["active_perturbations"].append(perturbation)
-
-                #Simulate the timestep
-                curr_subject.simulate_movement(1)
-                curr_data = curr_subject.get_data(1)
-                self.Data.append("\t".join(map(str,curr_data))+"\n")
-                    
-                #Remove old perturbations that have ended
-                new_active_perturbations = []
-                for perturbation in treatment["active_perturbations"]:
-                    if not perturbation.isActive(t):
+                    if remove_from_individuals:
                         curr_subject.removePerturbation(perturbation)
-                    else:
-                        new_active_perturbations.append(perturbation)
-                treatment["active_perturbations"]=new_active_perturbations
-
+           
+            #With perturbations in place and updated,
+            #simulate a timestep for each individual in treatment
+            for curr_subject in treatment["individuals"]:
+                    #Simulate the timestep
+                    curr_subject.simulate_movement(1)
+                    curr_data = curr_subject.get_data(1)
+                    self.Data.append("\t".join(map(str,curr_data))+"\n")
+                        
     def writeToMovieFile(self,output_folder):
         """Write an MPG movie to output folder"""
         individuals = []
@@ -582,17 +604,39 @@ def main():
     #in unperturbed individuals.
     individual_base_params = {"lambda":opts.L,"delta":opts.delta,\
       "interindividual_variation":opts.interindividual_variation}   
+    if opts.fixed_start_pos:
+        try:
+            x,y,z = map(float,opts.fixed_start_pos.split(",")) 
+            individual_base_params['x']=x
+            individual_base_params['y']=y
+            individual_base_params['z']=z
     
+        except:
+            print fixed_start_pos
+            raise ValueError("Problem with --fixed_start_pos. Got %s Please supply tx,y,z values in the range (-1,1) separated by commas. Example: 0.1,-0.2,0.3"% fixed_start_pos) 
 
     #Set up the treatments to be applied
 
     #TODO: parameterize this by parsing a parameter file
-    set_xyz_low_lambda = {"start":opts.perturbation_timepoint, "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    set_xyz_low_lambda = {"start":opts.perturbation_timepoint,\
+       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"lambda":0.005},"update_mode":"replace","axes":["x","y","z"]}
-    set_x_mu_low = {"start":opts.perturbation_timepoint, "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    
+    set_x_mu_low = {"start":opts.perturbation_timepoint,\
+       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"mu":-0.8},"update_mode":"replace","axes":["x"]}
-    set_xyz_delta_high  = {"start":opts.perturbation_timepoint, "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    
+    set_xyz_delta_high  = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"delta":2.0},"update_mode":"multiply","axes":["x","y","z"]}
+    
+
+    set_xyz_mu_low = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"mu":-0.05},"update_mode":"replace","axes":["x","y","z"]}
+    
+
+    #TODO let user choose
     treatments = [[],[set_xyz_delta_high]] 
     
     treatment_names = opts.treatment_names.split(",")
