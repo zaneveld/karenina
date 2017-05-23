@@ -196,14 +196,16 @@ class Individual(object):
             #simulate minor interindividual variation
             if c in params.keys():
                 start_coord = params[c]
+                start_mu = params[c]
             else:      
                 start_coord =  (random()-0.50) *\
                      2.0 * ( interindividual_variation)
+                start_mu = start_coord
             #print "START COORD %s: %f" %(c,start_coord)
 
             #For OU processes, assume the process reverts
             # to its starting coordinate
-            curr_params = params
+            curr_params = copy(self.BaseParams)
             curr_params["mu"] = start_coord
             print "start_coord:",start_coord
             print "curr_params['mu']",curr_params['mu']
@@ -448,8 +450,6 @@ class Experiment(object):
         
         interindividual_varation -- the amount of starting variation between individuals
         """
-       
-
         
         self.TreatmentNames = treatment_names
         self.Treatments = [{"treatment_name":name} for name in self.TreatmentNames]
@@ -560,7 +560,7 @@ class Experiment(object):
                 #Record whether to deactivate perturbation
                 if perturbation in treatment["active_perturbations"] and\
                     not perturbation.isActive(t):
-                    remove_from_indviduals = True
+                    remove_from_individuals = True
                     treatment["active_perturbations"].remove(perturbation)
                                    
                 #Apply new perturbations and remove old ones
@@ -614,8 +614,6 @@ def main():
 
     #Check timepoints 
     check_perturbation_timepoint(opts.perturbation_timepoint,opts.n_timepoints)    
-
-
     #Set the base parameters for microbiome change over time
     #in unperturbed individuals.
     individual_base_params = {"lambda":opts.L,"delta":opts.delta,\
@@ -634,27 +632,62 @@ def main():
     #Set up the treatments to be applied
 
     #TODO: parameterize this by parsing a parameter file
-    set_xyz_low_lambda = {"start":opts.perturbation_timepoint,\
+    set_xyz_lambda_low = {"start":opts.perturbation_timepoint,\
        "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"lambda":0.005},"update_mode":"replace","axes":["x","y","z"]}
+    
+    set_xyz_lambda_zero = {"start":opts.perturbation_timepoint,\
+       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.000},"update_mode":"replace","axes":["x","y","z"]}
     
     set_x_mu_low = {"start":opts.perturbation_timepoint,\
        "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"mu":-0.8},"update_mode":"replace","axes":["x"]}
     
-    set_xyz_delta_high  = {"start":opts.perturbation_timepoint,\
+    double_xyz_delta  = {"start":opts.perturbation_timepoint,\
       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"delta":2.0},"update_mode":"multiply","axes":["x","y","z"]}
     
+    double_z_delta  = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"delta":2.0},"update_mode":"multiply","axes":["z"]}
 
     set_xyz_mu_low = {"start":opts.perturbation_timepoint,\
       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"mu":-0.05},"update_mode":"replace","axes":["x","y","z"]}
+      "params":{"mu":-0.8},"update_mode":"replace","axes":["x","y","z"]}
     
+    set_xyz_mu_high = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"mu":0.8},"update_mode":"replace","axes":["x","y","z"]}
+    
+    add_x_mu_high = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"mu":0.8},"update_mode":"add","axes":["x"]}
+    
+    set_x_mu_high = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"mu":0.8},"update_mode":"replace","axes":["x"]}
+    
+    set_x_lambda_small = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.008,"mu":-0.08},"update_mode":"replace","axes":["x"]}
 
-    #TODO let user choose
-    treatments = [[],[set_xyz_delta_high]] 
+    set_x_lambda_medium = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.016,"mu":-0.08},"update_mode":"replace","axes":["x"]}
     
+    set_x_lambda_high = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.064,"mu":-0.08},"update_mode":"replace","axes":["x"]}
+    
+    #TODO let user choose
+    #treatments = [[],[set_x_lambda_high]] 
+    #treatments = [[],[double_xyz_delta]] 
+    #treatments = [[],[set_xyz_lambda_low]] 
+    #treatments = [[],[add_x_mu_high,double_z_delta]] 
+    #treatments = [[],[set_xyz_mu_high]] 
+    treatments = [[],[double_xyz_delta]] 
+   
     treatment_names = opts.treatment_names.split(",")
     n_individuals = map(int,opts.n_individuals.split(","))
     
