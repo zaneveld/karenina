@@ -316,14 +316,23 @@ def get_timeseries_data(individuals,n_timepoints,start=0,end=-1,axes=["x","y","z
         results.append(array(result))
     return results
         
-def update_3d_plot_lines(end_t,timeseries_data,lines,start_t=0):
+def update_3d_plot(end_t,timeseries_data,lines,points=None,start_t=0):
+    
     for line,data in zip(lines,timeseries_data):
         line.set_data(data[0:2,start_t:end_t])
-        #As noted in the matplotlib tutorial, you can't just pass in 3d data
-        #to set_data.  This has to be hacked in via the set_3d_properties method.
+        #z pos can't be set with set_data
         line.set_3d_properties(data[2,start_t:end_t])
+    
+    if points:
+         for point,data in zip(points,timeseries_data):
+            point.set_data(data[0:2,end_t-1:end_t])
+            #z pos can't be set with set_data
+            point.set_3d_properties(data[2,end_t-1:end_t])
+        
+   
 
-def save_simulation_movie(individuals, output_folder, n_individuals,n_timepoints,\
+def save_simulation_movie(individuals, output_folder,\
+     n_individuals,n_timepoints,\
     black_background=True):
     """Save an .ffmpg move of the simulated community change"""
     
@@ -349,7 +358,14 @@ def save_simulation_movie(individuals, output_folder, n_individuals,n_timepoints
     print("Individual colors:",colors)
     print "Movie raw data:",data
     # NOTE: Can't pass empty arrays into 3d version of plot()
-    lines = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1],c=colors[i])[0] for i,dat in enumerate(data)]
+    linestyle = '-'
+    pointstyle = 'o' #cheat to use lines to represent points
+    lines = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1],linestyle,\
+      c=colors[i],alpha=0.20)[0] for i,dat in enumerate(data)]
+
+    pointstyle = 'o'
+    points = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1],pointstyle,\
+      c=colors[i],alpha=1.0)[0] for i,dat in enumerate(data)]
 
     # Setting the axes properties
     ax.set_xlim3d([-1.0, 1.0])
@@ -384,7 +400,7 @@ def save_simulation_movie(individuals, output_folder, n_individuals,n_timepoints
         ax.tick_params(axis='z', colors=dull_red)
 
     # Creating the Animation object
-    line_ani = animation.FuncAnimation(fig, update_3d_plot_lines, n_timepoints, fargs=(data,lines),\
+    line_ani = animation.FuncAnimation(fig, update_3d_plot, n_timepoints, fargs=(data,lines,points),\
       interval=100, blit=False)
     line_ani.save(join(output_folder,'simulation_video.mp4'), writer=writer)
     #plt.show()
