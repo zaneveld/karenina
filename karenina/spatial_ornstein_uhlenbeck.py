@@ -318,7 +318,7 @@ def get_timeseries_data(individuals,n_timepoints,start=0,end=-1,axes=["x","y","z
         results.append(array(result))
     return results
         
-def update_3d_plot(end_t,timeseries_data,lines,points=None,start_t=0):
+def update_3d_plot(end_t,timeseries_data,ax,lines,points=None,start_t=0):
     
     for line,data in zip(lines,timeseries_data):
         line.set_data(data[0:2,start_t:end_t])
@@ -330,8 +330,8 @@ def update_3d_plot(end_t,timeseries_data,lines,points=None,start_t=0):
             point.set_data(data[0:2,end_t-1:end_t])
             #z pos can't be set with set_data
             point.set_3d_properties(data[2,end_t-1:end_t])
-        
-   
+    rotation_speed = 0.5    
+    ax.view_init(30, rotation_speed * end_t) 
 
 def save_simulation_movie(individuals, output_folder,\
      n_individuals,n_timepoints,\
@@ -402,7 +402,7 @@ def save_simulation_movie(individuals, output_folder,\
         ax.tick_params(axis='z', colors=dull_red)
 
     # Creating the Animation object
-    line_ani = animation.FuncAnimation(fig, update_3d_plot, n_timepoints, fargs=(data,lines,points),\
+    line_ani = animation.FuncAnimation(fig, update_3d_plot, n_timepoints, fargs=(data,ax,lines,points),\
       interval=100, blit=False)
     line_ani.save(join(output_folder,'simulation_video.mp4'), writer=writer)
     #plt.show()
@@ -636,6 +636,14 @@ def main():
        "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"lambda":0.005},"update_mode":"replace","axes":["x","y","z"]}
     
+    set_yz_lambda_medium = {"start":opts.perturbation_timepoint,\
+       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.08},"update_mode":"replace","axes":["z","y"]}
+    
+    set_y_lambda_medium = {"start":opts.perturbation_timepoint,\
+       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.16},"update_mode":"replace","axes":["y"]}
+    
     set_xyz_lambda_zero = {"start":opts.perturbation_timepoint,\
        "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"lambda":0.000},"update_mode":"replace","axes":["x","y","z"]}
@@ -651,7 +659,7 @@ def main():
     double_z_delta  = {"start":opts.perturbation_timepoint,\
       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"delta":2.0},"update_mode":"multiply","axes":["z"]}
-
+    
     set_xyz_mu_low = {"start":opts.perturbation_timepoint,\
       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
       "params":{"mu":-0.8},"update_mode":"replace","axes":["x","y","z"]}
@@ -678,16 +686,28 @@ def main():
     
     set_x_lambda_high = {"start":opts.perturbation_timepoint,\
       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.064,"mu":-0.08},"update_mode":"replace","axes":["x"]}
+      "params":{"lambda":0.064},"update_mode":"replace","axes":["x"]}
     
+    set_yz_lambda_high = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.064},"update_mode":"replace","axes":["z","y"]}
+    
+    set_y_lambda_high = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.064},"update_mode":"replace","axes":["y"]}
+    
+    set_z_lambda_zero = {"start":opts.perturbation_timepoint,\
+      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.0},"update_mode":"replace","axes":["z"]}
+
     #TODO let user choose
     #treatments = [[],[set_x_lambda_high]] 
     #treatments = [[],[double_xyz_delta]] 
     #treatments = [[],[set_xyz_lambda_low]] 
     #treatments = [[],[add_x_mu_high,double_z_delta]] 
     #treatments = [[],[set_xyz_mu_high]] 
-    treatments = [[],[double_xyz_delta]] 
-   
+    #treatments = [[],[double_xyz_delta]] 
+    treatments = [[],[set_xyz_lambda_zero]] 
     treatment_names = opts.treatment_names.split(",")
     n_individuals = map(int,opts.n_individuals.split(","))
     
