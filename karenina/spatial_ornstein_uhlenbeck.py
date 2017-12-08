@@ -69,10 +69,10 @@ def make_option_parser():
 
     required_options = OptionGroup(parser, "Required options")
 
-    """ OptionGroup gives error: invalid option type??
-    required_options.add_option('-o','--output',type="new_filepath",
+
+    required_options.add_option('-o','--output', type="string",
     help='the output folder for the simulation results')
-    """
+
 
     parser.add_option_group(required_options)
 
@@ -92,6 +92,10 @@ def make_option_parser():
     help='Comma-separated number of individuals to simulate per treatment. ' +
     '[default: %default]')
 
+    optional_options.add_option('-t', '--n_timepoints',default=10, type="int",\
+    help='Number of timepoints to simulate. (One number, which is the ' +
+    'same for all treatments) [default: %default]')
+
     optional_options.add_option('-p','--perturbation_timepoint',\
     default=5,type="int",\
     help='Timepoint at which to apply a perturbation. Must be less than ' +
@@ -100,6 +104,7 @@ def make_option_parser():
     optional_options.add_option('-d','--perturbation_duration',\
     default=100,type="int",\
     help='Duration that the perturbation lasts. [default: %default]')
+
 
     optional_options.add_option('--interindividual_variation',
     default=0.01,type="float",help='Starting variability between ' +
@@ -252,7 +257,7 @@ class Perturbation(object):
         #we modify the input dict, which
         #isn't what we want
         new_params = copy(params)
-        for k,v in self.Params.iteritems():
+        for k,v in iter(self.Params.items()):
             new_params[k] = update_f(params[k],v)
 
         return new_params
@@ -470,9 +475,12 @@ def save_simulation_movie(individuals, output_folder,\
         ax.w_yaxis.set_pane_color((0.0, 0.0, 0.0, 1))
         ax.w_zaxis.set_pane_color((0.0, 0.0, 0.0, 1))
         #Set 3d background grid color to a dull red
-        ax.w_xaxis._axinfo.update({'grid' : {'color': dull_red}})
-        ax.w_yaxis._axinfo.update({'grid' : {'color': dull_red}})
-        ax.w_zaxis._axinfo.update({'grid' : {'color': dull_red}})
+        new_grid_params = ax.w_xaxis._axinfo['grid']
+        new_grid_params.update({'color': dull_red, 'linewidth':1.0})
+        print(new_grid_params)
+        ax.w_xaxis._axinfo.update({'grid' : new_grid_params})
+        ax.w_yaxis._axinfo.update({'grid' : new_grid_params})
+        ax.w_zaxis._axinfo.update({'grid' : new_grid_params})
 
         ax.spines['bottom'].set_color(dull_red)
         ax.spines['left'].set_color(dull_red)
@@ -533,21 +541,22 @@ class Experiment(object):
         interindividual_varation -- the amount of starting variation between individuals
         """
 
-        self.TreatmentNames = treatment_names
+        self.TreatmentNames = [t for t in treatment_names]
         self.Treatments = [{"treatment_name":name} for name in self.TreatmentNames]
         self.BaseParams = individual_base_params
-        self.NIndividuals = n_individuals
+        self.NIndividuals = [n for n in n_individuals]
         self.NTimepoints = n_timepoints
         #Check that a few parameters are valid
-        print ("treatment_names:",treatment_names)
-        print ("n_individuals:",n_individuals)
+        print ("treatment_names:",self.TreatmentNames)
+        print ("n_individuals:",self.NIndividuals)
         print ("treatment_params:",treatment_params)
         self.check_n_timepoints_is_int(n_timepoints)
-        self.check_variable_specified_per_treatment(n_individuals)
+        self.check_variable_specified_per_treatment(self.NIndividuals)
         self.check_variable_specified_per_treatment(treatment_params)
 
 
-        for i,n in enumerate(n_individuals):
+        #for i,n in enumerate(n_individuals):
+        for i,n in enumerate(self.NIndividuals):
             self.Treatments[i]["n_individuals"] = n
 
         self.NTimepoints = n_timepoints
@@ -565,6 +574,7 @@ class Experiment(object):
             else:
                 params['color'] = 'lightgray'
 
+            print(treatment)
             for i in range(treatment["n_individuals"]):
 
                 curr_subject_id = "%s_%i" %(treatment["treatment_name"],i)
@@ -601,7 +611,9 @@ class Experiment(object):
 
     def check_variable_specified_per_treatment(self,v):
         """Raise a ValueError if v is not the same length as the number of treatments"""
-        if len(v) != len(self.TreatmentNames):
+        print([x for x in v])
+        print(self.TreatmentNames)
+        if len([x for x in v]) != len(self.TreatmentNames):
             raise ValueError("Must specify a list of n_individuals equal in length to the number of treatments")
 
     def check_n_timepoints_is_int(self,n_timepoints):
@@ -689,11 +701,9 @@ def ensure_exists(output_dir):
 
 def main():
 
-    """
-    option_parser, opts, args =\
-       parse_command_line_parameters(**script_info)
-
-    ensure_exists(opts.output)
+    parser = make_option_parser()
+    opts, args = parser.parse_args()
+    print (opts)
 
     #Check timepoints
     check_perturbation_timepoint(opts.perturbation_timepoint,opts.n_timepoints)
@@ -711,7 +721,7 @@ def main():
         except:
             print (fixed_start_pos)
             raise ValueError("Problem with --fixed_start_pos. Got %s Please supply tx,y,z values in the range (-1,1) separated by commas. Example: 0.1,-0.2,0.3"% fixed_start_pos)
-    """
+
     #Set up the treatments to be applied
 
     #TODO: parameterize this by parsing a parameter file
