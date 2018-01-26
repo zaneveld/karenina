@@ -16,7 +16,6 @@ __status__ = "Development"
 from scipy.stats import norm
 from sys import argv
 from random import random,randint
-#from cogent.util.option_parsing import parse_command_line_parameters, make_option
 from optparse import OptionParser
 from optparse import OptionGroup
 from ast import literal_eval
