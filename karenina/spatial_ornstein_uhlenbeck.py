@@ -16,7 +16,6 @@ __status__ = "Development"
 from scipy.stats import norm
 from sys import argv
 from random import random,randint
-#from cogent.util.option_parsing import parse_command_line_parameters, make_option
 from optparse import OptionParser
 from optparse import OptionGroup
 from ast import literal_eval
@@ -26,34 +25,6 @@ from os.path import join,isdir
 from os import makedirs
 from numpy import array
 from copy import copy
-
-"""
-script_info = {}
-script_info['brief_description'] = "This script simulates microbial community change over time in PCoA-space using Brownian Motion or Ornstein-Uhlenbeck models."
-script_info['script_description'] = "This script simulates microbiome change over time using Ornstein-Uhlenbeck (OU) models.  These are similar to Brownian motion models, with the exception that they include reversion to a mean"
-script_info['script_usage'] = [
-                               ("","Simulate microbiomes using default parameters .", "%prog -o ./simulation_results")
-                                ]
-script_info['output_description']= "Output is a tab-delimited data table and figures."
-
-script_info['required_options'] = [
- make_option('-o','--output',type="new_filepath",help='the output folder for the simulation results')
-]
-
-script_info['optional_options'] = [\
-    make_option('--treatment_names',default="control,destabilizing_treatment",type="string",help="Comma seperated list of treatment named [default:%default]"),
-    make_option('-n','--n_individuals',default="35,35",type="string",help='Comma-separated number of individuals to simulate per treatment. [default: %default]'),
-    make_option('-t','--n_timepoints',default=10,type="int",help='Number of timepoints to simulate. (one number, which is the same for all treatments) [default: %default]'),
-    make_option('-p','--perturbation_timepoint',default=5,type="int",help='Timepoint at which to apply a perturbation. Must be less than --n_timepoints [default: %default]'),
-    make_option('-d','--perturbation_duration',default=100,type="int",help='Duration that the perturbation lasts. [default: %default]'),
-    make_option('--interindividual_variation',default=0.01,type="float",help='Starting variability between individuals. [default: %default]'),
-    make_option('--delta',default=0.25,type="float",help='Starting delta parameter for Brownian motion and Ornstein-Uhlenbeck processes. A higher number indicates more variability over time. [default: %default]'),
-    make_option('-l','--L',default=0.20,type="float",help='Starting lambda parameter for Ornstein-Uhlenbeck processes. A higher number indicates a greater tendancy to revert to the mean value. [default: %default]'),
-    make_option('--fixed_start_pos',default=None,type="string",help='Starting x,y,z position for all points, as comma separated floating point values, e.g. 0.0,0.1,0.2. If not supplied, starting positions will be randomized based on the interindividual_variation parameter [default: %default]')
-    ]
-
-script_info['version'] = __version__
-"""
 
 def make_option_parser():
     """Return an optparse OptionParser object"""
@@ -66,13 +37,14 @@ def make_option_parser():
     "and figures.",
     version = __version__)
 
-
     required_options = OptionGroup(parser, "Required options")
 
 
     required_options.add_option('-o','--output', type="string",
     help='the output folder for the simulation results')
 
+    required_options.add_option('--output_dir', type="string",
+    help='directory for log file')
 
     parser.add_option_group(required_options)
 
@@ -128,14 +100,11 @@ def make_option_parser():
 
     parser.add_option_group(optional_options)
 
-
     return parser
 
 class Process(object):
-
-    #Constructor to Process class
-    #class variables don't have to be declared first?
     """Represents a 1d process in a Euclidean space"""
+
     def __init__(self,start_coord, motion = "Ornstein-Uhlenbeck",\
         history = None,params={"L":0.20,"delta":0.25}):
         """
@@ -147,26 +116,23 @@ class Process(object):
         self.Coord = start_coord
         self.History = history
         self.History.append(start_coord)
-        self.Params = params #hash table?
-        self.ProcessType = motion #string
-        self.Perturbations = [] #this is an empty list
+        self.Params = params
+        self.ProcessType = motion
+        self.Perturbations = []
 
     def update(self,dt):
-        curr_params = copy(self.Params) #deep or shallow copy?
+        curr_params = copy(self.Params)
         for p in self.Perturbations:
-            curr_params = p.updateParams(curr_params) #function defined below
+            curr_params = p.updateParams(curr_params)
         if self.ProcessType == "Brownian":
             self.bm_update(dt,delta=curr_params["delta"])
-
-            #if it's not Brownian then it must be OU? then else should be sufficient?
-        elif self.ProcessType == "Ornstein-Uhlenbeck": #does the \ mean including the next line?
+        elif self.ProcessType == "Ornstein-Uhlenbeck":
             self.ou_update(dt,mu=curr_params["mu"],\
             delta = curr_params["delta"],\
             L=curr_params["lambda"])
 
-    #what is bm?
     def bm_change(self,dt,delta):
-        change =  norm.rvs(loc=0,size=1,scale=delta**2*dt) #what does this do?
+        change =  norm.rvs(loc=0,size=1,scale=delta**2*dt)
         return change
 
     def bm_update(self,dt,delta):
@@ -354,9 +320,7 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
     individual_colors = {"healthy":"orange","perturbed":"magenta"}
 
 
-    # Create a Figure object.
     fig = plt.figure(figsize=(5, 4))
-    # Create an Axes object.
     ax = fig.add_subplot(1,1,1) # one row, one column, first plot
     ax.set_axis_bgcolor('black')
     fig.patch.set_facecolor('black')
@@ -699,11 +663,41 @@ def ensure_exists(output_dir):
         if not isdir(output_dir):
             raise
 
+def write_options_to_log(log, opts):
+    """Writes user's input options to log file"""
+
+    logfile = open(join(opts.output_dir, log),"w+")
+    logfile_header = "#Karenina Simulation Logfile\n"
+    logfile.write(logfile_header)
+
+    logfile.write("Output folder: %s\n" %(str(opts.output)))
+    logfile.write("Input file: %s\n" %(str(opts.input_file)))
+    logfile.write("Treatment names: " + (str(opts.treatment_names)) + "\n")
+    n_individuals_line = "Number of individuals: %s\n"\
+    %(str(opts.n_individuals))
+    logfile.write(n_individuals_line)
+    logfile.write("Number of timepoints: " + (str(opts.n_timepoints)) + "\n")
+    logfile.write("Perturbation timepoint: " +
+    (str(opts.perturbation_timepoint)) + "\n")
+    logfile.write("Perturbation duration: " +
+    (str(opts.perturbation_duration)) + "\n")
+    logfile.write("Interindividual variation: " +
+    (str(opts.interindividual_variation)) + "\n")
+    logfile.write("Delta: " + (str(opts.delta)) + "\n")
+    logfile.write("Lambda: " + (str(opts.L)) + "\n")
+    logfile.write("Fixed starting position: " + (str(opts.fixed_start_pos)) +
+    "\n")
+
+    logfile.close()
+
+
 def main():
 
     parser = make_option_parser()
     opts, args = parser.parse_args()
     print (opts)
+
+    write_options_to_log("log.txt", opts)
 
     #Check timepoints
     check_perturbation_timepoint(opts.perturbation_timepoint,opts.n_timepoints)
@@ -814,7 +808,6 @@ def main():
         individual_base_params,treatments,opts.interindividual_variation)
     experiment.simulate_timesteps(0,opts.n_timepoints)
     experiment.writeToMovieFile(opts.output)
-
 
 if __name__ == "__main__":
     main()
