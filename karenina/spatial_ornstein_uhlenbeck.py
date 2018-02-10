@@ -37,13 +37,14 @@ def make_option_parser():
     "and figures.",
     version = __version__)
 
-
     required_options = OptionGroup(parser, "Required options")
 
 
     required_options.add_option('-o','--output', type="string",
     help='the output folder for the simulation results')
 
+    required_options.add_option('--output_dir', type="string",
+    help='directory for log file')
 
     parser.add_option_group(required_options)
 
@@ -98,7 +99,6 @@ def make_option_parser():
     'parameter [default: %default]')
 
     parser.add_option_group(optional_options)
-
 
     return parser
 
@@ -663,11 +663,41 @@ def ensure_exists(output_dir):
         if not isdir(output_dir):
             raise
 
+def write_options_to_log(log, opts):
+    """Writes user's input options to log file"""
+
+    logfile = open(join(opts.output_dir, log),"w+")
+    logfile_header = "#Karenina Simulation Logfile\n"
+    logfile.write(logfile_header)
+
+    logfile.write("Output folder: %s\n" %(str(opts.output)))
+    logfile.write("Input file: %s\n" %(str(opts.input_file)))
+    logfile.write("Treatment names: " + (str(opts.treatment_names)) + "\n")
+    n_individuals_line = "Number of individuals: %s\n"\
+    %(str(opts.n_individuals))
+    logfile.write(n_individuals_line)
+    logfile.write("Number of timepoints: " + (str(opts.n_timepoints)) + "\n")
+    logfile.write("Perturbation timepoint: " +
+    (str(opts.perturbation_timepoint)) + "\n")
+    logfile.write("Perturbation duration: " +
+    (str(opts.perturbation_duration)) + "\n")
+    logfile.write("Interindividual variation: " +
+    (str(opts.interindividual_variation)) + "\n")
+    logfile.write("Delta: " + (str(opts.delta)) + "\n")
+    logfile.write("Lambda: " + (str(opts.L)) + "\n")
+    logfile.write("Fixed starting position: " + (str(opts.fixed_start_pos)) +
+    "\n")
+
+    logfile.close()
+
+
 def main():
 
     parser = make_option_parser()
     opts, args = parser.parse_args()
     print (opts)
+
+    write_options_to_log("log.txt", opts)
 
     #Check timepoints
     check_perturbation_timepoint(opts.perturbation_timepoint,opts.n_timepoints)
@@ -778,7 +808,6 @@ def main():
         individual_base_params,treatments,opts.interindividual_variation)
     experiment.simulate_timesteps(0,opts.n_timepoints)
     experiment.writeToMovieFile(opts.output)
-
 
 if __name__ == "__main__":
     main()
