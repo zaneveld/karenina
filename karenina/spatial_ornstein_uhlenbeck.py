@@ -61,8 +61,8 @@ def make_option_parser():
 
     optional_options.add_option('-n','--n_individuals',\
     default="35,35",type="string",\
-    help='Comma-separated number of individuals to simulate per treatment. ' +
-    '[default: %default]')
+    help='Comma-separated number of individuals to simulate per treatment.'+\
+    'Note: This value must be enclosed in quotes. Example: "35,35". [default: %default]')
 
     optional_options.add_option('-t', '--n_timepoints',default=10, type="int",\
     help='Number of timepoints to simulate. (One number, which is the ' +
@@ -578,7 +578,7 @@ class Experiment(object):
         print([x for x in v])
         print(self.TreatmentNames)
         if len([x for x in v]) != len(self.TreatmentNames):
-            raise ValueError("Must specify a list of n_individuals equal in length to the number of treatments")
+            raise ValueError('Must specify a list of n_individuals equal in length to the number of treatments. Note that n_individuals must be enclosed in quotes e.g. -n "35,35"  ')
 
     def check_n_timepoints_is_int(self,n_timepoints):
         """Raise a ValueError if n_timepoints can't be cast as an int"""
@@ -713,8 +713,8 @@ def main():
             individual_base_params['z']=z
 
         except:
-            print (fixed_start_pos)
-            raise ValueError("Problem with --fixed_start_pos. Got %s Please supply tx,y,z values in the range (-1,1) separated by commas. Example: 0.1,-0.2,0.3"% fixed_start_pos)
+            print ("Supplied value for fixed start position after parsing:",opts.fixed_start_pos)
+            raise ValueError('Problem with --fixed_start_pos. Got %s Please supply x,y,z values in the range (-1,1) separated by commas and enclosed in quotes. Example: "0.1,-0.2,0.3"'% opts.fixed_start_pos)
 
     #Set up the treatments to be applied
 
@@ -796,7 +796,9 @@ def main():
     #treatments = [[],[double_xyz_delta]]
     treatments = [[],[set_xyz_lambda_zero]]
     treatment_names = opts.treatment_names.split(",")
-    n_individuals = map(int,opts.n_individuals.split(","))
+    print("Raw number of individuals from user:",opts.n_individuals)
+    print("n_individuals.split(',')",opts.n_individuals.split(','))
+    n_individuals = list(map(int,opts.n_individuals.split(",")))
 
     print ("**Experiment Design**")
     print ("treatments:",treatment_names)
