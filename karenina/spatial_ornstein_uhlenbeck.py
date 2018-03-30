@@ -21,7 +21,7 @@ from optparse import OptionGroup
 from ast import literal_eval
 import numpy as np
 import matplotlib.pyplot as plt
-from os.path import join,isdir
+from os.path import join,isdir,realpath,dirname
 from os import makedirs
 from numpy import array
 from copy import copy
@@ -43,17 +43,17 @@ def make_option_parser():
     required_options.add_option('-o','--output', type="string",
     help='the output folder for the simulation results')
 
-    required_options.add_option('--output_dir', type="string",
-    help='directory for log file')
-
     parser.add_option_group(required_options)
 
 
     optional_options = OptionGroup(parser, "Optional options")
 
-    optional_options.add_option("-i", "--input_file",\
-    action="store", type="string",\
-    help = "Input file for analysis")
+    optional_options.add_option('--pert_file_path',\
+      default = join(dirname(dirname(realpath(__file__))),'data',\
+      'perturbations','xyz_lambda_zero.csv'),\
+      type = "string",\
+      help = 'file path to a perturbation file specifying parameters for' +
+      ' the simulation results [default: %default]')
 
     optional_options.add_option('--treatment_names',\
     default="control,destabilizing_treatment",type="string",\
@@ -322,7 +322,8 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
 
     fig = plt.figure(figsize=(5, 4))
     ax = fig.add_subplot(1,1,1) # one row, one column, first plot
-    ax.set_axis_bgcolor('black')
+    #ax.set_axis_bgcolor('black') deprecated
+    ax.set_facecolor('black')
     fig.patch.set_facecolor('black')
     ax.set_title('Simulated Microbiome Destabilization\n (n=%i; %i individuals, %i timepoints)' %(n_timepoints * n_individuals,\
       n_individuals,n_timepoints), color='w', fontsize=12)
@@ -432,7 +433,8 @@ def save_simulation_movie(individuals, output_folder,\
 
     ax.set_title('Simulation Results')
     if black_background:
-        ax.set_axis_bgcolor('black')
+        #ax.set_axis_bgcolor('black') deprecated
+        ax.set_facecolor('black')
         fig.patch.set_facecolor('black')
         dull_red = (0.50,0,0,1)
         ax.w_xaxis.set_pane_color((0.0, 0.0, 0.0, 1))
@@ -666,12 +668,11 @@ def ensure_exists(output_dir):
 def write_options_to_log(log, opts):
     """Writes user's input options to log file"""
 
-    logfile = open(join(opts.output_dir, log),"w+")
+    logfile = open(join(opts.output, log),"w+")
     logfile_header = "#Karenina Simulation Logfile\n"
     logfile.write(logfile_header)
 
     logfile.write("Output folder: %s\n" %(str(opts.output)))
-    logfile.write("Input file: %s\n" %(str(opts.input_file)))
     logfile.write("Treatment names: " + (str(opts.treatment_names)) + "\n")
     n_individuals_line = "Number of individuals: %s\n"\
     %(str(opts.n_individuals))
@@ -690,6 +691,62 @@ def write_options_to_log(log, opts):
 
     logfile.close()
 
+def parse_perturbation_file(opts):
+    """Return a list of perturbations
+    infile -- a .csv file describing one perturbation per line
+    assume input file is correctly formatted (no warnings if not)
+
+    NOTE: each pertubation should be in the format:
+    set_xyz_lambda_low =
+       {"start":opts.perturbation_timepoint,\
+       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+      "params":{"lambda":0.005},\
+      "update_mode":"replace",\
+      "axes":["x","y","z"]}
+    """
+    perturb_list = []
+    if (opts.pert_file_path != None):
+        input_file = open(opts.pert_file_path, "r")
+
+        for line in input_file:
+            print (line)
+            temp_list = []
+
+            for word in line.split('\t'):
+                temp_list.append(word)
+
+            temp_dict = {"start":opts.perturbation_timepoint,\
+              "end":opts.perturbation_timepoint + opts.perturbation_duration}
+
+            for temp_list_index in range(len(temp_list)):
+                if (temp_list[temp_list_index] == 'params'):
+                    index = temp_list_index + 1
+                    temp_dict['params'] = {}
+                    while (temp_list[index] != 'update_mode'):
+                        temp_dict['params'][temp_list[index]] =\
+                        float(temp_list[index + 1])
+                        index += 2
+                elif (temp_list[temp_list_index] == 'update_mode'):
+                    temp_dict["update_mode"] = temp_list[temp_list_index + 1]
+                elif (temp_list[temp_list_index] == 'axes'):
+                    index = temp_list_index + 1;
+                    temp_dict["axes"] = []
+                    while (index != len(temp_list) and temp_list[index] != ''
+                    and temp_list[index] != '\n'):
+                        split = temp_list[index].split('\n')
+                        temp_dict["axes"].append(split[0])
+                        index += 1
+            perturb_list.append(temp_dict)
+        input_file.close()
+
+    else:
+        set_xyz_lambda_zero = {"start":opts.perturbation_timepoint,\
+        "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+        "params":{"lambda":0.000},"update_mode":"replace","axes":["x","y","z"]}
+
+        perturb_list.append(set_xyz_lambda_zero)
+
+    return perturb_list
 
 def main():
 
@@ -719,73 +776,75 @@ def main():
     #Set up the treatments to be applied
 
     #TODO: parameterize this by parsing a parameter file
-    set_xyz_lambda_low = {"start":opts.perturbation_timepoint,\
-       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.005},"update_mode":"replace","axes":["x","y","z"]}
+    # set_xyz_lambda_low = {"start":opts.perturbation_timepoint,\
+    #    "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.005},"update_mode":"replace","axes":["x","y","z"]}
+    #
+    # set_yz_lambda_medium = {"start":opts.perturbation_timepoint,\
+    #    "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.08},"update_mode":"replace","axes":["z","y"]}
+    #
+    # set_y_lambda_medium = {"start":opts.perturbation_timepoint,\
+    #    "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.16},"update_mode":"replace","axes":["y"]}
+    #
+    # set_xyz_lambda_zero = {"start":opts.perturbation_timepoint,\
+    #    "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.000},"update_mode":"replace","axes":["x","y","z"]}
+    #
+    # set_x_mu_low = {"start":opts.perturbation_timepoint,\
+    #    "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"mu":-0.8},"update_mode":"replace","axes":["x"]}
+    #
+    # double_xyz_delta  = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"delta":2.0},"update_mode":"multiply","axes":["x","y","z"]}
+    #
+    # double_z_delta  = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"delta":2.0},"update_mode":"multiply","axes":["z"]}
+    #
+    # set_xyz_mu_low = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"mu":-0.8},"update_mode":"replace","axes":["x","y","z"]}
+    #
+    # set_xyz_mu_high = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"mu":0.8},"update_mode":"replace","axes":["x","y","z"]}
+    #
+    # add_x_mu_high = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"mu":0.8},"update_mode":"add","axes":["x"]}
+    #
+    # set_x_mu_high = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"mu":0.8},"update_mode":"replace","axes":["x"]}
+    #
+    # set_x_lambda_small = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.008,"mu":-0.08},"update_mode":"replace","axes":["x"]}
+    #
+    # set_x_lambda_medium = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.016,"mu":-0.08},"update_mode":"replace","axes":["x"]}
+    #
+    # set_x_lambda_high = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.064},"update_mode":"replace","axes":["x"]}
+    #
+    # set_yz_lambda_high = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.064},"update_mode":"replace","axes":["z","y"]}
+    #
+    # set_y_lambda_high = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.064},"update_mode":"replace","axes":["y"]}
+    #
+    # set_z_lambda_zero = {"start":opts.perturbation_timepoint,\
+    #   "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+    #   "params":{"lambda":0.0},"update_mode":"replace","axes":["z"]}
 
-    set_yz_lambda_medium = {"start":opts.perturbation_timepoint,\
-       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.08},"update_mode":"replace","axes":["z","y"]}
-
-    set_y_lambda_medium = {"start":opts.perturbation_timepoint,\
-       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.16},"update_mode":"replace","axes":["y"]}
-
-    set_xyz_lambda_zero = {"start":opts.perturbation_timepoint,\
-       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.000},"update_mode":"replace","axes":["x","y","z"]}
-
-    set_x_mu_low = {"start":opts.perturbation_timepoint,\
-       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"mu":-0.8},"update_mode":"replace","axes":["x"]}
-
-    double_xyz_delta  = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"delta":2.0},"update_mode":"multiply","axes":["x","y","z"]}
-
-    double_z_delta  = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"delta":2.0},"update_mode":"multiply","axes":["z"]}
-
-    set_xyz_mu_low = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"mu":-0.8},"update_mode":"replace","axes":["x","y","z"]}
-
-    set_xyz_mu_high = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"mu":0.8},"update_mode":"replace","axes":["x","y","z"]}
-
-    add_x_mu_high = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"mu":0.8},"update_mode":"add","axes":["x"]}
-
-    set_x_mu_high = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"mu":0.8},"update_mode":"replace","axes":["x"]}
-
-    set_x_lambda_small = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.008,"mu":-0.08},"update_mode":"replace","axes":["x"]}
-
-    set_x_lambda_medium = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.016,"mu":-0.08},"update_mode":"replace","axes":["x"]}
-
-    set_x_lambda_high = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.064},"update_mode":"replace","axes":["x"]}
-
-    set_yz_lambda_high = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.064},"update_mode":"replace","axes":["z","y"]}
-
-    set_y_lambda_high = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.064},"update_mode":"replace","axes":["y"]}
-
-    set_z_lambda_zero = {"start":opts.perturbation_timepoint,\
-      "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.0},"update_mode":"replace","axes":["z"]}
+    perturbations = parse_perturbation_file(opts)
 
     #TODO let user choose
     #treatments = [[],[set_x_lambda_high]]
@@ -794,7 +853,8 @@ def main():
     #treatments = [[],[add_x_mu_high,double_z_delta]]
     #treatments = [[],[set_xyz_mu_high]]
     #treatments = [[],[double_xyz_delta]]
-    treatments = [[],[set_xyz_lambda_zero]]
+    #treatments = [[],[set_xyz_lambda_zero]]
+    treatments = [[], perturbations]
     treatment_names = opts.treatment_names.split(",")
     print("Raw number of individuals from user:",opts.n_individuals)
     print("n_individuals.split(',')",opts.n_individuals.split(','))

@@ -1,0 +1,17 @@
+params	lambda	0.005	update_mode	replace	axes	x	y	z
+params	lambda	0.080	update_mode	replace	axes	z	y	
+params	lambda	0.160	update_mode	replace	axes	y		
+params	lambda	0.000	update_mode	replace	axes	x	y	z
+params	mu	-0.800	update_mode	replace	axes	x		
+params	delta	2.000	update_mode	multiply	axes	x	y	z
+params	delta	2.000	update_mode	multiply	axes	z		
+params	mu	-0.800	update_mode	replace	axes	x	y	z
+params	mu	0.800	update_mode	replace	axes	x	y	z
+params	mu	0.800	update_mode	add	axes	x		
+params	mu	0.800	update_mode	replace	axes	x		
+params	lambda	0.008	mu	-0.08	update_mode	replace	axes	x
+params	lambda	0.016	mu	-0.08	update_mode	replace	axes	x
+params	lambda	0.064	update_mode	replace	axes	x		
+params	lambda	0.064	update_mode	replace	axes	z	y	
+params	lambda	0.064	update_mode	replace	axes	y		
+params	lambda	0.000	update_mode	replace	axes	z		
