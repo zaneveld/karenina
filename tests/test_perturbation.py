@@ -11,7 +11,7 @@ __status__ = "Development"
 
 import unittest
 from warnings import catch_warnings
-from karenina.perturbation Perturbation
+from karenina.perturbation import Perturbation
 import numpy.testing as npt
 
 """
