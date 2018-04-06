@@ -11,8 +11,8 @@ __status__ = "Development"
 
 import unittest
 from warnings import catch_warnings
-from karenina.experiment Experiment
 import numpy.testing as npt
+import karenina.visualization
 
 """
 Tests for spatial_ornstein_uhlenbeck.py
@@ -25,19 +25,16 @@ class TestExperiment(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_check_variable_specified_per_treatment(self):
+    def test_get_timeseries_data(self):
         pass
 
-    def test_check_n_timepoints_is_int(self):
+    def test_save_simulation_figure(self):
         pass
 
-    def test_simulate_timesteps(self):
+    def test_save_simulation_movie(self):
         pass
 
-    def test_simulate_timestep(self):
-        pass
-
-    def test_writeToMovieFile(self):
+    def test_update_3d_plot(self):
         pass
 
 if __name__ == '__main__':
