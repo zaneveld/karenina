@@ -12,6 +12,7 @@ __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
 from experiment import Experiment
+import visualization
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname
