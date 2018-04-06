@@ -11,7 +11,7 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from spatial_ornstein_uhlenbeck_process import Process
+from process import Process
 from random import random,randint
 from copy import copy
 

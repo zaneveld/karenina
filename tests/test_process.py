@@ -11,7 +11,7 @@ __status__ = "Development"
 
 import unittest
 from warnings import catch_warnings
-from karenina.spatial_ornstein_uhlenbeck import Process, Individual, Experiment, Perturbation
+from karenina.process import Process
 import numpy.testing as npt
 
 """

@@ -11,7 +11,7 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from spatial_ornstein_uhlenbeck_experiment import Experiment
+from experiment import Experiment
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname

@@ -11,8 +11,8 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from spatial_ornstein_uhlenbeck_individual import Individual
-from spatial_ornstein_uhlenbeck_perturbation import Perturbation
+from individual import Individual
+from perturbation import Perturbation
 from os.path import join,isdir,realpath,dirname
 from numpy import array
 from copy import copy
