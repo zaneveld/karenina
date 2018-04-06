@@ -12,7 +12,7 @@ __status__ = "Development"
 import unittest
 from warnings import catch_warnings
 import numpy.testing as npt
-import karenina.visualization
+from karenina.visualization import get_timeseries_data, save_simulation_figure, save_simulation_movie, update_3d_plot
 
 """
 Tests for spatial_ornstein_uhlenbeck.py
