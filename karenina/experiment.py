@@ -164,23 +164,23 @@ class Experiment(object):
                 apply_to_individuals = False
                 remove_from_individuals = False
                 #Record whether to activate perturbation
-                if perturbation.isActive(t) and\
+                if perturbation.is_active(t) and\
                     perturbation not in treatment["active_perturbations"]:
                     apply_to_individuals = True
                     treatment["active_perturbations"].append(perturbation)
 
                 #Record whether to deactivate perturbation
                 if perturbation in treatment["active_perturbations"] and\
-                    not perturbation.isActive(t):
+                    not perturbation.is_active(t):
                     remove_from_individuals = True
                     treatment["active_perturbations"].remove(perturbation)
 
                 #Apply new perturbations and remove old ones
                 for curr_subject in treatment["individuals"]:
                     if apply_to_individuals:
-                        curr_subject.applyPerturbation(perturbation)
+                        curr_subject.apply_perturbation(perturbation)
                     if remove_from_individuals:
-                        curr_subject.removePerturbation(perturbation)
+                        curr_subject.remove_perturbation(perturbation)
 
             #With perturbations in place and updated,
             #simulate a timestep for each individual in treatment
@@ -190,7 +190,7 @@ class Experiment(object):
                     curr_data = curr_subject.get_data(1)
                     self.Data.append("\t".join(map(str,curr_data))+"\n")
 
-    def writeToMovieFile(self,output_folder):
+    def write_to_movie_file(self,output_folder):
         """Write an MPG movie to output folder"""
         individuals = []
         for treatment in self.Treatments:

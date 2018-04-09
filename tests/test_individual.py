@@ -25,16 +25,16 @@ class TestIndividual(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_applyPerturbation(self):
+    def test_apply_perturbation(self):
         pass
 
-    def test_removePerturbation(self):
+    def test_remove_perturbation(self):
         pass
 
-    def test_removePerturbationFromAxis(self):
+    def test_remove_perturbation_from_axis(self):
         pass
 
-    def test_applyPerturbationToAxis(self):
+    def test_apply_perturbation_to_axis(self):
         pass
 
     def test_check_identity(self):

@@ -43,20 +43,20 @@ class Individual(object):
             self.MovementProcesses[c] = Process(start_coord = start_coord,params=curr_params,\
               motion = "Ornstein-Uhlenbeck")
 
-    def applyPerturbation(self,perturbation):
+    def apply_perturbation(self,perturbation):
         """Apply a perturbation to the appropriate axes"""
         for axis in perturbation.Axes:
-            self.applyPerturbationToAxis(axis,perturbation)
+            self.apply_perturbation_to_axis(axis,perturbation)
 
-    def removePerturbation(self,perturbation):
+    def remove_perturbation(self,perturbation):
         for axis in perturbation.Axes:
-            self.removePerturbationFromAxis(axis,perturbation)
+            self.remove_perturbation_from_axis(axis,perturbation)
 
-    def removePerturbationFromAxis(self,axis,perturbation):
+    def remove_perturbation_from_axis(self,axis,perturbation):
         """Remove a perturbation from one or more Process objects"""
         self.MovementProcesses[axis].Perturbations.remove(perturbation)
 
-    def applyPerturbationToAxis(self,axis,perturbation):
+    def apply_perturbation_to_axis(self,axis,perturbation):
         """Apply a perturbation to a Processes objects"""
 
         self.MovementProcesses[axis].Perturbations.append(perturbation)

@@ -12,7 +12,6 @@ __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
 from experiment import Experiment
-import visualization
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname
@@ -239,7 +238,7 @@ def main():
     experiment = Experiment(treatment_names,n_individuals,opts.n_timepoints,\
         individual_base_params,treatments,opts.interindividual_variation)
     experiment.simulate_timesteps(0,opts.n_timepoints)
-    experiment.writeToMovieFile(opts.output)
+    experiment.write_to_movie_file(opts.output)
 
 if __name__ == "__main__":
     main()
