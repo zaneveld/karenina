@@ -10,8 +10,13 @@ __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
 import unittest
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
-from karenina.process import Process
+from process import Process
+from perturbation import Perturbation
 import numpy.testing as npt
 
 """
@@ -110,3 +115,7 @@ class TestProcess(unittest.TestCase):
         unstable_diff = abs(end_coord - new_mu)
 
         self.assertTrue(unstable_diff < stable_diff)
+
+
+if __name__ == '__main__':
+    unittest.main()

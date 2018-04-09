@@ -9,9 +9,13 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 import unittest
 from warnings import catch_warnings
-from karenina.experiment import Experiment
+from experiment import Experiment
 import numpy.testing as npt
 
 """

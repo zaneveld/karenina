@@ -9,9 +9,13 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-import unittest 
+import unittest
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
-from karenina.fit_timeseries  import fit_timeseries,fit_normal,\
+from fit_timeseries  import fit_timeseries,fit_normal,\
   get_OU_nlogLik,make_OU_objective_fn
 from karenina.spatial_ornstein_uhlenbeck import Process
 import numpy.testing as npt
@@ -80,17 +84,17 @@ class TestFit(unittest.TestCase):
         final_errors = {}
         dt = 1
         for n_timepoints in list(range(1,300)):
-            print "Building OU model for %i timepoints" %n_timepoints 
+            print ("Building OU model for %i timepoints" %n_timepoints)
             #run ou_process to get history
             ou = Process(start_coord=0.20,motion="Ornstein-Uhlenbeck",\
               history = None, params =\
               {"lambda":0.12,"delta":0.25,"mu":0.5})
             for t in range(0,n_timepoints):
                 ou.update(dt)
-            print n_timepoints,ou.History
+            print (n_timepoints,ou.History)
             xs = array(ou.History)
             ts = arange(0,len(ou.History))*dt
-            print xs,ts,dt
+            print (xs,ts,dt)
             fn_to_optimize = make_OU_objective_fn(xs,ts)
             #Estimate correct parameters
             for niter in [5]:
@@ -100,9 +104,9 @@ class TestFit(unittest.TestCase):
                     start_Sigma =0.1
                     start_Lambda = 0.0
                     start_Theta = mean(xs)
-                    print "niter=",niter
-                    print "start_Theta: ",start_Theta
-                    print "n_timepoints: ",n_timepoints
+                    print ("niter=",niter)
+                    print ("start_Theta: ",start_Theta)
+                    print ("n_timepoints: ",n_timepoints)
                     xmax = array([1.0,1.0,1.0])
                     xmin = array([0.0,0.0,-1.0])
                     x0 = array([start_Sigma,start_Lambda,start_Theta])
@@ -116,13 +120,13 @@ class TestFit(unittest.TestCase):
                     Sigma,Lambda,Theta = global_min
                     correct_values = array([0.25,0.12,0.5])
                     final_error = global_min - correct_values
-                    print "Global min:",global_min
+                    print ("Global min:",global_min)
                     final_errors["%s_%i_%i" %(local_optimizer,niter,n_timepoints)] =\
                       final_error
-                    print "*"*80
+                    print ("*"*80)
                     print("%s error: %.4f,%.4f,%.4f" %(local_optimizer,\
                       final_error[0],final_error[1],final_error[2])) 
-                    print "*"*80
+                    print ("*"*80)
         for opt,err in final_errors.iteritems():
             print("%s error: %.4f,%.4f,%.4f" %(opt,\
               err[0],err[1],err[2])) 
@@ -132,8 +136,8 @@ class TestFit(unittest.TestCase):
         ou = self.OU
         xs = array(ou.History)
         ts = arange(0,len(ou.History))        
-        print "xs.shape:",xs.shape
-        print "ts.shape:",ts.shape
+        print ("xs.shape:",xs.shape)
+        print ("ts.shape:",ts.shape)
         #Let's try a range of values around the true ones
         #as we'd produce when basinhopping 
         

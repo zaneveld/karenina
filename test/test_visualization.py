@@ -9,30 +9,37 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-import unittest 
+import unittest
 from warnings import catch_warnings
-from karenina.spatial_ornstein_uhlenbeck import check_perturbation_timepoint, write_options_to_log, parse_perturbation_file
 import numpy.testing as npt
-  
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
+from visualization import get_timeseries_data, save_simulation_figure, save_simulation_movie, update_3d_plot
+
 """
 Tests for spatial_ornstein_uhlenbeck.py
 """
 
-class TestPrimary(unittest.TestCase):
+
+class TestExperiment(unittest.TestCase):
     # TODO: Tests
 
     def setUp(self):
         pass
 
-    def test_check_perturbation_timepoint(self):
+    def test_get_timeseries_data(self):
         pass
 
-    def test_write_options_to_log(self):
+    def test_save_simulation_figure(self):
         pass
 
-    def test_parse_perturbation_file(self):
+    def test_save_simulation_movie(self):
         pass
-    
+
+    def test_update_3d_plot(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

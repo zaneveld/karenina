@@ -10,31 +10,44 @@ __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
 import unittest
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
+from individual import Individual
 import numpy.testing as npt
-from karenina.visualization import get_timeseries_data, save_simulation_figure, save_simulation_movie, update_3d_plot
 
 """
 Tests for spatial_ornstein_uhlenbeck.py
 """
 
 
-class TestExperiment(unittest.TestCase):
+class TestIndividual(unittest.TestCase):
     # TODO: Tests
 
     def setUp(self):
         pass
 
-    def test_get_timeseries_data(self):
+    def test_apply_perturbation(self):
         pass
 
-    def test_save_simulation_figure(self):
+    def test_remove_perturbation(self):
         pass
 
-    def test_save_simulation_movie(self):
+    def test_remove_perturbation_from_axis(self):
         pass
 
-    def test_update_3d_plot(self):
+    def test_apply_perturbation_to_axis(self):
+        pass
+
+    def test_check_identity(self):
+        pass
+
+    def test_simulate_movement(self):
+        pass
+
+    def test_get_data(self):
         pass
 
 if __name__ == '__main__':

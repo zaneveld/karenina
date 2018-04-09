@@ -142,9 +142,9 @@ def make_OU_objective_fn(x,times,verbose=False):
         Sigma,Lambda,Theta = p
         nlogLik = get_OU_nlogLik(fixed_x,fixed_times,Sigma,Lambda,Theta)
         if verbose:
-            print "\nnlogLik:",nlogLik 
+            print ("\nnlogLik:",nlogLik)
             #print "\t".join(["Sigma","Lambda","Theta"])
-            print "%.2f\t%.2f\t%.2f" % (Sigma,Lambda,Theta)
+            print ("%.2f\t%.2f\t%.2f" % (Sigma,Lambda,Theta))
         return nlogLik
         
     return fn_to_optimize
