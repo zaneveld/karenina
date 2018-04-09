@@ -35,7 +35,7 @@ class Process(object):
     def update(self,dt):
         curr_params = copy(self.Params)
         for p in self.Perturbations:
-            curr_params = p.updateParams(curr_params)
+            curr_params = p.update_params(curr_params)
         if self.ProcessType == "Brownian":
             self.bm_update(dt,delta=curr_params["delta"])
         elif self.ProcessType == "Ornstein-Uhlenbeck":

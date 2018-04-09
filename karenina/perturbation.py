@@ -40,16 +40,16 @@ class Perturbation(object):
         self.UpdateMode = update_mode
         self.Axes = axes
 
-    def isActive(self,t):
+    def is_active(self,t):
         return self.Start <= t <= self.End
 
-    def updateParams(self,params):
+    def update_params(self,params):
         if self.UpdateMode == "replace":
-            update_f = self.updateByReplacement
+            update_f = self.update_by_replacement
         elif self.UpdateMode == "add":
-            update_f = self.updateByAddition
+            update_f = self.update_by_addition
         elif self.UpdateMode == "multiply":
-            update_f = self.updateByMultiplication
+            update_f = self.update_by_multiplication
         else:
             raise ValueError("Invalid update mode for perturbation: %s" %self.UpdateMode)
 
@@ -62,11 +62,11 @@ class Perturbation(object):
 
         return new_params
 
-    def updateByReplacement(self,curr_param, perturbation_param):
+    def update_by_replacement(self,curr_param, perturbation_param):
         return perturbation_param
 
-    def updateByAddition(self,curr_param, perturbation_param):
+    def update_by_addition(self,curr_param, perturbation_param):
         return curr_param + perturbation_param
 
-    def updateByMultiplication(self,curr_param, perturbation_param):
+    def update_by_multiplication(self,curr_param, perturbation_param):
         return curr_param * perturbation_param
