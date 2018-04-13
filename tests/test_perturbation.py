@@ -11,7 +11,11 @@ __status__ = "Development"
 
 import unittest
 from warnings import catch_warnings
-from karenina.perturbation import Perturbation
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
+from perturbation import Perturbation
 import numpy.testing as npt
 
 """
@@ -49,8 +53,8 @@ class TestPerturbation(unittest.TestCase):
                                   "set_high_lambda_low_delta": set_high_lambda_low_delta,
                                   "double_lambda_and_mu": double_lambda_and_mu}
 
-    def test_isActive(self):
-        """Perturbation isActive tests whether it is active based on the current time"""
+    def test_is_active(self):
+        """Perturbation is_active tests whether it is active based on the current time"""
         # perturbations start at 50 and end at 75
         exact_start = 50
         exact_end = 75
@@ -58,59 +62,59 @@ class TestPerturbation(unittest.TestCase):
         start_of_experiment = 0
 
         curr_perturbation = self.TestPerturbations["set_zero_lambda"]
-        self.assertTrue(curr_perturbation.isActive(in_the_middle))
-        self.assertFalse(curr_perturbation.isActive(start_of_experiment))
+        self.assertTrue(curr_perturbation.is_active(in_the_middle))
+        self.assertFalse(curr_perturbation.is_active(start_of_experiment))
 
         # let's test the borderline cases, which should be active
-        self.assertTrue(curr_perturbation.isActive(exact_start))
-        self.assertTrue(curr_perturbation.isActive(exact_end))
+        self.assertTrue(curr_perturbation.is_active(exact_start))
+        self.assertTrue(curr_perturbation.is_active(exact_end))
 
         # Test that if we change Start and End we change
-        # isActive results
+        # is_active results
 
         curr_perturbation.Start = 90
         curr_perturbation.End = 100
 
-        self.assertFalse(curr_perturbation.isActive(55))
-        self.assertTrue(curr_perturbation.isActive(95))
+        self.assertFalse(curr_perturbation.is_active(55))
+        self.assertTrue(curr_perturbation.is_active(95))
 
-    def test_updateParam_updates_single_param(self):
-        """Perturbation.updateParams updates a single parameter correctly"""
+    def test_update_param_updates_single_param(self):
+        """Perturbation.update_params updates a single parameter correctly"""
 
         base_params = {"mu": 0.1, "lambda": 0.25, "delta": 0.18}
 
         curr_perturbation = self.TestPerturbations["set_low_lambda"]
-        obs = curr_perturbation.updateParams(base_params)
+        obs = curr_perturbation.update_params(base_params)
         exp = {"mu": 0.1, "lambda": 0.005, "delta": 0.18}
         self.assertEqual(obs, exp)
 
         curr_perturbation = self.TestPerturbations["set_zero_lambda"]
-        obs = curr_perturbation.updateParams(base_params)
+        obs = curr_perturbation.update_params(base_params)
         exp = {"mu": 0.1, "lambda": 0.0, "delta": 0.18}
         self.assertEqual(obs, exp)
 
         curr_perturbation = self.TestPerturbations["double_lambda"]
-        obs = curr_perturbation.updateParams(base_params)
+        obs = curr_perturbation.update_params(base_params)
         exp = {"mu": 0.1, "lambda": 0.50, "delta": 0.18}
         self.assertEqual(obs, exp)
 
         curr_perturbation = self.TestPerturbations["halve_lambda"]
-        obs = curr_perturbation.updateParams(base_params)
+        obs = curr_perturbation.update_params(base_params)
         exp = {"mu": 0.1, "lambda": 0.125, "delta": 0.18}
         self.assertEqual(obs, exp)
 
-    def test_updateParam_updates_multiple_params(self):
-        """Perturbation.updateParams updates a single parameter correctly"""
+    def test_update_param_updates_multiple_params(self):
+        """Perturbation.update_params updates a single parameter correctly"""
 
         base_params = {"mu": 0.1, "lambda": 0.25, "delta": 0.18}
 
         curr_perturbation = self.TestPerturbations["set_high_lambda_low_delta"]
-        obs = curr_perturbation.updateParams(base_params)
+        obs = curr_perturbation.update_params(base_params)
         exp = {"mu": 0.1, "lambda": 0.5, "delta": 0.1}
         self.assertEqual(obs, exp)
 
         curr_perturbation = self.TestPerturbations["double_lambda_and_mu"]
-        obs = curr_perturbation.updateParams(base_params)
+        obs = curr_perturbation.update_params(base_params)
         exp = {"mu": 0.2, "lambda": 0.5, "delta": 0.18}
         self.assertEqual(obs, exp)
 

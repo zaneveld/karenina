@@ -12,7 +12,7 @@ __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
 from cogent.util.option_parsing import parse_command_line_parameters, make_option
-from util import ensure_exists
+from util import exists
 
 from scipy.optimize import basinhopping,brute,differential_evolution
 from scipy.stats import norm
@@ -142,9 +142,9 @@ def make_OU_objective_fn(x,times,verbose=False):
         Sigma,Lambda,Theta = p
         nlogLik = get_OU_nlogLik(fixed_x,fixed_times,Sigma,Lambda,Theta)
         if verbose:
-            print "\nnlogLik:",nlogLik 
+            print ("\nnlogLik:",nlogLik)
             #print "\t".join(["Sigma","Lambda","Theta"])
-            print "%.2f\t%.2f\t%.2f" % (Sigma,Lambda,Theta)
+            print ("%.2f\t%.2f\t%.2f" % (Sigma,Lambda,Theta))
         return nlogLik
         
     return fn_to_optimize
@@ -211,7 +211,8 @@ def main():
     option_parser, opts, args =\
        parse_command_line_parameters(**script_info)
     
-    ensure_exists(opts.output)
+    if exists(opts.output):
+	print("Output saved to: "+str(opts.output))
 
 
 if __name__ == "__main__":

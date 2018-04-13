@@ -11,7 +11,11 @@ __status__ = "Development"
 
 import unittest 
 from warnings import catch_warnings
-from karenina.spatial_ornstein_uhlenbeck import check_perturbation_timepoint, write_options_to_log, parse_perturbation_file
+import sys, os
+testdir = os.path.dirname(__file__)
+srcdir = '../karenina'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
+from spatial_ornstein_uhlenbeck import check_perturbation_timepoint, write_options_to_log, parse_perturbation_file
 import numpy.testing as npt
   
 """
