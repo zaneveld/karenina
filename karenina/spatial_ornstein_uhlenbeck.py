@@ -198,6 +198,10 @@ def main():
 
     parser = make_option_parser()
     opts, args = parser.parse_args()
+    if opts.output is None:
+        parser.error("-o --output is required\n"
+                     "For additional help:\n\t"
+                     "karenina -h")
     print (opts)
 
     write_options_to_log("log.txt", opts)
