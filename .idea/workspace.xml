@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dffdf71f-d7d6-409c-841b-a173442c53a3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/karenina/fit_timeseries.py" afterPath="$PROJECT_DIR$/karenina/fit_timeseries.py" />
+      <change beforePath="$PROJECT_DIR$/tests/test_fit_timeseries.py" afterPath="$PROJECT_DIR$/tests/test_fit_timeseries.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,12 +26,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="spatial_ornstein_uhlenbeck.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="spatial_ornstein_uhlenbeck.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/karenina/spatial_ornstein_uhlenbeck.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="198" column="4" lean-forward="true" selection-start-line="198" selection-start-column="4" selection-end-line="200" selection-end-column="16" />
+            <state relative-caret-position="372">
+              <caret line="199" column="36" lean-forward="true" selection-start-line="199" selection-start-column="36" selection-end-line="199" selection-end-column="36" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fit_timeseries.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/karenina/fit_timeseries.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1326">
+              <caret line="222" column="46" lean-forward="false" selection-start-line="222" selection-start-column="46" selection-end-line="222" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_fit_timeseries.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/test_fit_timeseries.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="62" column="47" lean-forward="true" selection-start-line="62" selection-start-column="47" selection-end-line="62" selection-end-column="47" />
+              <folding>
+                <element signature="e#286#301#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,6 +93,7 @@
       <list>
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/karenina/fit_timeseries.py" />
+        <option value="$PROJECT_DIR$/tests/test_fit_timeseries.py" />
       </list>
     </option>
   </component>
@@ -186,8 +210,13 @@
           <url>file://$PROJECT_DIR$/tests/test_spatial_ornstein_uhlenbeck.py</url>
           <line>11</line>
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_fit_timeseries.py</url>
+          <line>11</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -233,14 +262,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_experiment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_fit_timeseries.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -298,6 +319,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/karenina/spatial_ornstein_uhlenbeck.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="199" column="36" lean-forward="true" selection-start-line="199" selection-start-column="36" selection-end-line="199" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_visualization.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -310,17 +339,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/karenina/fit_timeseries.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="221" column="15" lean-forward="false" selection-start-line="221" selection-start-column="15" selection-end-line="221" selection-end-column="15" />
+        <state relative-caret-position="1326">
+          <caret line="222" column="46" lean-forward="false" selection-start-line="222" selection-start-column="46" selection-end-line="222" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/karenina/spatial_ornstein_uhlenbeck.py">
+    <entry file="file://$PROJECT_DIR$/tests/test_fit_timeseries.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="198" column="4" lean-forward="true" selection-start-line="198" selection-start-column="4" selection-end-line="200" selection-end-column="16" />
-          <folding />
+        <state relative-caret-position="85">
+          <caret line="62" column="47" lean-forward="true" selection-start-line="62" selection-start-column="47" selection-end-line="62" selection-end-column="47" />
+          <folding>
+            <element signature="e#286#301#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -60,7 +60,7 @@ class TestFit(unittest.TestCase):
 
     def test_fit_normal(self):
         """Return the mean and standard deviation of normal data"""
-        for scale,data in self.BasicNormalData.iteritems():
+        for scale,data in self.BasicNormalData.items():
              est_loc,est_scale,nlogLik = fit_normal(data)
              accurate_to = 3 #decimal places
              npt.assert_almost_equal(est_loc,0,1)

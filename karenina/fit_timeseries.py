@@ -12,7 +12,6 @@ __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
 #from cogent.util.option_parsing import parse_command_line_parameters, make_option
-from util import exists
 from optparse import OptionParser
 from optparse import OptionGroup
 from scipy.optimize import basinhopping,brute,differential_evolution
@@ -220,9 +219,10 @@ def main():
     parser = make_option_parser()
     opts, args = parser.parse_args()
     print(opts)
-    
-    if exists(opts.output):
-        print("Output saved to: " +str(opts.output))
+
+    #TODO: Make if not exists output directory
+    #if exists(opts.output):
+    #    print("Output saved to: " +str(opts.output))
 
 
 if __name__ == "__main__":
