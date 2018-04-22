@@ -212,7 +212,7 @@ def main():
        parse_command_line_parameters(**script_info)
     
     if exists(opts.output):
-		print("Output saved to: " +str(opts.output))
+        print("Output saved to: " +str(opts.output))
 
 
 if __name__ == "__main__":
