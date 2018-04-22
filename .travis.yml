@@ -9,4 +9,4 @@ matrix:
     - python: 3.6
       env: TOXENV=py36
 
-install: pip install karenina-test
+script: make test
