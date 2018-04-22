@@ -11,12 +11,10 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-#from cogent.util.option_parsing import parse_command_line_parameters, make_option
 from optparse import OptionParser
 from optparse import OptionGroup
 from scipy.optimize import basinhopping,brute,differential_evolution
 from scipy.stats import norm
-
 from numpy import diff,inf,all,array
 
 

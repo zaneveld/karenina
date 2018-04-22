@@ -15,8 +15,8 @@ testdir = os.path.dirname(__file__)
 srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
-from process import Process
-from perturbation import Perturbation
+from karenina.process import Process
+from karenina.perturbation import Perturbation
 import numpy.testing as npt
 
 """

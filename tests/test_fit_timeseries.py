@@ -15,9 +15,9 @@ testdir = os.path.dirname(__file__)
 srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
-from fit_timeseries  import fit_timeseries,fit_normal,\
+from karenina.fit_timeseries  import fit_timeseries,fit_normal,\
   get_OU_nlogLik,make_OU_objective_fn
-from process import Process
+from karenina.process import Process
 import numpy.testing as npt
 
 from scipy.stats import norm

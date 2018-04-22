@@ -16,7 +16,7 @@ import sys, os
 testdir = os.path.dirname(__file__)
 srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
-from visualization import get_timeseries_data, save_simulation_figure, save_simulation_movie, update_3d_plot
+from karenina.visualization import get_timeseries_data, save_simulation_figure, save_simulation_movie, update_3d_plot
 
 """
 Tests for spatial_ornstein_uhlenbeck.py

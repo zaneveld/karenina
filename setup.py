@@ -32,8 +32,7 @@ setup(
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
 
-    name='karenina-test',  # Required
-    #name='karenina',  # Required
+    name='karenina',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -56,8 +55,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/SLPeoples/karenina',  # Optional
-    #url='https://github.com/zaneveld/karenina',  # Optional
+    url='https://github.com/zaneveld/karenina',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -147,7 +145,27 @@ setup(
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files
     #
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    #data_files=[('my_data', ['data/data_file'])],  # Optional
+    data_files=[('data/perturbations', ['data/perturbations/add_x_mu_high.csv',
+                                        'data/perturbations/all_perturbations.tsv',
+                                        'data/perturbations/double_xyz_delta.csv',
+                                        'data/perturbations/double_z_delta.csv',
+                                        'data/perturbations/README.txt',
+                                        'data/perturbations/set_x_lambda_high.csv',
+                                        'data/perturbations/set_x_lambda_medium.csv',
+                                        'data/perturbations/set_x_lambda_small.csv',
+                                        'data/perturbations/set_x_mu_high.csv',
+                                        'data/perturbations/set_xyz_mu_high.csv',
+                                        'data/perturbations/set_xyz_mu_low.csv',
+                                        'data/perturbations/set_y_lambda_high.csv',
+                                        'data/perturbations/set_yz_lambda_high.csv',
+                                        'data/perturbations/set_z_lambda_zero.csv',
+                                        'data/perturbations/x_mu_low.csv',
+                                        'data/perturbations/xyz_lambda_low.csv',
+                                        'data/perturbations/xyz_lambda_zero.csv',
+                                        'data/perturbations/xyz_lambda_zero_alt_format.csv',
+                                        'data/perturbations/y_lambda_medium.csv',
+                                        'data/perturbations/yz_lambda_medium.csv',]
+                 )],  # Optional
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
@@ -158,7 +176,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'karenina=spatial_ornstein_uhlenbeck:main',
+            'karenina=karenina.spatial_ornstein_uhlenbeck:main',
         ],
     },
 
