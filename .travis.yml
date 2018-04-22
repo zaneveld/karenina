@@ -10,9 +10,8 @@ matrix:
       env: TOXENV=py36
 
 before_install:
-  - sudo add-apt-repository ppa:djcj/hybrid -y
+  - sudo add-apt-repository ppa:jonathonf/ffmpeg-3 -y
   - sudo apt-get update
-  # - sudo apt-get dist-upgrade
-  - sudo apt-get install ffmpeg -y
+  - sudo apt-get install ffmpeg libav-tools x264 x265 -y
 
 script: python -m unittest discover tests
