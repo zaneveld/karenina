@@ -9,4 +9,4 @@ matrix:
     - python: 3.6
       env: TOXENV=py36
 
-script: python tests/test_experiment.py
+script: python -m unittest discover tests
