@@ -1,7 +1,0 @@
-optparse
-os
-scipy
-numpy
-random
-unittest
-sys
