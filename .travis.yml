@@ -10,7 +10,7 @@ matrix:
       env: TOXENV=py36
 
 before_install:
-  - sudo add-apt-repository ppa:djcj/hybrid
+  - sudo add-apt-repository ppa:djcj/hybrid -y
   - sudo apt-get update
   - sudo apt-get dist-upgrade
   - sudo apt-get install ffmpeg
