@@ -184,7 +184,7 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
     """
     
     if global_optimizer == "basinhopping":
-        local_min_bounds = zip(xmin.tolist(),xmax.tolist())
+        local_min_bounds = list(zip(xmin.tolist(),xmax.tolist()))
         local_min_kwargs = {"method":local_optimizer,"bounds":local_min_bounds}
 
         #From the scipy docs, if we want bounds on 
@@ -203,9 +203,7 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
 
         bounds_test = Bounds()
         
-        result = basinhopping(fn_to_optimize,x0,\
-          minimizer_kwargs=local_min_kwargs,niter = niter,\
-          stepsize=0.05,accept_test = bounds_test)
+        result = basinhopping(fn_to_optimize,x0,minimizer_kwargs=local_min_kwargs,niter = niter,stepsize=0.05,accept_test = bounds_test)
         global_min = result.x
         #Result of evaluating fn_to_optimize at global min
         f_at_global_min = result.fun
