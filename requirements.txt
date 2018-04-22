@@ -1,4 +1,3 @@
-copy
 optparse
 os
 scipy
