@@ -9,4 +9,7 @@ matrix:
     - python: 3.6
       env: TOXENV=py36
 
+before_install:
+  - sudo apt-get install ffmpeg
+
 script: python -m unittest discover tests
