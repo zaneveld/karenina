@@ -12,6 +12,7 @@ __status__ = "Development"
 import unittest
 from warnings import catch_warnings
 import sys, os
+from os.path import join,realpath,dirname
 testdir = os.path.dirname(__file__)
 srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
@@ -27,7 +28,7 @@ class TestPrimary(unittest.TestCase):
 
     def setUp(self):
         self.perturbation_file_path =\
-        "../data/perturbations/set_x_lambda_small.tsv"
+        join(dirname(dirname(realpath(file))),'data','perturbations','set_x_lambda_small.tsv')
         self.perturbation_timepoint = 5
         self.perturbation_duration = 100
 
