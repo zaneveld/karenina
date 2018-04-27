@@ -1,0 +1,15 @@
+language: python
+
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27
+    - python: 3.6
+      env: TOXENV=py36
+
+before_install:
+  - sudo add-apt-repository ppa:mc3man/trusty-media -y
+  - sudo apt-get update
+  - sudo apt-get install ffmpeg -y
+
+script: python -m unittest discover tests

@@ -11,30 +11,37 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from cogent.util.option_parsing import parse_command_line_parameters, make_option
-from util import exists
-
+from optparse import OptionParser
+from optparse import OptionGroup
 from scipy.optimize import basinhopping,brute,differential_evolution
 from scipy.stats import norm
-
 from numpy import diff,inf,all,array
 
-#Set up script parameters
-script_info = {}
-script_info['brief_description'] = "This script fits time-series PCoA data to Ornstein-Uhlenbeck models [CURRENTLY DEMO ONLY]."
-script_info['script_description'] = "This script fits microbiome change over time to Ornstein-Uhlenbeck (OU) models."
-script_info['script_usage'] = [
-                               ("","Demo fitting an OU model using default parameters.", "%prog -o ./simulation_results")
-                                ]
-script_info['output_description']= "Output is a tab-delimited data table of fitting results"
-script_info['required_options'] = [
- make_option('-o','--output',type="new_filepath",help='the output folder for the simulation results')
-]
-script_info['optional_options'] = [\
-    make_option('--fit_method',default="basinhopping",type="choice",choices=['basinhopping','differential_evolution','brute'],help="Global optimization_method to use [default:%default]")
-   ]
 
-script_info['version'] = __version__
+def make_option_parser():
+    """Return an optparse OptionParser object"""
+
+    parser = OptionParser(usage = [
+                               ("","Demo fitting an OU model using default parameters.", "%prog -o ./simulation_results")
+                                ],
+    description = "This script fits microbiome change over time to Ornstein-Uhlenbeck (OU) models.",
+    version = __version__)
+
+    required_options = OptionGroup(parser, "Required options")
+
+    required_options.add_option('-o','--output', type="new_filepath",
+    help='the output folder for the simulation results')
+
+    parser.add_option_group(required_options)
+
+    optional_options = OptionGroup(parser, "Optional options")
+
+    optional_options.add_option('--fit_method', default
+    ="basinhopping", type="choice", choices=['basinhopping', 'differential_evolution', 'brute'], help="Global optimization_method to use [default:%default]")
+
+    parser.add_option_group(optional_options)
+
+    return parser
 
 def fit_OU_process(data,dts):
     """Return the parameters of an OU process over data
@@ -175,7 +182,7 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
     """
     
     if global_optimizer == "basinhopping":
-        local_min_bounds = zip(xmin.tolist(),xmax.tolist())
+        local_min_bounds = list(zip(xmin.tolist(),xmax.tolist()))
         local_min_kwargs = {"method":local_optimizer,"bounds":local_min_bounds}
 
         #From the scipy docs, if we want bounds on 
@@ -194,9 +201,7 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
 
         bounds_test = Bounds()
         
-        result = basinhopping(fn_to_optimize,x0,\
-          minimizer_kwargs=local_min_kwargs,niter = niter,\
-          stepsize=0.05,accept_test = bounds_test)
+        result = basinhopping(fn_to_optimize,x0,minimizer_kwargs=local_min_kwargs,niter = niter,stepsize=0.05,accept_test = bounds_test)
         global_min = result.x
         #Result of evaluating fn_to_optimize at global min
         f_at_global_min = result.fun
@@ -207,12 +212,13 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
 
  
 def main():
+    parser = make_option_parser()
+    opts, args = parser.parse_args()
+    print(opts)
 
-    option_parser, opts, args =\
-       parse_command_line_parameters(**script_info)
-    
-    if exists(opts.output):
-	print("Output saved to: "+str(opts.output))
+    #TODO: Make if not exists output directory
+    #if exists(opts.output):
+    #    print("Output saved to: " +str(opts.output))
 
 
 if __name__ == "__main__":

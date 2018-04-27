@@ -15,7 +15,7 @@ srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 import unittest
 from warnings import catch_warnings
-from experiment import Experiment
+from karenina.experiment import Experiment
 import numpy.testing as npt
 
 """
