@@ -11,7 +11,7 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from experiment import Experiment
+from karenina.experiment import Experiment
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname
@@ -225,6 +225,10 @@ def main():
 
     parser = make_option_parser()
     opts, args = parser.parse_args()
+    if opts.output is None:
+        parser.error("-o --output is required\n"
+                     "For additional help:\n\t"
+                     "karenina -h")
     print (opts)
 
     write_options_to_log("log.txt", opts)

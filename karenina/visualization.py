@@ -11,7 +11,7 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from os.path import join,isdir,realpath,dirname
+from os.path import join
 from numpy import array
 
 def get_timeseries_data(individuals,axes=["x","y","z"]):
