@@ -255,8 +255,7 @@ def main():
 
     #Set up the treatments to be applied
 
-    perturbations = parse_perturbation_file(opts.pert_file_path,\
-    opts.perturbation_timepoint, opts.perturbation_duration)
+    perturbations = parse_perturbation_file(opts.pert_file_path,opts.perturbation_timepoint, opts.perturbation_duration)
 
     treatments = [[], perturbations]
     treatment_names = opts.treatment_names.split(",")

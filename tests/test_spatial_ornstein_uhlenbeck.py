@@ -28,7 +28,7 @@ class TestPrimary(unittest.TestCase):
 
     def setUp(self):
         self.perturbation_file_path =\
-        join(dirname(dirname(realpath(file))),'data','perturbations','set_x_lambda_small.tsv')
+            join(dirname(dirname(realpath(__file__))),'data','perturbations','set_x_lambda_small.tsv')
         self.perturbation_timepoint = 5
         self.perturbation_duration = 100
 
