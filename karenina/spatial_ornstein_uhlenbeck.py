@@ -11,7 +11,7 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from experiment import Experiment
+from karenina.experiment import Experiment
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname
@@ -142,7 +142,6 @@ perturbation_duration):
     """Return a list of perturbations
     infile -- a .tsv file describing one perturbation per line
     assume input file is correctly formatted (no warnings if not)
-
     NOTE: each pertubation should be in the format:
     set_xyz_lambda_low =
        {"start":opts.perturbation_timepoint,\
@@ -234,6 +233,7 @@ def main():
         parser.print_help()
         exit()
 
+
     write_options_to_log("log.txt", opts)
 
     #Check timepoints
@@ -255,8 +255,7 @@ def main():
 
     #Set up the treatments to be applied
 
-    perturbations = parse_perturbation_file(opts.pert_file_path,\
-    opts.perturbation_timepoint, opts.perturbation_duration)
+    perturbations = parse_perturbation_file(opts.pert_file_path,opts.perturbation_timepoint, opts.perturbation_duration)
 
     treatments = [[], perturbations]
     treatment_names = opts.treatment_names.split(",")

@@ -11,9 +11,9 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
-from individual import Individual
-from perturbation import Perturbation
-import visualization
+from karenina.individual import Individual
+from karenina.perturbation import Perturbation
+import karenina.visualization as visualization
 from copy import copy
 
 
