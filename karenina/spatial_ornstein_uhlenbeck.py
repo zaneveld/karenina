@@ -137,7 +137,8 @@ def write_options_to_log(log, opts):
     logfile.close()
 
 
-def parse_perturbation_file(opts):
+def parse_perturbation_file(pert_file_path, perturbation_timepoint,\
+perturbation_duration):
     """Return a list of perturbations
     infile -- a .tsv file describing one perturbation per line
     assume input file is correctly formatted (no warnings if not)
@@ -153,51 +154,53 @@ def parse_perturbation_file(opts):
 
     perturbations_list = []
 
-    if (opts.pert_file_path != None):
-        df = pd.read_csv(opts.pert_file_path, sep = "\t")
+    if (pert_file_path != None):
+        df = pd.read_csv(pert_file_path, sep = "\t")
 
         headers_list = list(df)
 
         for index, row in df.iterrows():
 
-            a_perturbation = {"start":opts.perturbation_timepoint,\
-            "end":opts.perturbation_timepoint + opts.perturbation_duration}
+            a_perturbation = {"start":perturbation_timepoint,\
+            "end":perturbation_timepoint + perturbation_duration}
 
-            params_checker = False
-            values_checker = False
-            update_mode_checker = False
-            axes_checker = False
+            required_headers_checker = {"params" : False, "values" : False,
+            "update_mode" : False, "axes" : False}
 
             for header in headers_list:
 
                 header_lowercase = header.lower()
 
                 if header_lowercase in ("parameter", "parameters", "param",\
-                "params", "p"):
-                    params_checker = True
+                "params"):
+                    required_headers_checker["params"] = True
                     params = row[header].split(",")
 
-                elif header_lowercase in ("value", "values", "val", "vals",\
-                "v"):
-                    values_checker = True
+                elif header_lowercase in ("value", "values", "val", "vals"):
+                    required_headers_checker["values"] = True
                     values = str(row[header]).split(",")
 
                 elif header_lowercase in ("update_mode", "update_modes",\
-                "update mode", "update modes", "u", "um", "u_m", "u m"):
-                    update_mode_checker = True
+                "update mode", "update modes"):
+                    required_headers_checker["update_mode"] = True
                     update_mode = row[header]
 
-                elif header_lowercase in ("axes", "axis", "a"):
-                    axes_checker = True
+                elif header_lowercase in ("axes", "axis"):
+                    required_headers_checker["axes"] = True
                     axes = row[header].split(",")
 
                 else:
                     raise ValueError("Could not identify header name in " + \
                     "perturbations file")
 
-            if (params_checker == False or values_checker == False or \
-            update_mode_checker == False or axes_checker == False):
-                raise ValueError("Missing header(s)")
+            missing_headers_error_message = ""
+            for each_checker in required_headers_checker:
+                if required_headers_checker[each_checker] == False:
+                    missing_headers_error_message += each_checker + " "
+            if missing_headers_error_message != "":
+                missing_headers_error_message = "Missing the following " +\
+                "header(s): " + missing_headers_error_message
+                raise ValueError(missing_headers_error_message)
 
             if len(params) != len(values):
                 raise ValueError("Number of parameters does not match the " + \
@@ -212,8 +215,8 @@ def parse_perturbation_file(opts):
             perturbations_list.append(a_perturbation)
 
     else:
-        set_xyz_lambda_zero = {"start":opts.perturbation_timepoint,\
-        "end":opts.perturbation_timepoint + opts.perturbation_duration,\
+        set_xyz_lambda_zero = {"start":perturbation_timepoint,\
+        "end":perturbation_timepoint + perturbation_duration,\
         "params":{"lambda":0.000},"update_mode":"replace","axes":["x","y","z"]}
 
         perturbations_list.append(set_xyz_lambda_zero)
@@ -224,12 +227,13 @@ def parse_perturbation_file(opts):
 def main():
 
     parser = make_option_parser()
+
     opts, args = parser.parse_args()
+
     if opts.output is None:
-        parser.error("-o --output is required\n"
-                     "For additional help:\n\t"
-                     "karenina -h")
-    print (opts)
+        parser.print_help()
+        exit()
+
 
     write_options_to_log("log.txt", opts)
 
@@ -252,7 +256,8 @@ def main():
 
     #Set up the treatments to be applied
 
-    perturbations = parse_perturbation_file(opts)
+    perturbations = parse_perturbation_file(opts.pert_file_path,\
+    opts.perturbation_timepoint, opts.perturbation_duration)
 
     treatments = [[], perturbations]
     treatment_names = opts.treatment_names.split(",")
