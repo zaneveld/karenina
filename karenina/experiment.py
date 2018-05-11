@@ -197,7 +197,6 @@ class Experiment(object):
             for curr_subject in treatment["individuals"]:
                 individuals.append(curr_subject)
         print ("individuals:",individuals)
-        visualization.save_simulation_movie(individuals, output_folder,\
-             len(individuals),self.NTimepoints,\
-             black_background=True)
+        visualization.save_simulation_movie(individuals, output_folder,
+                                            len(individuals),self.NTimepoints,black_background=True)
 
