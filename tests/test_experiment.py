@@ -107,6 +107,10 @@ class TestExperiment(unittest.TestCase):
         pass
 
     def test_writeToMovieFile(self):
+        # Travis-CI Uses Xwindows backend, this prevents that issue.
+        import matplotlib
+        matplotlib.use('Agg')
+        
         self.output_folder = "./"
         Experiment.write_to_movie_file(self, self.output_folder)
         assert os.path.exists("./simulation_video.mp4")
