@@ -72,8 +72,7 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
 
 
 def save_simulation_movie(individuals, output_folder,\
-     n_individuals,n_timepoints,\
-    black_background=True):
+     n_individuals,n_timepoints,black_background=True):
     """Save an .ffmpg move of the simulated community change"""
 
     #TODO: standardize these and put them up above
@@ -82,6 +81,10 @@ def save_simulation_movie(individuals, output_folder,\
     import matplotlib.pyplot as plt
     import mpl_toolkits.mplot3d.axes3d as p3
     import matplotlib.animation as animation
+    
+    # Travis-CI Uses Xwindows backend, this prevents that issue.
+    import matplotlib
+    matplotlib.use('Agg')
 
 
     #The code for writing animation files is essentially identical to the
