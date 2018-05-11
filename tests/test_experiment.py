@@ -38,27 +38,26 @@ class TestExperiment(unittest.TestCase):
         self.treatment_params = [[],[]]
         self.interindividual_variation = 0.01
 
+        self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
+                         self.treatment_params, self.interindividual_variation)
+
     def test_check_variable_specified_per_treatment(self):
-        Experiment.check_variable_specified_per_treatment(Experiment(self.TreatmentNames,
-                                                                     self.NIndividuals,
-                                                                     self.n_timepoints,
-                                                                     self.BaseParams,
-                                                                     self.treatment_params,
-                                                                     self.interindividual_variation),
+        Experiment.check_variable_specified_per_treatment(self.exp,
                                                           self.NIndividuals)
         self.TreatmentNames.append('Error')
-        self.assertRaises(ValueError, Experiment.check_variable_specified_per_treatment,self,self.NIndividuals)
+        with self.assertRaises(ValueError):
+            self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
+                                  self.treatment_params, self.interindividual_variation)
+            Experiment.check_variable_specified_per_treatment(self.exp,self.NIndividuals)
 
     def test_check_n_timepoints_is_int(self):
-        Experiment.check_n_timepoints_is_int(Experiment(self.TreatmentNames,
-                                                        self.NIndividuals,
-                                                        self.n_timepoints,
-                                                        self.BaseParams,
-                                                        self.treatment_params,
-                                                        self.interindividual_variation),
+        Experiment.check_n_timepoints_is_int(self.exp,
                                              self.n_timepoints)
         self.n_timepoints = [10]
-        self.assertRaises(ValueError, Experiment.check_n_timepoints_is_int, self, self.n_timepoints)
+        with self.assertRaises(ValueError):
+            self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
+                                  self.treatment_params, self.interindividual_variation)
+            Experiment.check_n_timepoints_is_int(self.exp, self.n_timepoints)
 
     def test_simulate_timesteps(self):
         pass
@@ -73,12 +72,7 @@ class TestExperiment(unittest.TestCase):
         matplotlib.use('Agg')
 
         self.output_folder = "./"
-        Experiment.write_to_movie_file(Experiment(self.TreatmentNames,
-                                                  self.NIndividuals,
-                                                  self.n_timepoints,
-                                                  self.BaseParams,
-                                                  self.treatment_params,
-                                                  self.interindividual_variation),
+        Experiment.write_to_movie_file(self.exp,
                                        self.output_folder)
         assert os.path.exists("./simulation_video.mp4")
         os.remove("./simulation_video.mp4")
