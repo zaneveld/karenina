@@ -2,4 +2,3 @@ scipy
 
 pandas
 matplotlib
-mpl_toolkits
