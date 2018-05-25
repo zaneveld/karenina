@@ -47,9 +47,7 @@ class TestProcess(unittest.TestCase):
         self.TestProcesses["stable_process"] = stable_process
 
     def test_stable_process_update(self):
-        """
-        A stable OU process (lambda =1) is invariable in position
-        """
+        """A stable OU process (lambda =1) is invariable in position"""
 
         stable_process = self.TestProcesses["stable_process"]
         start_coord = stable_process.Coord
@@ -60,9 +58,7 @@ class TestProcess(unittest.TestCase):
         npt.assert_almost_equal(start_coord, end_coord)
 
     def test_perturb_stable_process(self):
-        """
-        Process can be perturbed to become more variable
-        """
+        """Process can be perturbed to become more variable"""
         stable_process = self.TestProcesses["stable_process"]
         start_coord = stable_process.Coord
 
@@ -93,9 +89,7 @@ class TestProcess(unittest.TestCase):
         self.assertTrue(stable_change < unstable_change)
 
     def test_perturb_alter_mean(self):
-        """
-        Process can be perturbed to take on a new mean location
-        """
+        """Process can be perturbed to take on a new mean location"""
         stable_process = self.TestProcesses["stable_process"]
         start_coord = stable_process.Coord
 
