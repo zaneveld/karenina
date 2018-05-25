@@ -42,7 +42,7 @@ class TestExperiment(unittest.TestCase):
         self.verbose = False
 
         self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
-                         self.treatment_params, self.interindividual_variation)
+                         self.treatment_params, self.interindividual_variation, self.verbose)
 
 
     def test_check_variable_specified_per_treatment(self):
@@ -54,7 +54,7 @@ class TestExperiment(unittest.TestCase):
         self.TreatmentNames.append('Error')
         with self.assertRaises(ValueError):
             self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
-                                  self.treatment_params, self.interindividual_variation)
+                                  self.treatment_params, self.interindividual_variation, self.verbose)
             self.exp.check_variable_specified_per_treatment(self.NIndividuals, self.verbose)
 
 
@@ -67,7 +67,7 @@ class TestExperiment(unittest.TestCase):
         self.n_timepoints = [10]
         with self.assertRaises(ValueError):
             self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
-                                  self.treatment_params, self.interindividual_variation)
+                                  self.treatment_params, self.interindividual_variation, self.verbose)
             self.exp.check_n_timepoints_is_int(self.n_timepoints)
 
 
@@ -96,7 +96,7 @@ class TestExperiment(unittest.TestCase):
 
         self.output_folder = "./"
         Experiment.write_to_movie_file(self.exp,
-                                       self.output_folder)
+                                       self.output_folder, self.verbose)
         assert os.path.exists("./simulation_video.mp4")
         os.remove("./simulation_video.mp4")
 
