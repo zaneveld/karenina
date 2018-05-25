@@ -66,11 +66,8 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_simulate_timesteps(self):
-        # Can be changed to determine expected output of 700 timesteps.
-        # (Not certain why there are 700 data points)
-        # Should simulate_timestep be tested or is this sufficient?
-        #   simulate_timestep only implements simulate_movement
-        #   expected value could be tested here.
+        #simulate_timestep only implements simulate_movement
+        #   expected value could be tested there.
 
         """
         Tests that the timesteps are successfully completed, populating Data with expected number of entries.
