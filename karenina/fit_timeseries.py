@@ -42,7 +42,7 @@ def make_option_parser():
     optional_options.add_option('-v', '--verbose', action="store_true", dest="verbose", default=False,
                                 help='-v, allows for verbose output' +
                                      ' [default: %default]')
-    
+
     parser.add_option_group(optional_options)
 
     return parser

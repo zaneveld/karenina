@@ -21,13 +21,9 @@ from karenina.perturbation import Perturbation
 import numpy.testing as npt
 from copy import copy
 
-"""
-Tests for spatial_ornstein_uhlenbeck.py
-"""
 
 class TestExperiment(unittest.TestCase):
-    # TODO: Print statements for test status?
-
+    """Tests for the Experiment class"""
     def setUp(self):
         """
         Creates default local variables for use in the tests
