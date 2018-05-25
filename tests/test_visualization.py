@@ -18,12 +18,8 @@ srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from karenina.visualization import get_timeseries_data, save_simulation_figure, save_simulation_movie, update_3d_plot
 
-"""
-Tests for spatial_ornstein_uhlenbeck.py
-"""
 
-
-class TestExperiment(unittest.TestCase):
+class TestVisualization(unittest.TestCase):
     # TODO: Tests
 
     def setUp(self):
