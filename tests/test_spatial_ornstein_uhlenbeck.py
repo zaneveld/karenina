@@ -34,9 +34,11 @@ class TestPrimary(unittest.TestCase):
         self.perturbation_duration = 100
 
     def test_check_perturbation_timepoint(self):
+        """TODO"""
         pass
 
     def test_write_options_to_log(self):
+        """TODO"""
         pass
 
     def test_parse_perturbation_file(self):

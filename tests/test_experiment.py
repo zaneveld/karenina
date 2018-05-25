@@ -46,10 +46,7 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_check_variable_specified_per_treatment(self):
-        """
-        Tests that the NIndividuals is equal to the number of Treatment Names.
-        Introduces an extra treatment name, and asserts the thrown ValueError
-        """
+        """Tests that the NIndividuals is equal to the number of Treatment Names."""
         self.exp.check_variable_specified_per_treatment(self.NIndividuals, self.verbose)
         self.TreatmentNames.append('Error')
         with self.assertRaises(ValueError):
@@ -59,10 +56,7 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_check_n_timepoints_is_int(self):
-        """
-        Tests that the n_timepoints is of the int datatype.
-        Introduces a new variable for n_timepoints as a list, asserts the thrown ValueError
-        """
+        """Tests that the n_timepoints is of the int datatype."""
         self.exp.check_n_timepoints_is_int(self.n_timepoints)
         self.n_timepoints = [10]
         with self.assertRaises(ValueError):
@@ -79,7 +73,7 @@ class TestExperiment(unittest.TestCase):
         #   expected value could be tested here.
 
         """
-        Tests that the timesteps are successfully completed, populating the Data variable with 700 new entries.
+        Tests that the timesteps are successfully completed, populating Data with expected number of entries.
         """
         assert len(self.exp.Data) == 1
         self.exp.simulate_timesteps(0,self.n_timepoints, self.verbose)
@@ -87,9 +81,7 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_writeToMovieFile(self):
-        """
-        Tests that the output movie file is successfully written, then removes the file.
-        """
+        """Tests that the output movie file is successfully written, then removes the file."""
         # Travis-CI Uses Xwindows backend, this prevents that issue.
         import matplotlib
         matplotlib.use('Agg')

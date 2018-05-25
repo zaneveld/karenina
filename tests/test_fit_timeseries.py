@@ -33,7 +33,9 @@ class TestFit(unittest.TestCase):
     """Tests of the fit timeseries module"""
 
     def setUp(self):
-        """Set up test data for each test function"""
+        """
+        Set up test data for each test function
+        """
         
         #If this model fitting approach is going to work
         #we need to ensure that a super basic function
