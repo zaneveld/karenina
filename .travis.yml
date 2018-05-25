@@ -12,4 +12,4 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install ffmpeg -y
 
-script: python -m unittest discover tests
+script: python -m unittest discover tests -v

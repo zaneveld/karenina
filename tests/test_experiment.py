@@ -25,11 +25,13 @@ from copy import copy
 Tests for spatial_ornstein_uhlenbeck.py
 """
 
-
 class TestExperiment(unittest.TestCase):
-    # TODO: Tests
+    # TODO: Print statements for test status?
 
     def setUp(self):
+        """
+        Creates default local variables for use in the tests
+        """
         self.TreatmentNames = ['control','destabilizing_treatment']
         self.Treatments = [{'treatment_name': 'control'}, {'treatment_name': 'destabilizing_treatment'}]
         self.BaseParams = {'lambda': 0.2, 'delta': 0.25, 'interindividual_variation': 0.01}
@@ -41,32 +43,50 @@ class TestExperiment(unittest.TestCase):
         self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
                          self.treatment_params, self.interindividual_variation)
 
+
     def test_check_variable_specified_per_treatment(self):
-        Experiment.check_variable_specified_per_treatment(self.exp,
-                                                          self.NIndividuals)
+        """
+        Tests that the NIndividuals is equal to the number of Treatment Names.
+        Introduces an extra treatment name, and asserts the thrown ValueError
+        """
+        self.exp.check_variable_specified_per_treatment(self.NIndividuals)
         self.TreatmentNames.append('Error')
         with self.assertRaises(ValueError):
             self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
                                   self.treatment_params, self.interindividual_variation)
-            Experiment.check_variable_specified_per_treatment(self.exp,self.NIndividuals)
+            self.exp.check_variable_specified_per_treatment(self.NIndividuals)
+
 
     def test_check_n_timepoints_is_int(self):
-        Experiment.check_n_timepoints_is_int(self.exp,
-                                             self.n_timepoints)
+        """
+        Tests that the n_timepoints is of the int datatype.
+        Introduces a new variable for n_timepoints as a list, asserts the thrown ValueError
+        """
+        self.exp.check_n_timepoints_is_int(self.n_timepoints)
         self.n_timepoints = [10]
         with self.assertRaises(ValueError):
             self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
                                   self.treatment_params, self.interindividual_variation)
-            Experiment.check_n_timepoints_is_int(self.exp, self.n_timepoints)
+            self.exp.check_n_timepoints_is_int(self.n_timepoints)
+
 
     def test_simulate_timesteps(self):
-        pass
+        # Can be changed to determine expected output of 700 timesteps.
+        # (Not certain why there are 700 data points)
+        # Should simulate_timestep be tested or benchmarked?
 
-    def test_simulate_timestep(self):
-        #Experiment.simulate_timestep(self, 0)
-        pass
+        """
+        Tests that the timesteps are successfully completed, populating the Data variable with 700 new entries.
+        """
+        assert len(self.exp.Data) == 1
+        self.exp.simulate_timesteps(0,self.n_timepoints)
+        assert len(self.exp.Data) == 701
+
 
     def test_writeToMovieFile(self):
+        """
+        Tests that the output movie file is successfully written, then removes the file.
+        """
         # Travis-CI Uses Xwindows backend, this prevents that issue.
         import matplotlib
         matplotlib.use('Agg')
