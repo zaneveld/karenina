@@ -58,10 +58,13 @@ class TestFit(unittest.TestCase):
             dt = 1
             ou_process.update(dt)
         self.OU = ou_process
+        self.verbose = False
             
 
     def test_fit_normal(self):
-        """Return the mean and standard deviation of normal data"""
+        """
+        Return the mean and standard deviation of normal data
+        """
         for scale,data in self.BasicNormalData.items():
              est_loc,est_scale,nlogLik = fit_normal(data)
              accurate_to = 3 #decimal places
@@ -69,7 +72,9 @@ class TestFit(unittest.TestCase):
              npt.assert_almost_equal(est_scale,scale,1)
 
     def test_basinhopping_canned_example(self):
-        """Basinhopping fits a parabola with superimposed local minima"""
+        """
+        Basinhopping fits a parabola with superimposed local minima
+        """
         #This is directly from the scipy.optimize docs
         
         fn_to_optimize = lambda x: cos(14.5 * x - 0.3) + (x + 0.2) * x   
@@ -137,12 +142,15 @@ class TestFit(unittest.TestCase):
               err[0],err[1],err[2])) 
     """
     def test_get_OU_nLogLik_accords_with_correct_params(self):
-        """get_OU_nLogLik gives best score to correct params"""
+        """
+        get_OU_nLogLik gives best score to correct params
+        """
         ou = self.OU
         xs = array(ou.History)
         ts = arange(0,len(ou.History))        
-        print ("xs.shape:",xs.shape)
-        print ("ts.shape:",ts.shape)
+        if self.verbose:
+            print ("xs.shape:",xs.shape)
+            print ("ts.shape:",ts.shape)
         #Let's try a range of values around the true ones
         #as we'd produce when basinhopping 
         

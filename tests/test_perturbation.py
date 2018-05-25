@@ -54,7 +54,9 @@ class TestPerturbation(unittest.TestCase):
                                   "double_lambda_and_mu": double_lambda_and_mu}
 
     def test_is_active(self):
-        """Perturbation is_active tests whether it is active based on the current time"""
+        """
+        Perturbation is_active tests whether it is active based on the current time
+        """
         # perturbations start at 50 and end at 75
         exact_start = 50
         exact_end = 75
@@ -79,7 +81,9 @@ class TestPerturbation(unittest.TestCase):
         self.assertTrue(curr_perturbation.is_active(95))
 
     def test_update_param_updates_single_param(self):
-        """Perturbation.update_params updates a single parameter correctly"""
+        """
+        Perturbation.update_params updates a single parameter correctly
+        """
 
         base_params = {"mu": 0.1, "lambda": 0.25, "delta": 0.18}
 
@@ -104,7 +108,9 @@ class TestPerturbation(unittest.TestCase):
         self.assertEqual(obs, exp)
 
     def test_update_param_updates_multiple_params(self):
-        """Perturbation.update_params updates a single parameter correctly"""
+        """
+        Perturbation.update_params updates a single parameter correctly
+        """
 
         base_params = {"mu": 0.1, "lambda": 0.25, "delta": 0.18}
 

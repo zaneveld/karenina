@@ -46,7 +46,9 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_check_variable_specified_per_treatment(self):
-        """Tests that the NIndividuals is equal to the number of Treatment Names."""
+        """
+        Tests that the NIndividuals is equal to the number of Treatment Names.
+        """
         self.exp.check_variable_specified_per_treatment(self.NIndividuals, self.verbose)
         self.TreatmentNames.append('Error')
         with self.assertRaises(ValueError):
@@ -56,7 +58,9 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_check_n_timepoints_is_int(self):
-        """Tests that the n_timepoints is of the int datatype."""
+        """
+        Tests that the n_timepoints is of the int datatype.
+        """
         self.exp.check_n_timepoints_is_int(self.n_timepoints)
         self.n_timepoints = [10]
         with self.assertRaises(ValueError):
@@ -81,7 +85,9 @@ class TestExperiment(unittest.TestCase):
 
 
     def test_writeToMovieFile(self):
-        """Tests that the output movie file is successfully written, then removes the file."""
+        """
+        Tests that the output movie file is successfully written, then removes the file.
+        """
         # Travis-CI Uses Xwindows backend, this prevents that issue.
         import matplotlib
         matplotlib.use('Agg')
