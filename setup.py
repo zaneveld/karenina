@@ -52,6 +52,7 @@ setup(
                   'data/perturbations/set_x_mu_low.tsv', 'data/perturbations/set_xyz_lambda_low.tsv',
                   'data/perturbations/set_xyz_lambda_zero.tsv', 'data/perturbations/set_xyz_lambda_zero.tsv',
                   'data/perturbations/set_y_lambda_medium.tsv', 'data/perturbations/set_yz_lambda_medium.tsv',])],
+
     entry_points={
         'console_scripts': [
             'karenina=karenina.spatial_ornstein_uhlenbeck:main',
