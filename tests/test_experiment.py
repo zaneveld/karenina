@@ -39,6 +39,7 @@ class TestExperiment(unittest.TestCase):
         self.n_timepoints = 10
         self.treatment_params = [[],[]]
         self.interindividual_variation = 0.01
+        self.verbose = False
 
         self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
                          self.treatment_params, self.interindividual_variation)
@@ -49,12 +50,12 @@ class TestExperiment(unittest.TestCase):
         Tests that the NIndividuals is equal to the number of Treatment Names.
         Introduces an extra treatment name, and asserts the thrown ValueError
         """
-        self.exp.check_variable_specified_per_treatment(self.NIndividuals)
+        self.exp.check_variable_specified_per_treatment(self.NIndividuals, self.verbose)
         self.TreatmentNames.append('Error')
         with self.assertRaises(ValueError):
             self.exp = Experiment(self.TreatmentNames, self.NIndividuals, self.n_timepoints, self.BaseParams,
                                   self.treatment_params, self.interindividual_variation)
-            self.exp.check_variable_specified_per_treatment(self.NIndividuals)
+            self.exp.check_variable_specified_per_treatment(self.NIndividuals, self.verbose)
 
 
     def test_check_n_timepoints_is_int(self):
@@ -81,7 +82,7 @@ class TestExperiment(unittest.TestCase):
         Tests that the timesteps are successfully completed, populating the Data variable with 700 new entries.
         """
         assert len(self.exp.Data) == 1
-        self.exp.simulate_timesteps(0,self.n_timepoints)
+        self.exp.simulate_timesteps(0,self.n_timepoints, self.verbose)
         assert len(self.exp.Data) == 701
 
 

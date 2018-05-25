@@ -71,7 +71,7 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
     fig.savefig(fig_filename, facecolor=fig.get_facecolor(), edgecolor='none',bbox_inches='tight')
 
 
-def save_simulation_movie(individuals, output_folder,\
+def save_simulation_movie(verbose, individuals, output_folder,\
      n_individuals,n_timepoints,black_background=True):
     """Save an .ffmpg move of the simulated community change"""
 
@@ -94,8 +94,9 @@ def save_simulation_movie(individuals, output_folder,\
 
     data = get_timeseries_data(individuals)
     colors = [i.BaseParams["color"] for i in individuals]
-    #print("Individual colors:",colors)
-    #print ("Movie raw data:",data)
+    if verbose:
+        print("Individual colors:",colors)
+        print("Movie raw data:",data)
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
     pointstyle = 'o' #cheat to use lines to represent points
@@ -127,7 +128,8 @@ def save_simulation_movie(individuals, output_folder,\
         #Set 3d background grid color to a dull red
         new_grid_params = ax.w_xaxis._axinfo['grid']
         new_grid_params.update({'color': dull_red, 'linewidth':1.0})
-        #print(new_grid_params)
+        if verbose:
+            print(new_grid_params)
         ax.w_xaxis._axinfo.update({'grid' : new_grid_params})
         ax.w_yaxis._axinfo.update({'grid' : new_grid_params})
         ax.w_zaxis._axinfo.update({'grid' : new_grid_params})
