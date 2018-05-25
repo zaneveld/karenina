@@ -261,16 +261,16 @@ def main():
 
     treatments = [[], perturbations]
     treatment_names = opts.treatment_names.split(",")
-    print("Raw number of individuals from user:",opts.n_individuals)
-    print("n_individuals.split(',')",opts.n_individuals.split(','))
+    #print("Raw number of individuals from user:",opts.n_individuals)
+    #print("n_individuals.split(',')",opts.n_individuals.split(','))
     n_individuals = list(map(int,opts.n_individuals.split(",")))
 
-    print ("**Experiment Design**")
-    print ("treatments:",treatment_names)
-    print ("n_individuals:",n_individuals)
-    print ("interindividual_variation",opts.interindividual_variation)
-    print ("treatment_effects:",treatments)
-    print ("individual_base_params:",individual_base_params)
+    #print ("**Experiment Design**")
+    #print ("treatments:",treatment_names)
+    #print ("n_individuals:",n_individuals)
+    #print ("interindividual_variation",opts.interindividual_variation)
+    #print ("treatment_effects:",treatments)
+    #print ("individual_base_params:",individual_base_params)
     experiment = Experiment(treatment_names,n_individuals,opts.n_timepoints,\
         individual_base_params,treatments,opts.interindividual_variation)
     experiment.simulate_timesteps(0,opts.n_timepoints)

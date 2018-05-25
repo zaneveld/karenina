@@ -65,9 +65,9 @@ class Experiment(object):
         self.NIndividuals = [n for n in n_individuals]
         self.NTimepoints = n_timepoints
         #Check that a few parameters are valid
-        print ("treatment_names:",self.TreatmentNames)
-        print ("n_individuals:",self.NIndividuals)
-        print ("treatment_params:",treatment_params)
+        #print ("treatment_names:",self.TreatmentNames)
+        #print ("n_individuals:",self.NIndividuals)
+        #print ("treatment_params:",treatment_params)
         self.check_n_timepoints_is_int(n_timepoints)
         self.check_variable_specified_per_treatment(self.NIndividuals)
         self.check_variable_specified_per_treatment(treatment_params)
@@ -92,7 +92,7 @@ class Experiment(object):
             else:
                 params['color'] = 'lightgray'
 
-            print(treatment)
+            #print(treatment)
             for i in range(treatment["n_individuals"]):
 
                 curr_subject_id = "%s_%i" %(treatment["treatment_name"],i)
@@ -110,9 +110,9 @@ class Experiment(object):
             treatment["active_perturbations"] = []
             raw_perturbation_info = treatment_params[treatment_idx]
             #We should have a dict with start, end, and parms for each perturbation
-            print ("raw_perturbation_info:",raw_perturbation_info)
+            #print ("raw_perturbation_info:",raw_perturbation_info)
             for p in raw_perturbation_info:
-                print ("params:",p)
+                #print ("params:",p)
                 curr_perturbation = Perturbation(p["start"],p["end"],p["params"],p["update_mode"],p["axes"])
                 treatment["perturbations"].append(curr_perturbation)
 
@@ -129,8 +129,8 @@ class Experiment(object):
 
     def check_variable_specified_per_treatment(self,v):
         """Raise a ValueError if v is not the same length as the number of treatments"""
-        print([x for x in v])
-        print(self.TreatmentNames)
+        #print([x for x in v])
+        #print(self.TreatmentNames)
         if len([x for x in v]) != len(self.TreatmentNames):
             raise ValueError('Must specify a list of n_individuals equal in length to the number of treatments. Note that n_individuals must be enclosed in quotes e.g. -n "35,35"  ')
 
@@ -144,7 +144,7 @@ class Experiment(object):
     def simulate_timesteps(self,t_start,t_end):
         """Simulate multiple timesteps"""
         for t in range(t_start,t_end):
-            print ("Simulating timestep: %i" %t)
+            #print ("Simulating timestep: %i" %t)
             self.simulate_timestep(t)
 
     def simulate_timestep(self,t):
@@ -196,7 +196,7 @@ class Experiment(object):
         for treatment in self.Treatments:
             for curr_subject in treatment["individuals"]:
                 individuals.append(curr_subject)
-        print ("individuals:",individuals)
+        #print ("individuals:",individuals)
         visualization.save_simulation_movie(individuals, output_folder,
                                             len(individuals),self.NTimepoints,black_background=True)
 

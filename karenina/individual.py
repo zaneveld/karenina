@@ -38,8 +38,8 @@ class Individual(object):
             # to its starting coordinate
             curr_params = copy(self.BaseParams)
             curr_params["mu"] = start_coord
-            print ("start_coord:",start_coord)
-            print ("curr_params['mu']",curr_params['mu'])
+            #print ("start_coord:",start_coord)
+            #print ("curr_params['mu']",curr_params['mu'])
             self.MovementProcesses[c] = Process(start_coord = start_coord,params=curr_params,\
               motion = "Ornstein-Uhlenbeck")
 
