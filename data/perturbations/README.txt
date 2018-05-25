@@ -1,4 +1,4 @@
-﻿# parse_perturbation_file
+# parse_perturbation_file
 
 Rules:
 Accepts 1 file at a time using the option --pert_file_path.
