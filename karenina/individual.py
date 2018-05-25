@@ -16,13 +16,15 @@ from random import random,randint
 from copy import copy
 
 class Individual(object):
-    def __init__(self,subject_id,coords=["x","y","z"],metadata={},params={},interindividual_variation=0.01):
+    def __init__(self,verbose,subject_id,coords=["x","y","z"],metadata={},params={},interindividual_variation=0.01):
         self.SubjectId = subject_id
         self.Metadata = metadata
         self.MovementProcesses = {}
         self.BaseParams = params
+        self.verbose = verbose
         for c in coords:
-            #print "STARTING PROCESS for Axis:",c
+            if verbose:
+                print("STARTING PROCESS for Axis:",c)
 
             #simulate minor interindividual variation
             if c in params.keys():
@@ -32,14 +34,16 @@ class Individual(object):
                 start_coord =  (random()-0.50) *\
                      2.0 * ( interindividual_variation)
                 start_mu = start_coord
-            #print "START COORD %s: %f" %(c,start_coord)
+            if verbose:
+                print("START COORD %s: %f" %(c,start_coord))
 
             #For OU processes, assume the process reverts
             # to its starting coordinate
             curr_params = copy(self.BaseParams)
             curr_params["mu"] = start_coord
-            print ("start_coord:",start_coord)
-            print ("curr_params['mu']",curr_params['mu'])
+            if verbose:
+                print ("start_coord:",start_coord)
+                print ("curr_params['mu']",curr_params['mu'])
             self.MovementProcesses[c] = Process(start_coord = start_coord,params=curr_params,\
               motion = "Ornstein-Uhlenbeck")
 
@@ -61,14 +65,15 @@ class Individual(object):
 
         self.MovementProcesses[axis].Perturbations.append(perturbation)
 
-    def check_identity(self):
+    def check_identity(self, verbose):
         for coord_name,movement_process in self.MovementProcesses.iteritems():
             for coord_name2,movement_process2 in self.MovementProcesses.iteritems():
                 if coord_name == coord_name2:
                     continue
                 if movement_process.History == movement_process2.History:
-                    #print "History1:",movement_process.History
-                    #print "History2:",movement_process2.History
+                    if verbose:
+                        print("History1:",movement_process.History)
+                        print("History2:",movement_process2.History)
                     return True
         return False
 

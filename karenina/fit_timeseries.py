@@ -39,6 +39,10 @@ def make_option_parser():
     optional_options.add_option('--fit_method', default
     ="basinhopping", type="choice", choices=['basinhopping', 'differential_evolution', 'brute'], help="Global optimization_method to use [default:%default]")
 
+    optional_options.add_option('-v', '--verbose', action="store_true", dest="verbose", default=False,
+                                help='-v, allows for verbose output' +
+                                     ' [default: %default]')
+
     parser.add_option_group(optional_options)
 
     return parser
@@ -214,7 +218,8 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
 def main():
     parser = make_option_parser()
     opts, args = parser.parse_args()
-    print(opts)
+    if opts.verbose:
+        print(opts)
 
     #TODO: Make if not exists output directory
     #if exists(opts.output):

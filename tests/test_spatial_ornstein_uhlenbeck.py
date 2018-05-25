@@ -27,23 +27,24 @@ class TestPrimary(unittest.TestCase):
     # TODO: Tests
 
     def setUp(self):
+        self.verbose = False
         self.perturbation_file_path =\
         join(dirname(dirname(realpath(__file__))),'data','perturbations','set_x_lambda_small.tsv')
         self.perturbation_timepoint = 5
         self.perturbation_duration = 100
 
     def test_check_perturbation_timepoint(self):
+        """TODO"""
         pass
 
     def test_write_options_to_log(self):
+        """TODO"""
         pass
 
     def test_parse_perturbation_file(self):
         """parse_perturbation_file functions with valid input"""
 
-        obs_perturbations_list = parse_perturbation_file\
-        (self.perturbation_file_path, self.perturbation_timepoint,\
-        self.perturbation_duration)
+        obs_perturbations_list = parse_perturbation_file(self.perturbation_file_path, self.perturbation_timepoint,self.perturbation_duration)
 
         exp_perturbations_list = [{'start': 5, 'end': 105,\
         'params': {'lambda': 0.008, 'mu': -0.08},\

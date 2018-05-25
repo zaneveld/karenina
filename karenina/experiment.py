@@ -31,7 +31,7 @@ class Experiment(object):
 
     """
     def __init__(self,treatment_names,n_individuals,n_timepoints,\
-        individual_base_params,treatment_params,interindividual_variation):
+        individual_base_params,treatment_params,interindividual_variation, verbose):
         """Set up an experiment with multiple treatments
 
         Parameters
@@ -58,19 +58,20 @@ class Experiment(object):
 
         interindividual_varation -- the amount of starting variation between individuals
         """
-
+        self.verbose = verbose
         self.TreatmentNames = [t for t in treatment_names]
         self.Treatments = [{"treatment_name":name} for name in self.TreatmentNames]
         self.BaseParams = individual_base_params
         self.NIndividuals = [n for n in n_individuals]
         self.NTimepoints = n_timepoints
         #Check that a few parameters are valid
-        print ("treatment_names:",self.TreatmentNames)
-        print ("n_individuals:",self.NIndividuals)
-        print ("treatment_params:",treatment_params)
+        if self.verbose:
+            print("treatment_names:",self.TreatmentNames)
+            print("n_individuals:",self.NIndividuals)
+            print("treatment_params:",treatment_params)
         self.check_n_timepoints_is_int(n_timepoints)
-        self.check_variable_specified_per_treatment(self.NIndividuals)
-        self.check_variable_specified_per_treatment(treatment_params)
+        self.check_variable_specified_per_treatment(self.NIndividuals, self.verbose)
+        self.check_variable_specified_per_treatment(treatment_params, self.verbose)
 
 
         #for i,n in enumerate(n_individuals):
@@ -92,11 +93,12 @@ class Experiment(object):
             else:
                 params['color'] = 'lightgray'
 
-            print(treatment)
+            if self.verbose:
+                print(treatment)
             for i in range(treatment["n_individuals"]):
 
                 curr_subject_id = "%s_%i" %(treatment["treatment_name"],i)
-                curr_subject = Individual(subject_id = curr_subject_id,
+                curr_subject = Individual(self.verbose,subject_id = curr_subject_id,
                   params = params,\
                   metadata={"treatment":treatment["treatment_name"]},\
                   interindividual_variation=interindividual_variation)
@@ -110,9 +112,12 @@ class Experiment(object):
             treatment["active_perturbations"] = []
             raw_perturbation_info = treatment_params[treatment_idx]
             #We should have a dict with start, end, and parms for each perturbation
-            print ("raw_perturbation_info:",raw_perturbation_info)
+            if self.verbose:
+                print("raw_perturbation_info:",raw_perturbation_info)
             for p in raw_perturbation_info:
-                print ("params:",p)
+                #
+                if self.verbose:
+                    print("params:",p)
                 curr_perturbation = Perturbation(p["start"],p["end"],p["params"],p["update_mode"],p["axes"])
                 treatment["perturbations"].append(curr_perturbation)
 
@@ -125,26 +130,28 @@ class Experiment(object):
     def run(self):
         "Run the experiment, simulating timesteps"
         visualization.save_simulation_figure(individuals,opts.output,n_individuals,n_timepoints,perturbation_timepoint)
-        visualization.save_simulation_movie(individuals, opts.output,n_individuals,n_timepoints,perturbation_timepoint)
+        visualization.save_simulation_movie(verbose, individuals, opts.output,n_individuals,n_timepoints,perturbation_timepoint)
 
-    def check_variable_specified_per_treatment(self,v):
+    def check_variable_specified_per_treatment(self,v,verbose):
         """Raise a ValueError if v is not the same length as the number of treatments"""
-        print([x for x in v])
-        print(self.TreatmentNames)
+        if verbose:
+            print([x for x in v])
+            print(self.TreatmentNames)
         if len([x for x in v]) != len(self.TreatmentNames):
             raise ValueError('Must specify a list of n_individuals equal in length to the number of treatments. Note that n_individuals must be enclosed in quotes e.g. -n "35,35"  ')
 
     def check_n_timepoints_is_int(self,n_timepoints):
         """Raise a ValueError if n_timepoints can't be cast as an int"""
         try:
-            n_timepoints = int(n_timepoints)
+            self.n_timepoints = int(n_timepoints)
         except:
             raise ValueError("n_timepoints must be a single integer that applies to all experiments (not a list per treatment for example).")
 
-    def simulate_timesteps(self,t_start,t_end):
+    def simulate_timesteps(self,t_start,t_end,verbose):
         """Simulate multiple timesteps"""
         for t in range(t_start,t_end):
-            print ("Simulating timestep: %i" %t)
+            if verbose:
+                print ("Simulating timestep: %i" %t)
             self.simulate_timestep(t)
 
     def simulate_timestep(self,t):
@@ -190,14 +197,14 @@ class Experiment(object):
                     curr_data = curr_subject.get_data(1)
                     self.Data.append("\t".join(map(str,curr_data))+"\n")
 
-    def write_to_movie_file(self,output_folder):
+    def write_to_movie_file(self,output_folder, verbose):
         """Write an MPG movie to output folder"""
         individuals = []
         for treatment in self.Treatments:
             for curr_subject in treatment["individuals"]:
                 individuals.append(curr_subject)
-        print ("individuals:",individuals)
-        visualization.save_simulation_movie(individuals, output_folder,\
-             len(individuals),self.NTimepoints,\
-             black_background=True)
+        if verbose:
+            print("individuals:",individuals)
+        visualization.save_simulation_movie(verbose,individuals, output_folder,
+                                            len(individuals),self.NTimepoints,black_background=True)
 

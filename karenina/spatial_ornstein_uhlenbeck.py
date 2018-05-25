@@ -88,6 +88,10 @@ def make_option_parser():
     'positions will be randomized based on the interindividual_variation ' +
     'parameter [default: %default]')
 
+    optional_options.add_option('-v','--verbose', action="store_true", dest="verbose", default=False,
+                                help='-v, allows for verbose output' +
+                                     ' [default: %default]')
+
     parser.add_option_group(optional_options)
 
     return parser
@@ -137,8 +141,9 @@ def write_options_to_log(log, opts):
     logfile.close()
 
 
-def parse_perturbation_file(pert_file_path, perturbation_timepoint,\
-perturbation_duration):
+
+def parse_perturbation_file(pert_file_path, perturbation_timepoint,perturbation_duration):
+
     """Return a list of perturbations
     infile -- a .tsv file describing one perturbation per line
     assume input file is correctly formatted (no warnings if not)
@@ -237,6 +242,7 @@ def main():
 
     write_options_to_log("log.txt", opts)
 
+    verbose = opts.verbose
     #Check timepoints
     check_perturbation_timepoint(opts.perturbation_timepoint,opts.n_timepoints)
     #Set the base parameters for microbiome change over time
@@ -261,20 +267,21 @@ def main():
 
     treatments = [[], perturbations]
     treatment_names = opts.treatment_names.split(",")
-    print("Raw number of individuals from user:",opts.n_individuals)
-    print("n_individuals.split(',')",opts.n_individuals.split(','))
+    if verbose:
+        print("Raw number of individuals from user:",opts.n_individuals)
+        print("n_individuals.split(',')",opts.n_individuals.split(','))
     n_individuals = list(map(int,opts.n_individuals.split(",")))
-
-    print ("**Experiment Design**")
-    print ("treatments:",treatment_names)
-    print ("n_individuals:",n_individuals)
-    print ("interindividual_variation",opts.interindividual_variation)
-    print ("treatment_effects:",treatments)
-    print ("individual_base_params:",individual_base_params)
+    if verbose:
+        print ("**Experiment Design**")
+        print ("treatments:",treatment_names)
+        print ("n_individuals:",n_individuals)
+        print ("interindividual_variation",opts.interindividual_variation)
+        print ("treatment_effects:",treatments)
+        print ("individual_base_params:",individual_base_params)
     experiment = Experiment(treatment_names,n_individuals,opts.n_timepoints,\
-        individual_base_params,treatments,opts.interindividual_variation)
-    experiment.simulate_timesteps(0,opts.n_timepoints)
-    experiment.write_to_movie_file(opts.output)
+        individual_base_params,treatments,opts.interindividual_variation, verbose)
+    experiment.simulate_timesteps(0,opts.n_timepoints, verbose)
+    experiment.write_to_movie_file(opts.output, verbose)
 
 if __name__ == "__main__":
     main()
