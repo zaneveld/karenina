@@ -412,9 +412,9 @@ def fit_input(input, ind, tp, tx, method):
             numeric = [float(item) for item in numeric]
             vals.append([numeric, value])
         data.append([sj,tp_t,tx_t,vals])
-
-    fx = []
+        
     # Make an objective function for each row
+    fx = []
     for row in data:
         for item in row[3]:
             #[0: function, 1: subject, 2: times, 3: treatment, 4: values, 5:pc1/2/3]
