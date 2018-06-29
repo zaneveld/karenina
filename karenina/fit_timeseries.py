@@ -553,8 +553,7 @@ def benchmark(output):
                 #print(file=f)
     for opt, err in final_errors.items():
         print("%s error: %.4f,%.4f,%.4f" % (opt, err[0], err[1], err[2]))
-        if sys.version_info >= (3,0):
-            print("%s error: %.4f,%.4f,%.4f" %(opt,err[0],err[1],err[2]), file=f)
+        #print("%s error: %.4f,%.4f,%.4f" %(opt,err[0],err[1],err[2]), file=f)
 
 def main():
     parser = make_option_parser()
