@@ -55,7 +55,8 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'karenina=karenina.spatial_ornstein_uhlenbeck:main',
+            'spatial_ornstein_uhlenbeck.py=karenina.spatial_ornstein_uhlenbeck:main',
+            'fit_timeseries.py=karenina.fit_timeseries:main',
         ],
     },
 )
