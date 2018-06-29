@@ -132,8 +132,22 @@ class TestFit(unittest.TestCase):
                 #Don't expect that this is worse than bad_param_est3
 
             except AssertionError:
-                print("retying")
                 attempt += 1
+                print("Bad RNG Sample; retrying ", attempt,"/3...")
+                self.setUp()
+
+    def test_parse_pcoa(self):
+        """TODO"""
+        pass
+
+    def test_parse_metadata(self):
+        """TODO"""
+        pass
+
+    def test_fit_input(self):
+        """TODO"""
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
