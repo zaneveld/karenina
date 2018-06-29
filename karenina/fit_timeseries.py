@@ -550,8 +550,7 @@ def benchmark(output):
                 print("*" * 80)
                 # print("*" * 80, file=f)
                 print()
-                #
-                    print(file=f)
+                #print(file=f)
     for opt, err in final_errors.items():
         print("%s error: %.4f,%.4f,%.4f" % (opt, err[0], err[1], err[2]))
         if sys.version_info >= (3,0):
