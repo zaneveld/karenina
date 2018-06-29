@@ -412,7 +412,7 @@ def fit_input(input, ind, tp, tx, method):
             numeric = [float(item) for item in numeric]
             vals.append([numeric, value])
         data.append([sj,tp_t,tx_t,vals])
-        
+
     # Make an objective function for each row
     fx = []
     for row in data:
