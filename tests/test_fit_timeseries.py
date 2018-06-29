@@ -81,12 +81,6 @@ class TestFit(unittest.TestCase):
         npt.assert_almost_equal(global_min,-0.1951,4)
         npt.assert_almost_equal(f_at_global_min,-1.0009,4)
 
-    # CAUTION : this test is commented out because it causes TRAVIS CI to timeout.
-    # CONSIDER : Creation of separate benchmarking file
-
-    # BEgin
-
-    # end
     def test_get_OU_nLogLik_accords_with_correct_params(self):
         """get_OU_nLogLik gives best score to correct params"""
 
