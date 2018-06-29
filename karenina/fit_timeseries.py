@@ -196,8 +196,8 @@ def fit_normal(data):
 
 
 
-def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
-  xmax=array([inf,inf,inf]),global_optimizer="basinhopping",\
+def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
+  xmax=array([inf,inf,inf]),global_optimizer="basinhopping",
   local_optimizer="Nelder-Mead",stepsize=0.01,niter=200):
     """Minimize a function returning input & result
     fn_to_optimize -- the function to minimize. Must return a single value or array x.
@@ -228,7 +228,8 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
             return tmax and tmin
 
         bounds_test = Bounds()
-        result = basinhopping(fn_to_optimize,x0,minimizer_kwargs=local_min_kwargs,niter = niter,stepsize=0.05,accept_test = bounds_test)
+        result = basinhopping(fn_to_optimize, x0, minimizer_kwargs=local_min_kwargs, niter = niter,stepsize=0.05,
+                              accept_test = bounds_test)
         global_min = result.x
         #Result of evaluating fn_to_optimize at global min
         f_at_global_min = result.fun
@@ -391,7 +392,7 @@ def fit_input(input, ind, tp, tx, method):
     """
 
     subjects = input[ind].unique()
-    values = ['pc1','pc2','pc3']
+    values = ['pc1', 'pc2', 'pc3']
     data = []
     for sj in subjects:
         df = input[input[ind] == sj]
@@ -411,7 +412,7 @@ def fit_input(input, ind, tp, tx, method):
             numeric = df[value].tolist()
             numeric = [float(item) for item in numeric]
             vals.append([numeric, value])
-        data.append([sj,tp_t,tx_t,vals])
+        data.append([sj, tp_t, tx_t, vals])
 
     # Make an objective function for each row
     fx = []
@@ -468,6 +469,7 @@ def benchmark(output = None, max_tp = 300, verbose = False):
     Verifies that fit_timeseries recovers OU model params
     :param output: location for output log
     :param max_tp: maximum timepoints to test
+    :param verbose: verbosity
     """
     if output:
         f = open(output+"fit_timeseries_benchmark"+str(max_tp)+"_log.txt","w+")
@@ -493,10 +495,10 @@ def benchmark(output = None, max_tp = 300, verbose = False):
 
     final_errors = {}
     dt = 1
-    for n_timepoints in list(range(1, max_tp)):
+    for n_timepoints in list(range(1, max_tp+1)):
         log.append(str("Building OU model for %i timepoints" % n_timepoints))
         # run ou_process to get history
-        ou = Process(start_coord=0.20, motion="Ornstein-Uhlenbeck", \
+        ou = Process(start_coord=0.20, motion="Ornstein-Uhlenbeck",
                      history=None, params= {"lambda": 0.12, "delta": 0.25, "mu": 0.5})
         for t in range(0, n_timepoints):
             ou.update(dt)
@@ -509,12 +511,12 @@ def benchmark(output = None, max_tp = 300, verbose = False):
         # Estimate correct parameters
         for niter in [5]:
             for local_optimizer in ['L-BFGS-B']:
-                log.append(str("Running optimizer:"+", "+str(local_optimizer)))
+                log.append(str("Running optimizer: "+str(local_optimizer)))
                 # Using intentionally kinda bad estimates
                 start_Sigma = 0.1
                 start_Lambda = 0.0
                 start_Theta = np.mean(xs)
-                log.append(str("niter="+str(niter)))
+                log.append(str("niter: "+str(niter)))
                 log.append(str("start_Theta: "+str(start_Theta)))
                 log.append(str("n_timepoints: "+str(n_timepoints)))
                 xmax = array([1.0, 1.0, 1.0])
@@ -522,7 +524,7 @@ def benchmark(output = None, max_tp = 300, verbose = False):
                 x0 = array([start_Sigma, start_Lambda, start_Theta])
 
                 global_min, f_at_global_min = \
-                    fit_timeseries(fn_to_optimize, x0, xmin, xmax, stepsize=0.005, \
+                    fit_timeseries(fn_to_optimize, x0, xmin, xmax, stepsize=0.005,
                                    niter=niter, local_optimizer=local_optimizer)
 
                 log.append("OU result:")
@@ -540,13 +542,16 @@ def benchmark(output = None, max_tp = 300, verbose = False):
                     str("%s error: %.4f,%.4f,%.4f" % (local_optimizer,final_error[0],final_error[1],final_error[2])))
                 log.append(str("*" * 80))
                 log.append("")
+
     for opt, err in final_errors.items():
         log.append(str("%s error: %.4f,%.4f,%.4f" % (opt, err[0], err[1], err[2])))
+
     for line in log:
         if verbose:
             print(line)
         if output:
-            f.write(line)
+            f.write(str(line+"\n"))
+
     if output:
         if verbose:
             print("Output saved to: "+output+"fit_timeseries_benchmark_log"+str(max_tp)+".txt")
@@ -574,69 +579,6 @@ def main():
         output.to_csv(opts.output+out_name)
     else:
         benchmark(opts.output, verbose = verbose)
-
-    # FAIL:
-    """
-     -o ./data/fit_timeseries/
-     --pcoa_qza ./data/fit_timeseries/2485_pcoa.qza
-     --individual host_subject_id
-     --timepoint sampledate
-     --treatment obesitycat
-     -v
-     
-     ValueError: Single-point observations are not supported.
-    """
-
-    """
-    -o ./data/fit_timeseries/
-    --pcoa_qza ./data/fit_timeseries/weighted_unifrac_pcoa_results.qza
-    --individual Subject
-    --timepoint DaysSinceExperimentStart
-    --treatment ReportedAntibioticUsage
-    -v
-    
-    ValueError: Duplicate timepoint entries. Try redefining your subject identifiers.
-    Duplicates:[0.0, 84.0, 112.0, 140.0, 168.0]
-    """
-
-    # PASS:
-    """
-    -o ./data/fit_timeseries/
-    --pcoa_qza ./data/fit_timeseries/weighted_unifrac_pcoa_results.qza
-    --individual Subject,BodySite
-    --timepoint DaysSinceExperimentStart
-    --treatment ReportedAntibioticUsage
-    -v
-    """
-
-    """
-    -o ./data/fit_timeseries/
-    --pcoa_qza ./data/fit_timeseries/unweighted_unifrac_pcoa_results.qza
-    --individual Subject,BodySite
-    --timepoint DaysSinceExperimentStart
-    --treatment ReportedAntibioticUsage
-    -v
-    """
-
-    """
-    -o ./data/fit_timeseries/
-    --pcoa_qza ./data/fit_timeseries/jaccard_pcoa_results.qza
-    --individual Subject,BodySite
-    --timepoint DaysSinceExperimentStart
-    --treatment ReportedAntibioticUsage
-    -v
-    """
-
-    """
-    -o ./data/fit_timeseries/
-    --pcoa_qza ./data/fit_timeseries/bray_curtis_pcoa_results.qza
-    --individual Subject,BodySite
-    --timepoint DaysSinceExperimentStart
-    --treatment ReportedAntibioticUsage
-    -v
-    """
-
-
 
 if __name__ == "__main__":
     main()
