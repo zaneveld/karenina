@@ -42,9 +42,7 @@ class TestPrimary(unittest.TestCase):
         pass
 
     def test_parse_perturbation_file(self):
-        """
-        parse_perturbation_file functions with valid input
-        """
+        """parse_perturbation_file functions with valid input"""
 
         obs_perturbations_list = parse_perturbation_file(self.perturbation_file_path, self.perturbation_timepoint,self.perturbation_duration)
 
