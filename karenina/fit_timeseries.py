@@ -491,7 +491,7 @@ def benchmark(output):
     dt = 1
     for n_timepoints in list(range(1, 300)):
         print("Building OU model for %i timepoints" % n_timepoints)
-        print("Building OU model for %i timepoints" % n_timepoints, file=f)
+        if sys.version_info >= (3, 0): print("Building OU model for %i timepoints" % n_timepoints, file=f)
 
         # run ou_process to get history
         ou = Process(start_coord=0.20, motion="Ornstein-Uhlenbeck", \
@@ -499,27 +499,28 @@ def benchmark(output):
         for t in range(0, n_timepoints):
             ou.update(dt)
         print(n_timepoints, ou.History)
-        print(n_timepoints, ou.History, file=f)
+        if sys.version_info >= (3, 0): print(n_timepoints, ou.History, file=f)
         xs = array(ou.History)
         ts = np.arange(0, len(ou.History)) * dt
         print(xs, ts, dt)
-        print(xs, ts, dt, file=f)
+        if sys.version_info >= (3, 0): print(xs, ts, dt, file=f)
         fn_to_optimize = make_OU_objective_fn(xs, ts)
 
         # Estimate correct parameters
         for niter in [5]:
             for local_optimizer in ['L-BFGS-B']:
                 print("Running optimizer:", local_optimizer)
+                if sys.version_info >= (3, 0): print("Running optimizer:", local_optimizer, file=f)
                 # Using intentionally kinda bad estimates
                 start_Sigma = 0.1
                 start_Lambda = 0.0
                 start_Theta = np.mean(xs)
                 print("niter=", niter)
-                print("niter=", niter, file=f)
+                if sys.version_info >= (3, 0): print("niter=", niter, file=f)
                 print("start_Theta: ", start_Theta)
-                print("start_Theta: ", start_Theta, file=f)
+                if sys.version_info >= (3, 0): print("start_Theta: ", start_Theta, file=f)
                 print("n_timepoints: ", n_timepoints)
-                print("n_timepoints: ", n_timepoints, file=f)
+                if sys.version_info >= (3, 0): print("n_timepoints: ", n_timepoints, file=f)
                 xmax = array([1.0, 1.0, 1.0])
                 xmin = array([0.0, 0.0, -1.0])
                 x0 = array([start_Sigma, start_Lambda, start_Theta])
@@ -529,30 +530,32 @@ def benchmark(output):
                                    niter=niter, local_optimizer=local_optimizer)
 
                 print("OU result:")
-                print("OU result:", file=f)
+                if sys.version_info >= (3, 0): print("OU result:", file=f)
                 Sigma, Lambda, Theta = global_min
                 correct_values = array([0.25, 0.12, 0.5])
                 final_error = global_min - correct_values
                 print("Global min:", global_min)
-                print("Global min:", global_min, file=f)
+                if sys.version_info >= (3, 0): print("Global min:", global_min, file=f)
                 print("f at Global min:", f_at_global_min)
-                print("f at Global min:", f_at_global_min, file=f)
+                if sys.version_info >= (3, 0): print("f at Global min:", f_at_global_min, file=f)
                 # aic calulated with 2*n_params-2*LN(-1*nloglik)
                 print("aic:" , (2 * niter - 2 * (math.log(-1 * f_at_global_min))))
-                print("aic:", (2 * niter - 2 * (math.log(-1 * f_at_global_min))), file=f)
+                if sys.version_info >= (3, 0): print("aic:", (2 * niter - 2 * (math.log(-1 * f_at_global_min))), file=f)
 
                 final_errors["%s_%i_%i" % (local_optimizer, niter, n_timepoints)] = final_error
                 print("*" * 80)
-                print("*" * 80, file=f)
+                if sys.version_info >= (3, 0): print("*" * 80, file=f)
                 print("%s error: %.4f,%.4f,%.4f" % (local_optimizer,final_error[0],final_error[1],final_error[2]))
-                print("%s error: %.4f,%.4f,%.4f" % (local_optimizer, final_error[0], final_error[1], final_error[2]), file=f)
+                if sys.version_info >= (3, 0): print("%s error: %.4f,%.4f,%.4f" % (local_optimizer, final_error[0], final_error[1], final_error[2]), file=f)
                 print("*" * 80)
-                print("*" * 80, file=f)
+                if sys.version_info >= (3, 0): print("*" * 80, file=f)
                 print()
-                print(file=f)
+                if sys.version_info >= (3, 0):
+                    print(file=f)
     for opt, err in final_errors.items():
         print("%s error: %.4f,%.4f,%.4f" % (opt, err[0], err[1], err[2]))
-        print("%s error: %.4f,%.4f,%.4f" %(opt,err[0],err[1],err[2]), file=f)
+        if sys.version_info >= (3,0):
+            print("%s error: %.4f,%.4f,%.4f" %(opt,err[0],err[1],err[2]), file=f)
 
 def main():
     parser = make_option_parser()
