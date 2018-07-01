@@ -51,11 +51,17 @@ class TestFit(unittest.TestCase):
 
     def tearDown(self):
         """Removes output files"""
-        os.remove("./test_benchmark/fit_timeseries_benchmark3_log.txt")
-        os.remove("./test_benchmark/fit_timeseries_benchmark3.csv")
-        os.remove("./test_benchmark/benchmark_sigma_err.png")
-        os.remove("./test_benchmark/benchmark_lambda_err.png")
-        os.remove("./test_benchmark/benchmark_theta_err.png")
+        if(os.path.exists("./test_benchmark/fit_timeseries_benchmark3_log.txt")):
+            os.remove("./test_benchmark/fit_timeseries_benchmark3_log.txt")
+        if (os.path.exists("./test_benchmark/fit_timeseries_benchmark3.csv")):
+            os.remove("./test_benchmark/fit_timeseries_benchmark3.csv")
+        if (os.path.exists("./test_benchmark/benchmark_sigma_err.png")):
+            os.remove("./test_benchmark/benchmark_sigma_err.png")
+        if (os.path.exists("./test_benchmark/benchmark_lambda_err.png")):
+            os.remove("./test_benchmark/benchmark_lambda_err.png")
+        if (os.path.exists("./test_benchmark/benchmark_theta_err.png")):
+            os.remove("./test_benchmark/benchmark_theta_err.png")
+
         os.rmdir("./test_benchmark/")
 
 
