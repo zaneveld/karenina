@@ -15,6 +15,11 @@ from karenina.individual import Individual
 from karenina.perturbation import Perturbation
 import karenina.visualization as visualization
 from copy import copy
+import os
+import matplotlib as mpl
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
 
 
 
