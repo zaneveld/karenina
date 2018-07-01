@@ -39,9 +39,12 @@ class TestFit(unittest.TestCase):
         pass
 
     #matplotlib.use('Agg') in test_experiment breaks this because backend is changed.
-    """
+
     def test_vis(self):
-        #""Ensures that the output visualizations are generated""
+        """TODO"""
+        """Ensures that the output visualizations are generated"""
+        pass
+    """
         vis(self.df, "./test_benchmark/")
         assert os.path.exists("./test_benchmark/benchmark_sigma_err.png")
         assert os.path.exists("./test_benchmark/benchmark_lambda_err.png")

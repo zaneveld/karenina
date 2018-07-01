@@ -71,9 +71,11 @@ class TestExperiment(unittest.TestCase):
         assert len(self.exp.Data) == 701
 
     # Travis CI does not like using matplotlib. alternate solution required to test this.
-    """
+
     def test_writeToMovieFile(self):
-        ""Tests that the output movie file is successfully written, then removes the file.""
+        """TODO"""
+        """Tests that the output movie file is successfully written, then removes the file."""
+    """
         # Travis-CI Uses Xwindows backend, this prevents that issue.
         import os
         import matplotlib as mpl
