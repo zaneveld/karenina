@@ -20,6 +20,7 @@ import numpy as np
 import os
 import pandas as pd
 import seaborn as sns
+import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -59,6 +60,7 @@ def vis(df, output):
     :param output: output directory
     """
 
+    matplotlib.use()
     # Generate visualizations for each model tested (Local optimizer)
     for model in df.model.unique():
         df_t = df.loc[df['model'] == model]
