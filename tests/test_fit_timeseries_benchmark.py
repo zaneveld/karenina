@@ -39,6 +39,8 @@ class TestFit(unittest.TestCase):
         """TODO"""
         pass
 
+    #matplotlib.use('Agg') in test_experiment breaks this because backend is changed.
+    
     def test_vis(self):
         """Ensures that the output visualizations are generated"""
         vis(self.df, "./test_benchmark/")
@@ -46,8 +48,8 @@ class TestFit(unittest.TestCase):
         assert os.path.exists("./test_benchmark/benchmark_lambda_err.png")
         assert os.path.exists("./test_benchmark/benchmark_theta_err.png")
 
-        """TODO"""
         pass
+
 
     def tearDown(self):
         """Removes output files"""

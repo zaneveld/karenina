@@ -75,15 +75,13 @@ class TestExperiment(unittest.TestCase):
         """Tests that the output movie file is successfully written, then removes the file."""
         # Travis-CI Uses Xwindows backend, this prevents that issue.
         import matplotlib
-        matplotlib.use('Agg')
+        #matplotlib.use('Agg')
 
         self.output_folder = "./"
         Experiment.write_to_movie_file(self.exp,
                                        self.output_folder, self.verbose)
         assert os.path.exists("./simulation_video.mp4")
         os.remove("./simulation_video.mp4")
-
-        del sys.modules['matplotlib']
 
 if __name__ == '__main__':
     unittest.main()
