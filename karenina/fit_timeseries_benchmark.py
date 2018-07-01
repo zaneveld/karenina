@@ -60,7 +60,7 @@ def vis(df, output):
     :param output: output directory
     """
 
-    matplotlib.use()
+    matplotlib.use('GTK')
     # Generate visualizations for each model tested (Local optimizer)
     for model in df.model.unique():
         df_t = df.loc[df['model'] == model]
