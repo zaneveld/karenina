@@ -83,6 +83,8 @@ class TestExperiment(unittest.TestCase):
         assert os.path.exists("./simulation_video.mp4")
         os.remove("./simulation_video.mp4")
 
+        del sys.modules['matplotlib']
+
 if __name__ == '__main__':
     unittest.main()
 
