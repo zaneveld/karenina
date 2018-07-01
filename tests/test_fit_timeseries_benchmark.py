@@ -36,7 +36,6 @@ class TestFit(unittest.TestCase):
         assert os.path.exists("./test_benchmark/fit_timeseries_benchmark3.csv")
         assert self.df.isnull().any().any() == False
         """TODO"""
-        pass
 
     #matplotlib.use('Agg') in test_experiment breaks this because backend is changed.
 
@@ -50,7 +49,6 @@ class TestFit(unittest.TestCase):
         assert os.path.exists("./test_benchmark/benchmark_lambda_err.png")
         assert os.path.exists("./test_benchmark/benchmark_theta_err.png")
 
-        pass
     """
 
 
