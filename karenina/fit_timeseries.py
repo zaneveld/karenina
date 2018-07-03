@@ -1,5 +1,4 @@
 #/usr/bin/env python
-
 from __future__ import division
 
 __author__ = "Jesse Zaneveld"
@@ -16,28 +15,47 @@ from optparse import OptionGroup
 from scipy.optimize import basinhopping,brute,differential_evolution
 from scipy.stats import norm
 from numpy import diff,inf,all,array
-
+import zipfile
+import numpy as np
+import pandas as pd
+import collections
+import os
+import math
 
 def make_option_parser():
     """Return an optparse OptionParser object"""
 
-    parser = OptionParser(usage = [
-                               ("","Demo fitting an OU model using default parameters.", "%prog -o ./simulation_results")
-                                ],
-    description = "This script fits microbiome change over time to Ornstein-Uhlenbeck (OU) models.",
-    version = __version__)
+    parser = OptionParser(usage = "%prog -o ./simulation_results",
+        description="This script fits microbiome change over time to Ornstein-Uhlenbeck (OU) models."+
+                    "Demo fitting an OU model using default parameters.",
+        version= __version__)
 
     required_options = OptionGroup(parser, "Required options")
 
-    required_options.add_option('-o','--output', type="new_filepath",
-    help='the output folder for the simulation results')
+    required_options.add_option('-o','--output', type="string",
+                                help='the output folder for the simulation results')
 
     parser.add_option_group(required_options)
 
     optional_options = OptionGroup(parser, "Optional options")
 
     optional_options.add_option('--fit_method', default
-    ="basinhopping", type="choice", choices=['basinhopping', 'differential_evolution', 'brute'], help="Global optimization_method to use [default:%default]")
+    ="basinhopping", type="choice", choices=['basinhopping', 'differential_evolution', 'brute'],
+                                help="Global optimization_method to use [default:%default]")
+
+    optional_options.add_option('--pcoa_qza', type="string", default=None,
+                                help='The input PCoA qza file')
+    optional_options.add_option('--metadata', type="string", default=None,
+                                help='The input metadata tsv file, if not defined, '
+                                     'metadata will be extracted from PCoA qza')
+
+    # Individual identifier will either accept a single column, or optionally combine two columns of categorical features.
+    optional_options.add_option('--individual', type="string", default=None,
+                                help='The host subject ID column identifier, separate by comma to combine TWO columns')
+    optional_options.add_option('--timepoint', type="string", default=None,
+                                help='The timepoint column identifier')
+    optional_options.add_option('--treatment', type="string", default=None,
+                                help='The treatment column identifier')
 
     optional_options.add_option('-v', '--verbose', action="store_true", dest="verbose", default=False,
                                 help='-v, allows for verbose output' +
@@ -143,7 +161,11 @@ def make_OU_objective_fn(x,times,verbose=False):
     function, and use the values of p to represent parameter values that
     could produce the data. 
     """
-    
+    # x and times for each subject/site
+    # x is just the individual x's, x1 and timepoints, x2 and timepoints, x3 and timepoints
+    if len(x) <= 1:
+        raise ValueError("Single-point observations are not supported.")
+
     def fn_to_optimize(p):
         fixed_x = x
         fixed_times = times
@@ -151,16 +173,16 @@ def make_OU_objective_fn(x,times,verbose=False):
             raise ValueError("OU optimization must operate on a (3,) array representing Sigma,Lamda,and Theta values")
         #For clarity, binding these to variables
         Sigma,Lambda,Theta = p
+        #print([fixed_x,fixed_times,Sigma,Lambda,Theta])
         nlogLik = get_OU_nlogLik(fixed_x,fixed_times,Sigma,Lambda,Theta)
         if verbose:
             print ("\nnlogLik:",nlogLik)
             #print "\t".join(["Sigma","Lambda","Theta"])
             print ("%.2f\t%.2f\t%.2f" % (Sigma,Lambda,Theta))
         return nlogLik
-        
     return fn_to_optimize
 
-#May not actually need the parametric 
+#May not actually need the parametric
 #normal distrubtion fit
 
 def fit_normal(data):
@@ -171,9 +193,8 @@ def fit_normal(data):
     return mu,std,nlogLik
 
 
-
-def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
-  xmax=array([inf,inf,inf]),global_optimizer="basinhopping",\
+def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
+  xmax=array([inf,inf,inf]),global_optimizer="basinhopping",
   local_optimizer="Nelder-Mead",stepsize=0.01,niter=200):
     """Minimize a function returning input & result
     fn_to_optimize -- the function to minimize. Must return a single value or array x.
@@ -184,12 +205,12 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
     global_optimizer -- the global optimization method (see scipy.optimize)
     local_optimizer -- the local optimizer (must be supported by global method)
     """
-    
+
     if global_optimizer == "basinhopping":
         local_min_bounds = list(zip(xmin.tolist(),xmax.tolist()))
         local_min_kwargs = {"method":local_optimizer,"bounds":local_min_bounds}
 
-        #From the scipy docs, if we want bounds on 
+        #From the scipy docs, if we want bounds on
         #our basinhopping steps, we need to implement a custom
         #accept test
 
@@ -204,27 +225,279 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),\
             return tmax and tmin
 
         bounds_test = Bounds()
-        
-        result = basinhopping(fn_to_optimize,x0,minimizer_kwargs=local_min_kwargs,niter = niter,stepsize=0.05,accept_test = bounds_test)
+        result = basinhopping(fn_to_optimize, x0, minimizer_kwargs=local_min_kwargs, niter = niter,stepsize=0.05,
+                              accept_test = bounds_test)
         global_min = result.x
         #Result of evaluating fn_to_optimize at global min
         f_at_global_min = result.fun
     else:
         raise NotImplementedError("Only basinhopping is currently supported")
-    
-    return global_min,f_at_global_min 
 
- 
+    return global_min,f_at_global_min
+
+
+def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
+    """
+    Load data from PCoA output in Qiime2 Format
+    :param pcoa_qza: Location of PCoA file
+    :param individual: Subject column identifier(s) [ex: Subject; Subject,BodySite]
+    :param timepoint: Timepoint column identifier
+    :param treatment: Treatment column identifier
+    :param metadata: optionally defined metadata file location, if not defined, will use metadata from PCoA.qza
+    :return: input dataframe, tsv filepath location
+    """
+
+    # Checks for column definitions
+    if individual is None:
+        raise ValueError('Individual Column name must be identified.')
+    if " " in individual:
+        raise ValueError("Remove all white space from subject identifier.")
+    if timepoint is None:
+        raise ValueError('Timepoint Column name must be identified.')
+    if treatment is None:
+        raise ValueError('Treatment Column name must be identified.')
+
+    # elements of PCoA file are defined here, but only pc1, pc2, and pc3 from site are extracted at this time.
+    eigs = []
+    propEx = []
+    species = []
+    site = []
+
+    # Open the zip files
+    qza = zipfile.ZipFile(pcoa_qza, 'r')
+    pcoa = qza.open(qza.namelist()[0].split('/')[0]+'/data/ordination.txt')
+    # Define the tsv file location, if not set in opts.metadata
+    if metadata is None:
+        metadata = qza.open(qza.namelist()[0].split('/')[0]+'/provenance/action/metadata.tsv')
+    else:
+        pass
+    # Parse PCoA Contents
+    lines = pcoa.readlines()
+    i = 0
+    for line in lines:
+        line = line.decode("utf-8")
+        if line.startswith("Eigvals"):
+            eigs = lines[i+1].decode("utf-8").strip('\n').split("\t")
+        elif line.startswith("Proportion explained"):
+            propEx = lines[i+1].decode("utf-8").strip('\n').split("\t")
+        elif line.startswith("Species"):
+            species = lines[i + 1].decode("utf-8").strip('\n').split("\t")
+
+        elif line.startswith("Site"):
+            # We don't want Site constraints.
+            if ("constraints") in line:
+                break
+            max = int(line.split("\t")[1])+i
+            j = i + 1
+            while j <= max:
+                t_line = lines[j].decode('utf-8')
+                site.append(t_line.strip('\n').split("\t"))
+                j += 1
+        i += 1
+    t_site = []
+    for item in site:
+        t_site.append([item[0],item[1],item[2],item[3]])
+    site = t_site
+
+    #We now have variables:
+            #First three are stored for now, will be utilized later when standardization of axes can be supported.
+        # eigs: every eigenvalue
+        # propEx: every proportion explained
+        # species: every species
+
+        # site: Every site, with the highest three proportion-explained PCs, in the form:
+            # subjectID, x1, x2, x3
+
+    return site, metadata
+
+def parse_metadata(metadata, individual, timepoint, treatment, site):
+    """
+    Parse relevant contents from metadata file to complete input dataframe
+    :param metadata: tsv file location
+    :param individual: subject column identifier
+    :param timepoint: timepoint column identifier
+    :param treatment: treatment column identifier
+    :param site: [subjectID, x1, x2, x3]
+    :return: input dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]
+    """
+
+    # metadata file will be located in provenance/action/metadata.tsv, opens from QZA if not defined in opts
+    df = pd.read_csv(metadata, sep="\t")
+
+    # Drop any rows that are informational
+    while df.iloc[0][0].startswith("#"):
+        df.drop(df.index[:1], inplace=True)
+
+    # Combine Individual columns if multiple subject identifiers defined (Such as individual and site)
+    if "," in individual:
+        individual_temp = individual.split(",")
+        df_ind = df[individual_temp[0]]
+
+        # Iterate over the columns and combine on each pass
+        for i in range(len(individual_temp)):
+            if i == 0:
+                pass
+            else:
+                df_ind = pd.concat([df_ind,df[individual_temp[i]]],axis=1)
+
+        # Hyphenate the white space between identifiers
+        for i in range(len(individual_temp)):
+            if i == 0:
+                pass
+            else:
+                df_ind = df_ind[individual_temp[0]].astype(str)+"_"+df_ind[individual_temp[1]]
+
+        # Remove any user-generated white space
+        inds = []
+        for row in df_ind.iteritems():
+            inds.append(row[1].replace(" ","-"))
+        df_ind = pd.DataFrame({individual:inds})
+        # Reindex to match dataframes to be merged
+        df_ind.index += 1
+    else:
+        df_ind = df[individual]
+
+    df_tp = df[timepoint]
+    df_tx = df[treatment]
+
+    # Force timepoint to numerics
+    df_tp = df_tp.replace('[^0-9]','', regex=True)
+
+    # Build the return dataframe
+    df_ret = pd.concat([df[df.columns[0]], df_ind, df_tp, df_tx], axis=1)
+    df_site = pd.DataFrame.from_records(site, columns=["#SampleID","pc1","pc2","pc3"])
+    df_ret = pd.merge(df_ret, df_site, on="#SampleID", how='inner')
+
+    if "," in individual:
+        df_ret.rename(columns = {0:str(individual)}, inplace=True)
+
+    #Now have a full dataframe with sampleIDs, Subject Identifiers, timepoints, treatment, and initial x coordinates.
+        #Preserves only values which have initial positions, drops null coordinates.
+        #In example files, L3S242 was in metadata File, but not in the PCOA file, so there was one less in the df_ret.
+
+    return df_ret
+
+def aic(n_param, nLogLik):
+    """
+    calculates AIC with 2 * n_parameters - 2 * LN(-1 * nLogLik)
+    :param n_param: number of parameters
+    :param nLogLik: negative log likelihood
+    :return: aic score
+    """
+    return 2*n_param-2*(math.log(-1*nLogLik))
+
+
+def fit_input(input, ind, tp, tx, method):
+    """
+    Fit and minimize the timeseries for each subject defined
+    :param input: dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]
+    :param ind: subject column identifier
+    :param tp: timepoint column identifier
+    :param tx: treatment column identifier
+    :param method: "basinhopping" if not defined in opts
+    :return: dataframe: [ind,"pc","sigma","lambda","theta","optimizer","nLogLik","n_parameters","aic",tp,tx,"x"]
+    """
+
+    subjects = input[ind].unique()
+    values = ['pc1', 'pc2', 'pc3']
+    data = []
+    for sj in subjects:
+        df = input[input[ind] == sj]
+        tp_t = df[tp].tolist()
+        tp_t = [float(item) for item in tp_t]
+        # Check for duplicate timepoints. If the subject identifier is not properly defined,
+        # duplicate entries will be found in the timepoints.
+        duplicates = [item for item, count in collections.Counter(tp_t).items() if count > 1]
+        if duplicates:
+            raise ValueError('Duplicate timepoint entries. Try redefining your subject identifiers.\n'
+                             'Duplicates: '+str(duplicates))
+        tx_t = df[tx].tolist()
+        vals = []
+
+        # Pivot the PCs
+        for value in values:
+            numeric = df[value].tolist()
+            numeric = [float(item) for item in numeric]
+            vals.append([numeric, value])
+        data.append([sj, tp_t, tx_t, vals])
+
+    # Make an objective function for each row
+    fx = []
+    for row in data:
+        for item in row[3]:
+            #[0: function, 1: subject, 2: times, 3: treatment, 4: values, 5:pc1/2/3]
+            fx.append([make_OU_objective_fn(item[0], row[1]), row[0], row[1], row[2], item[0], item[1]])
+    fit_ts = []
+
+    # Optimize each function
+    for row in fx:
+        x = np.asarray(row[4])
+        if len(x)>1:
+            fit_ts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
+                           row[1], row[2], row[3], x, row[5]])
+
+    # Generate output data from optimized functions.
+    sig, lam, the, nlogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic = ([] for i in range(12))
+    for row in fit_ts:
+        # global_min = [sigma, lambda, theta]
+        sig.append(row[0][0][0])
+        lam.append(row[0][0][1])
+        the.append(row[0][0][2])
+        # f_at_global min = nlogLik
+        nlogLik.append(row[0][1])
+        ind_o.append(row[1])
+        tp_o.append(row[2])
+        tx_o.append(row[3])
+        x_o.append(row[4])
+        n_param.append(len(row[4]))
+        pc.append(row[5])
+        op.append(method)
+        # aic calulated with 2*n_params-2*LN(-1*nloglik)
+        aic.append(aic(len(row[4]), row[0][1]))
+
+    if "," in ind:
+        ind = ind.replace(",","_")
+
+    output = pd.DataFrame({"sigma":sig,
+                           "lambda":lam,
+                           "theta":the,
+                           "nLogLik":nlogLik,
+                           ind:ind_o,
+                           tp:tp_o,
+                           tx:tx_o,
+                           "x": x_o,
+                           "n_parameters":n_param,
+                           "pc":pc,
+                           "optimizer":op,
+                           "aic":aic},
+                           columns=[ind,"pc","sigma","lambda","theta","nLogLik",
+                                    "n_parameters","aic","optimizer",tp,tx,"x"])
+    return output
+
+
 def main():
     parser = make_option_parser()
     opts, args = parser.parse_args()
-    if opts.verbose:
+    verbose = opts.verbose
+    if verbose:
         print(opts)
 
-    #TODO: Make if not exists output directory
-    #if exists(opts.output):
-    #    print("Output saved to: " +str(opts.output))
+    if opts.output is None:
+        raise IOError('Output must be defined.')
 
+    if not os.path.exists(opts.output):
+        os.makedirs(opts.output)
+
+    if opts.pcoa_qza is not None:
+        # Extract the name of the pcoa qza, and append with '_fit_timeseries'
+        out_name = opts.pcoa_qza.split("/")[-1].split(".")[0] + "_fit_timeseries.csv"
+        site, metadata = parse_pcoa(opts.pcoa_qza, opts.individual, opts.timepoint, opts.treatment, opts.metadata)
+        input = parse_metadata(metadata,opts.individual, opts.timepoint, opts.treatment, site)
+        output = fit_input(input, opts.individual, opts.timepoint, opts.treatment, opts.fit_method)
+        output.to_csv(opts.output+out_name, index=False)
+    else:
+        parser.print_help()
+        exit(0)
 
 if __name__ == "__main__":
     main()

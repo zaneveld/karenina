@@ -1,0 +1,60 @@
+    # FAIL:
+    """
+     -o ./data/fit_timeseries/
+     --pcoa_qza ./data/fit_timeseries/2485_pcoa.qza
+     --individual host_subject_id
+     --timepoint sampledate
+     --treatment obesitycat
+     -v
+     
+     ValueError: Single-point observations are not supported.
+    """
+
+    """
+    -o ./data/fit_timeseries/
+    --pcoa_qza ./data/fit_timeseries/weighted_unifrac_pcoa_results.qza
+    --individual Subject
+    --timepoint DaysSinceExperimentStart
+    --treatment ReportedAntibioticUsage
+    -v
+    
+    ValueError: Duplicate timepoint entries. Try redefining your subject identifiers.
+    Duplicates:[0.0, 84.0, 112.0, 140.0, 168.0]
+    """
+
+    # PASS:
+    """
+    -o ./data/fit_timeseries/
+    --pcoa_qza ./data/fit_timeseries/weighted_unifrac_pcoa_results.qza
+    --individual Subject,BodySite
+    --timepoint DaysSinceExperimentStart
+    --treatment ReportedAntibioticUsage
+    -v
+    """
+
+    """
+    -o ./data/fit_timeseries/
+    --pcoa_qza ./data/fit_timeseries/unweighted_unifrac_pcoa_results.qza
+    --individual Subject,BodySite
+    --timepoint DaysSinceExperimentStart
+    --treatment ReportedAntibioticUsage
+    -v
+    """
+
+    """
+    -o ./data/fit_timeseries/
+    --pcoa_qza ./data/fit_timeseries/jaccard_pcoa_results.qza
+    --individual Subject,BodySite
+    --timepoint DaysSinceExperimentStart
+    --treatment ReportedAntibioticUsage
+    -v
+    """
+
+    """
+    -o ./data/fit_timeseries/
+    --pcoa_qza ./data/fit_timeseries/bray_curtis_pcoa_results.qza
+    --individual Subject,BodySite
+    --timepoint DaysSinceExperimentStart
+    --treatment ReportedAntibioticUsage
+    -v
+    """
