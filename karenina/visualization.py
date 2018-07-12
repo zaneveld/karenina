@@ -17,8 +17,10 @@ from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join
 from numpy import array
+from scipy.spatial import distance
 import os
 import random
+import csv
 
 
 def make_option_parser():
@@ -124,8 +126,7 @@ def uniqueid():
        seed += 1
 
 
-def save_simulation_pcoa(data, output):
-
+def save_simulation_data(data, output):
     with open(output+"ordination.txt","w") as outfile:
         unique_id = uniqueid()
 
@@ -141,15 +142,39 @@ def save_simulation_pcoa(data, output):
         outfile.write("Site\t"+str(len(data)*len(data[0][0]))+"\t3\n")
 
         # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
+        dm = {}
         for row in data:
             identifier = next(unique_id)
             for i in range(len(row[0])):
                 outfile.write(str(identifier)+"."+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
+                dm.update({str(identifier)+"."+str(i):[row[0][i],row[1][i],row[2][i]]})
 
         outfile.write("\n")
         outfile.write("Biplot\t0\t0\n\n")
         outfile.write("Site constraints\t0\t0\n")
     outfile.close()
+
+    # Distance matrix (euclidean)
+    dm_0 = []
+    dm_0.append("")
+    distance_matrix = []
+    for key in dm.keys():
+        dm_0.append(key)
+    distance_matrix.append(dm_0)
+    for key in dm.keys():
+        dm_1 = []
+        dm_1.append(key)
+        for key1 in dm.keys():
+            dm_1.append(str(distance.euclidean(dm[key],dm[key1])))
+        distance_matrix.append(dm_1)
+
+    with open(output+"euclidean.txt","w") as outfile:
+        for row in distance_matrix:
+            for item in row:
+                outfile.write(str(item)+"\t")
+            outfile.write("\n")
+    outfile.close()
+
 
 def save_simulation_movie(individuals, output_folder,\
      n_individuals,n_timepoints,black_background=True, verbose=False):
@@ -178,7 +203,7 @@ def save_simulation_movie(individuals, output_folder,\
         print("Individual colors:",colors)
         print("Movie raw data:",data)
 
-    save_simulation_pcoa(data, output_folder)
+    save_simulation_data(data, output_folder)
 
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
