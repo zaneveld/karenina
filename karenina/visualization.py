@@ -18,6 +18,7 @@ from optparse import OptionGroup
 from os.path import join
 from numpy import array
 import os
+import random
 
 
 def make_option_parser():
@@ -116,6 +117,41 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
     fig.savefig(fig_filename, facecolor=fig.get_facecolor(), edgecolor='none',bbox_inches='tight')
 
 
+def uniqueid():
+    seed = random.getrandbits(8)
+    while True:
+       yield seed
+       seed += 1
+
+
+def save_simulation_pcoa(data, output):
+
+    with open(output+"ordination.txt","w") as outfile:
+        unique_id = uniqueid()
+
+        # Need to calculate eigenvalues
+        # outfile.write("Eigvals\t" + str(len(data)) + "\n\n")
+        outfile.write("Eigvals\t0" + "\n\n")
+
+        # Need to calculate propEx
+        # outfile.write("Proportion explained\t" + str(len(data)) + "\n\n")
+        outfile.write("Proportion explained\t0"+ "\n\n")
+
+        outfile.write("Species\t0\t0\n\n")
+        outfile.write("Site\t"+str(len(data)*len(data[0][0]))+"\t3\n")
+
+        # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
+        print(data)
+        for row in data:
+            identifier = next(unique_id)
+            for i in range(len(row[0])):
+                outfile.write(str(identifier)+"."+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
+
+        outfile.write("\n")
+        outfile.write("Biplot\t0\t0\n\n")
+        outfile.write("Site constraints\t0\t0\n")
+    outfile.close()
+
 def save_simulation_movie(individuals, output_folder,\
      n_individuals,n_timepoints,black_background=True, verbose=False):
     """Save an .ffmpg move of the simulated community change"""
@@ -142,6 +178,9 @@ def save_simulation_movie(individuals, output_folder,\
     if verbose:
         print("Individual colors:",colors)
         print("Movie raw data:",data)
+
+    save_simulation_pcoa(data, output_folder)
+
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
     pointstyle = 'o' #cheat to use lines to represent points

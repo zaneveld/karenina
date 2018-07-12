@@ -269,7 +269,7 @@ def main():
     treatment_names = opts.treatment_names.split(",")
     if verbose:
         print("Raw number of individuals from user:",opts.n_individuals)
-        print("n_individuals.split(',')",opts.n_individuals.split(','))
+        print("n_individuals",opts.n_individuals.split(','))
     n_individuals = list(map(int,opts.n_individuals.split(",")))
     if verbose:
         print ("**Experiment Design**")
