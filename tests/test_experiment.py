@@ -75,6 +75,7 @@ class TestExperiment(unittest.TestCase):
     def test_writeToMovieFile(self):
         """TODO"""
         """Tests that the output movie file is successfully written, then removes the file."""
+        pass
     """
         # Travis-CI Uses Xwindows backend, this prevents that issue.
         import os

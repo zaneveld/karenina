@@ -74,17 +74,17 @@ def vis(df, output):
         df_the = df_t[["n_timepoints", "theta_err"]]
 
         # Create scatterplots with regression lines for each variable
-        sig_plot = sns.lmplot(x="n_timepoints", y="sigma_err", data=df_sig)
+        sig_plot = sns.lmplot(x="n_timepoints", y="sigma_err", data=df_sig, fit_reg=False)
         ax = plt.gca()
         ax.set_title("Observed Sigma Error")
         sig_plot.savefig(output+"benchmark_sigma_err.png")
 
-        lam_plot = sns.lmplot(x="n_timepoints", y="lambda_err", data=df_lam)
+        lam_plot = sns.lmplot(x="n_timepoints", y="lambda_err", data=df_lam, fit_reg=False)
         ax = plt.gca()
         ax.set_title("Observed Lambda Error")
         lam_plot.savefig(output + "benchmark_lambda_err.png")
 
-        the_plot = sns.lmplot(x="n_timepoints", y="theta_err", data=df_the)
+        the_plot = sns.lmplot(x="n_timepoints", y="theta_err", data=df_the, fit_reg=False)
         ax = plt.gca()
         ax.set_title("Observed Theta Error")
         the_plot.savefig(output + "benchmark_theta_err.png")

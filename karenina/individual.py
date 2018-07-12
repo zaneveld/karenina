@@ -16,7 +16,7 @@ from random import random,randint
 from copy import copy
 
 class Individual(object):
-    def __init__(self,verbose,subject_id,coords=["x","y","z"],metadata={},params={},interindividual_variation=0.01):
+    def __init__(self,subject_id,coords=["x","y","z"],metadata={},params={},interindividual_variation=0.01, verbose=False):
         self.SubjectId = subject_id
         self.Metadata = metadata
         self.MovementProcesses = {}
@@ -65,7 +65,7 @@ class Individual(object):
 
         self.MovementProcesses[axis].Perturbations.append(perturbation)
 
-    def check_identity(self, verbose):
+    def check_identity(self, verbose=False):
         for coord_name,movement_process in self.MovementProcesses.iteritems():
             for coord_name2,movement_process2 in self.MovementProcesses.iteritems():
                 if coord_name == coord_name2:

@@ -32,7 +32,7 @@ setup(
         'Topic :: Microbiology :: Visualization and Modeling Tools',
         'License :: GPL',
         #'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
+        #'Programming Language :: Python :: 2.7',
         #'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         #'Programming Language :: Python :: 3.5',
@@ -57,7 +57,8 @@ setup(
         'console_scripts': [
             'spatial_ornstein_uhlenbeck.py=karenina.spatial_ornstein_uhlenbeck:main',
             'fit_timeseries.py=karenina.fit_timeseries:main',
-            'fit_timeseries_benchmark.py = karenina.fit_timeseries_benchmark:main'
+            'fit_timeseries_benchmark.py = karenina.fit_timeseries_benchmark:main',
+            'karenina_visualization.py = karenina.visualization:main'
         ],
     },
 )
