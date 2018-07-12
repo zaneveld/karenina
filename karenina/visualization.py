@@ -141,7 +141,6 @@ def save_simulation_pcoa(data, output):
         outfile.write("Site\t"+str(len(data)*len(data[0][0]))+"\t3\n")
 
         # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
-        print(data)
         for row in data:
             identifier = next(unique_id)
             for i in range(len(row[0])):
