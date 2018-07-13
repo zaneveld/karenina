@@ -438,7 +438,6 @@ def fit_input(input, ind, tp, tx, method):
                            row[1], row[2], row[3], x, row[5]])
             print([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
                            row[1], row[2], row[3], x, row[5]])
-    exit(0)
 
     # Generate output data from optimized functions.
     sig, lam, the, nlogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic_o = ([] for i in range(12))

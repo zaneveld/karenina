@@ -101,7 +101,7 @@ class Experiment(object):
                 curr_subject = Individual(subject_id = curr_subject_id,
                   params = params,\
                   metadata={"treatment":treatment["treatment_name"]},
-                  interindividual_variation=interindividual_variation, verbose=verbose)
+                  interindividual_variation=interindividual_variation, verbose=self.verbose)
                 individuals.append(curr_subject)
             treatment["individuals"] = individuals
 
@@ -205,5 +205,5 @@ class Experiment(object):
                 individuals.append(curr_subject)
             #print("individuals:",individuals)
         visualization.save_simulation_movie(individuals, output_folder,
-                                            len(individuals),self.NTimepoints,black_background=True, verbose=verbose)
+                                            len(individuals),self.NTimepoints,black_background=True, verbose=self.verbose)
 
