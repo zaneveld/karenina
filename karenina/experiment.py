@@ -98,10 +98,10 @@ class Experiment(object):
             for i in range(treatment["n_individuals"]):
 
                 curr_subject_id = "%s_%i" %(treatment["treatment_name"],i)
-                curr_subject = Individual(self.verbose,subject_id = curr_subject_id,
+                curr_subject = Individual(subject_id = curr_subject_id,
                   params = params,\
-                  metadata={"treatment":treatment["treatment_name"]},\
-                  interindividual_variation=interindividual_variation)
+                  metadata={"treatment":treatment["treatment_name"]},
+                  interindividual_variation=interindividual_variation, verbose=self.verbose)
                 individuals.append(curr_subject)
             treatment["individuals"] = individuals
 
@@ -130,9 +130,9 @@ class Experiment(object):
     def run(self):
         "Run the experiment, simulating timesteps"
         visualization.save_simulation_figure(individuals,opts.output,n_individuals,n_timepoints,perturbation_timepoint)
-        visualization.save_simulation_movie(verbose, individuals, opts.output,n_individuals,n_timepoints,perturbation_timepoint)
+        visualization.save_simulation_movie(individuals, opts.output,n_individuals,n_timepoints,perturbation_timepoint, verbose)
 
-    def check_variable_specified_per_treatment(self,v,verbose):
+    def check_variable_specified_per_treatment(self,v,verbose=False):
         """Raise a ValueError if v is not the same length as the number of treatments"""
         if verbose:
             print([x for x in v])
@@ -147,7 +147,7 @@ class Experiment(object):
         except:
             raise ValueError("n_timepoints must be a single integer that applies to all experiments (not a list per treatment for example).")
 
-    def simulate_timesteps(self,t_start,t_end,verbose):
+    def simulate_timesteps(self,t_start,t_end,verbose=False):
         """Simulate multiple timesteps"""
         for t in range(t_start,t_end):
             if verbose:
@@ -197,14 +197,13 @@ class Experiment(object):
                     curr_data = curr_subject.get_data(1)
                     self.Data.append("\t".join(map(str,curr_data))+"\n")
 
-    def write_to_movie_file(self,output_folder, verbose):
+    def write_to_movie_file(self,output_folder, verbose=False):
         """Write an MPG movie to output folder"""
         individuals = []
         for treatment in self.Treatments:
             for curr_subject in treatment["individuals"]:
                 individuals.append(curr_subject)
-        if verbose:
-            print("individuals:",individuals)
-        visualization.save_simulation_movie(verbose,individuals, output_folder,
-                                            len(individuals),self.NTimepoints,black_background=True)
+            #print("individuals:",individuals)
+        visualization.save_simulation_movie(individuals, output_folder,
+                                            len(individuals),self.NTimepoints,black_background=True, verbose=self.verbose)
 

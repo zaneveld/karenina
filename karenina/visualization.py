@@ -11,8 +11,56 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
+from karenina.individual import Individual
+from karenina.fit_timeseries import parse_pcoa,parse_metadata
+from optparse import OptionParser
+from optparse import OptionGroup
 from os.path import join
 from numpy import array
+from scipy.spatial import distance
+import os
+import random
+import csv
+
+
+def make_option_parser():
+    """Return an optparse OptionParser object"""
+
+    parser = OptionParser(usage = "%prog -o ./simulation_results",
+        description="This script fits microbiome change over time to Ornstein-Uhlenbeck (OU) models."+
+                    "Demo fitting an OU model using default parameters.",
+        version= __version__)
+
+    required_options = OptionGroup(parser, "Required options")
+
+    required_options.add_option('-o','--output', type="string",
+                                help='the output folder for the simulation results')
+
+    parser.add_option_group(required_options)
+
+    optional_options = OptionGroup(parser, "Optional options")
+
+    optional_options.add_option('--pcoa_qza', type="string", default=None,
+                                help='The input PCoA qza file')
+    optional_options.add_option('--metadata', type="string", default=None,
+                                help='The input metadata tsv file, if not defined, '
+                                     'metadata will be extracted from PCoA qza')
+
+    # Individual identifier will either accept a single column, or optionally combine two columns of categorical features.
+    optional_options.add_option('--individual', type="string", default=None,
+                                help='The host subject ID column identifier, separate by comma to combine TWO columns')
+    optional_options.add_option('--timepoint', type="string", default=None,
+                                help='The timepoint column identifier')
+    optional_options.add_option('--treatment', type="string", default=None,
+                                help='The treatment column identifier')
+
+    optional_options.add_option('-v', '--verbose', action="store_true", dest="verbose", default=False,
+                                help='-v, allows for verbose output' +
+                                     ' [default: %default]')
+
+    parser.add_option_group(optional_options)
+
+    return parser
 
 def get_timeseries_data(individuals,axes=["x","y","z"]):
     results = []
@@ -71,8 +119,65 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
     fig.savefig(fig_filename, facecolor=fig.get_facecolor(), edgecolor='none',bbox_inches='tight')
 
 
-def save_simulation_movie(verbose, individuals, output_folder,\
-     n_individuals,n_timepoints,black_background=True):
+def uniqueid():
+    seed = random.getrandbits(8)
+    while True:
+       yield seed
+       seed += 1
+
+
+def save_simulation_data(data, output):
+    with open(output+"ordination.txt","w") as outfile:
+        unique_id = uniqueid()
+
+        # Need to calculate eigenvalues
+        # outfile.write("Eigvals\t" + str(len(data)) + "\n\n")
+        outfile.write("Eigvals\t0" + "\n\n")
+
+        # Need to calculate propEx
+        # outfile.write("Proportion explained\t" + str(len(data)) + "\n\n")
+        outfile.write("Proportion explained\t0"+ "\n\n")
+
+        outfile.write("Species\t0\t0\n\n")
+        outfile.write("Site\t"+str(len(data)*len(data[0][0]))+"\t3\n")
+
+        # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
+        dm = {}
+        for row in data:
+            identifier = next(unique_id)
+            for i in range(len(row[0])):
+                outfile.write(str(identifier)+"."+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
+                dm.update({str(identifier)+"."+str(i):[row[0][i],row[1][i],row[2][i]]})
+
+        outfile.write("\n")
+        outfile.write("Biplot\t0\t0\n\n")
+        outfile.write("Site constraints\t0\t0\n")
+    outfile.close()
+
+    # Distance matrix (euclidean)
+    dm_0 = []
+    dm_0.append("")
+    distance_matrix = []
+    for key in dm.keys():
+        dm_0.append(key)
+    distance_matrix.append(dm_0)
+    for key in dm.keys():
+        dm_1 = []
+        dm_1.append(key)
+        for key1 in dm.keys():
+            dm_1.append(str(distance.euclidean(dm[key],dm[key1])))
+        distance_matrix.append(dm_1)
+
+    with open(output+"euclidean.txt","w") as outfile:
+        for row in distance_matrix:
+            for item in row:
+                outfile.write(str(item)+"\t")
+            outfile.write("\n")
+    outfile.close()
+
+
+def save_simulation_movie(individuals, output_folder,\
+     n_individuals,n_timepoints,black_background=True, verbose=False):
     """Save an .ffmpg move of the simulated community change"""
 
     #TODO: standardize these and put them up above
@@ -97,6 +202,9 @@ def save_simulation_movie(verbose, individuals, output_folder,\
     if verbose:
         print("Individual colors:",colors)
         print("Movie raw data:",data)
+
+    save_simulation_data(data, output_folder)
+
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
     pointstyle = 'o' #cheat to use lines to represent points
@@ -149,8 +257,8 @@ def save_simulation_movie(verbose, individuals, output_folder,\
     line_ani.save(join(output_folder,'simulation_video.mp4'), writer=writer)
     #plt.show()
 
-def update_3d_plot(end_t,timeseries_data,ax,lines,points=None,start_t=0):
 
+def update_3d_plot(end_t,timeseries_data,ax,lines,points=None,start_t=0):
     for line,data in zip(lines,timeseries_data):
         line.set_data(data[0:2,start_t:end_t])
         #z pos can't be set with set_data
@@ -163,3 +271,55 @@ def update_3d_plot(end_t,timeseries_data,ax,lines,points=None,start_t=0):
             point.set_3d_properties(data[2,end_t-1:end_t])
     rotation_speed = 0.5
     ax.view_init(30, rotation_speed * end_t)
+
+
+def main():
+    parser = make_option_parser()
+    opts, args = parser.parse_args()
+    verbose = opts.verbose
+    if verbose:
+        print(opts)
+
+    if opts.output is None:
+        raise IOError('Output must be defined.')
+
+    if not os.path.exists(opts.output):
+        os.makedirs(opts.output)
+
+    tx = opts.treatment
+    output = opts.output
+    n_timepoints = opts.timepoint
+
+    ind = []
+
+    site, metadata = parse_pcoa(opts.pcoa_qza, opts.individual, opts.timepoint, opts.treatment, opts.metadata)
+    df = parse_metadata(metadata, opts.individual, opts.timepoint, opts.treatment, site)
+
+    i=0
+
+    colors = ['fuchsia', 'cyan', 'darkorange', 'blue', 'yellow']
+    tx = opts.treatment
+    treatments = df[tx].unique()
+    while len(colors) < len(treatments):
+        colors.append('lightgray')
+
+    for row in df.iterrows():
+        curr_subject_id = "%s_%i" % (df[opts.individual], i)
+        j=0
+        while row[1][3] != treatments[j]:
+            j+=1
+        color = colors[j]
+        params = {'lambda': 0.2, 'delta': 0.25, 'interindividual_variation': 0.01}
+        params['color'] = color
+        curr_subject = Individual(subject_id=curr_subject_id,
+                                  params=params, \
+                                  metadata={opts.treatment: df[opts.treatment]}, \
+                                  interindividual_variation=.01, verbose=verbose)
+        ind.append(curr_subject)
+        i+=1
+
+    save_simulation_figure(individuals=ind, output_folder=output, n_timepoints=50, perturbation_timepoint=25, n_individuals=50)
+    save_simulation_movie(individuals=ind,output_folder=output,n_timepoints=50,n_individuals=50, verbose=verbose)
+
+if __name__ == "__main__":
+    main()

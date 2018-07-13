@@ -170,15 +170,16 @@ def make_OU_objective_fn(x,times,verbose=False):
         fixed_x = x
         fixed_times = times
         if p.shape != (3,):
-            raise ValueError("OU optimization must operate on a (3,) array representing Sigma,Lamda,and Theta values")
-        #For clarity, binding these to variables
-        Sigma,Lambda,Theta = p
-        #print([fixed_x,fixed_times,Sigma,Lambda,Theta])
-        nlogLik = get_OU_nlogLik(fixed_x,fixed_times,Sigma,Lambda,Theta)
+            raise ValueError(
+                "OU optimization must operate on a (3,) array representing Sigma,Lamda,and Theta values")
+        # For clarity, binding these to variables
+        Sigma, Lambda, Theta = p
+        # print([fixed_x,fixed_times,Sigma,Lambda,Theta])
+        nlogLik = get_OU_nlogLik(fixed_x, fixed_times, Sigma, Lambda, Theta)
         if verbose:
-            print ("\nnlogLik:",nlogLik)
-            #print "\t".join(["Sigma","Lambda","Theta"])
-            print ("%.2f\t%.2f\t%.2f" % (Sigma,Lambda,Theta))
+            print("\nnlogLik:", nlogLik)
+            # print "\t".join(["Sigma","Lambda","Theta"])
+            print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
         return nlogLik
     return fn_to_optimize
 
@@ -435,9 +436,11 @@ def fit_input(input, ind, tp, tx, method):
         if len(x)>1:
             fit_ts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
                            row[1], row[2], row[3], x, row[5]])
+            print([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
+                           row[1], row[2], row[3], x, row[5]])
 
     # Generate output data from optimized functions.
-    sig, lam, the, nlogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic = ([] for i in range(12))
+    sig, lam, the, nlogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic_o = ([] for i in range(12))
     for row in fit_ts:
         # global_min = [sigma, lambda, theta]
         sig.append(row[0][0][0])
@@ -453,7 +456,7 @@ def fit_input(input, ind, tp, tx, method):
         pc.append(row[5])
         op.append(method)
         # aic calulated with 2*n_params-2*LN(-1*nloglik)
-        aic.append(aic(len(row[4]), row[0][1]))
+        aic_o.append(aic(len(row[4]), row[0][1]))
 
     if "," in ind:
         ind = ind.replace(",","_")
@@ -469,7 +472,7 @@ def fit_input(input, ind, tp, tx, method):
                            "n_parameters":n_param,
                            "pc":pc,
                            "optimizer":op,
-                           "aic":aic},
+                           "aic":aic_o},
                            columns=[ind,"pc","sigma","lambda","theta","nLogLik",
                                     "n_parameters","aic","optimizer",tp,tx,"x"])
     return output
@@ -487,6 +490,9 @@ def main():
 
     if not os.path.exists(opts.output):
         os.makedirs(opts.output)
+
+    if opts.treatment is not None:
+        cohorts = True
 
     if opts.pcoa_qza is not None:
         # Extract the name of the pcoa qza, and append with '_fit_timeseries'
