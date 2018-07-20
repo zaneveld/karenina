@@ -193,6 +193,14 @@ def make_OU_objective_fn_cohort(data, verbose=False):
     minimize f(p). So we want to embded or dx data and time data *in* the
     function, and use the values of p to represent parameter values that
     could produce the data.
+    
+    Overall strategy: Treat this exactly like the per-individual 
+    fitting, BUT within the objective function loop over all individuals
+    in a given treatment (not just one) to get nLogLiklihoods. The nLogLiklihood
+    for the individuals in the treatment is then just the sum of the individual
+    nLogLikelihoods for each individuals timeseries.
+    
+    data -- a dict of {"individual1": (fixed_x,fixed_times)} 
     """
 
 
@@ -210,14 +218,26 @@ def make_OU_objective_fn_cohort(data, verbose=False):
                 "OU optimization must operate on a (3,) array representing Sigma,Lamda,and Theta values")
         # For clarity, binding these to variables
         Sigma, Lambda, Theta = p
-        # print([fixed_x,fixed_times,Sigma,Lambda,Theta])
-        nlogLik = get_OU_nlogLik(fixed_x, fixed_times, Sigma, Lambda, Theta)
+        #Assuming data is a dict of indiviudal_id: 
+        #start with nLogLik = 0
+        cohort_nLogLik = 0 
+        for individual_id,data in data.items():
+            fixed_x,fixed_times = data
+            
+            # print([fixed_x,fixed_times,Sigma,Lambda,Theta])
+            nLogLik = get_OU_nlogLik(fixed_x, fixed_times, Sigma, Lambda, Theta)
+            if verbose:
+                print("\nnlogLik:", nlogLik)
+                # print "\t".join(["Sigma","Lambda","Theta"])
+                print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
+            cohort_nLogLik += nLogLik #test by passing in individuals and summing 
+        
         if verbose:
-            print("\nnlogLik:", nlogLik)
+            print("\nCohort nlogLik:", nlogLik)
             # print "\t".join(["Sigma","Lambda","Theta"])
             print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
-        return nlogLik
-
+        
+        return cohort_nlogLik
     return fn_to_optimize
 
 
