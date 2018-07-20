@@ -119,17 +119,8 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
     fig.savefig(fig_filename, facecolor=fig.get_facecolor(), edgecolor='none',bbox_inches='tight')
 
 
-def uniqueid():
-    seed = random.getrandbits(8)
-    while True:
-       yield seed
-       seed += 1
-
-
-def save_simulation_data(data, output):
+def save_simulation_data(data, ids, output):
     with open(output+"ordination.txt","w") as outfile:
-        unique_id = uniqueid()
-
         # Need to calculate eigenvalues
         # outfile.write("Eigvals\t" + str(len(data)) + "\n\n")
         outfile.write("Eigvals\t0" + "\n\n")
@@ -143,11 +134,13 @@ def save_simulation_data(data, output):
 
         # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
         dm = {}
+        j=0
         for row in data:
-            identifier = next(unique_id)
+            identifier = ids[j]
             for i in range(len(row[0])):
-                outfile.write(str(identifier)+"."+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
+                outfile.write(str(identifier)+"_t"+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
                 dm.update({str(identifier)+"."+str(i):[row[0][i],row[1][i],row[2][i]]})
+            j+=1
 
         outfile.write("\n")
         outfile.write("Biplot\t0\t0\n\n")
@@ -172,6 +165,28 @@ def save_simulation_data(data, output):
         for row in distance_matrix:
             for item in row:
                 outfile.write(str(item)+"\t")
+            outfile.write("\n")
+    outfile.close()
+
+    #Mapping file
+    md_0 = ["#SampleID","Subject","Treatment","Timepoint"]
+    md_1 = ["#q2:types","categorical","categorical","numeric"]
+    md = []
+    for id in ids:
+        for i in range(len(data[0][0])):
+            md.append([id+"_t"+str(i),id,''.join([k for k in id if not k.isdigit()])[:-1],i])
+    metadata = [md_0,md_1]
+    for row in md:
+        metadata.append(row)
+    with open(output+"metadata.tsv","w") as outfile:
+        for row in metadata:
+            i=0
+            for item in row:
+                if i < len(row)-1:
+                    outfile.write(str(item)+"\t")
+                if i==len(row)-1:
+                    outfile.write(str(item))
+                i+=1
             outfile.write("\n")
     outfile.close()
 
@@ -203,7 +218,10 @@ def save_simulation_movie(individuals, output_folder,\
         print("Individual colors:",colors)
         print("Movie raw data:",data)
 
-    save_simulation_data(data, output_folder)
+    ids = []
+    for item in individuals:
+        ids.append(item.SubjectId)
+    save_simulation_data(data, ids, output_folder)
 
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'

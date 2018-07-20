@@ -186,6 +186,41 @@ def make_OU_objective_fn(x,times,verbose=False):
 #May not actually need the parametric
 #normal distrubtion fit
 
+def make_OU_objective_fn_cohort(data, verbose=False):
+    """Make an objective function for use with basinhopping with data embedded
+
+    scipy.optimize.basinhopping needs a single array p, a function, and will
+    minimize f(p). So we want to embded or dx data and time data *in* the
+    function, and use the values of p to represent parameter values that
+    could produce the data.
+    """
+
+
+    #########
+    # This is just a copy of make_OU_objective_fn at this time
+    #########
+    if len(x) <= 1:
+        raise ValueError("Single-point observations are not supported.")
+
+    def fn_to_optimize(p):
+        fixed_x = x
+        fixed_times = times
+        if p.shape != (3,):
+            raise ValueError(
+                "OU optimization must operate on a (3,) array representing Sigma,Lamda,and Theta values")
+        # For clarity, binding these to variables
+        Sigma, Lambda, Theta = p
+        # print([fixed_x,fixed_times,Sigma,Lambda,Theta])
+        nlogLik = get_OU_nlogLik(fixed_x, fixed_times, Sigma, Lambda, Theta)
+        if verbose:
+            print("\nnlogLik:", nlogLik)
+            # print "\t".join(["Sigma","Lambda","Theta"])
+            print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
+        return nlogLik
+
+    return fn_to_optimize
+
+
 def fit_normal(data):
     """Return the mean and standard deviation of normal data"""
     estimate = norm.fit(data)
@@ -206,7 +241,6 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
     global_optimizer -- the global optimization method (see scipy.optimize)
     local_optimizer -- the local optimizer (must be supported by global method)
     """
-
     if global_optimizer == "basinhopping":
         local_min_bounds = list(zip(xmin.tolist(),xmax.tolist()))
         local_min_kwargs = {"method":local_optimizer,"bounds":local_min_bounds}
@@ -278,11 +312,11 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
     for line in lines:
         line = line.decode("utf-8")
         if line.startswith("Eigvals"):
-            eigs = lines[i+1].decode("utf-8").strip('\n').split("\t")
+            eigs = lines[i+1].decode("utf-8").strip('\n').strip('\r').split("\t")
         elif line.startswith("Proportion explained"):
-            propEx = lines[i+1].decode("utf-8").strip('\n').split("\t")
+            propEx = lines[i+1].decode("utf-8").strip('\n').strip('\r').split("\t")
         elif line.startswith("Species"):
-            species = lines[i + 1].decode("utf-8").strip('\n').split("\t")
+            species = lines[i + 1].decode("utf-8").strip('\n').strip('\r').split("\t")
 
         elif line.startswith("Site"):
             # We don't want Site constraints.
@@ -292,7 +326,7 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
             j = i + 1
             while j <= max:
                 t_line = lines[j].decode('utf-8')
-                site.append(t_line.strip('\n').split("\t"))
+                site.append(t_line.strip('\n').strip('\r').split("\t"))
                 j += 1
         i += 1
     t_site = []
@@ -364,8 +398,11 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
     # Force timepoint to numerics
     df_tp = df_tp.replace('[^0-9]','', regex=True)
 
+
     # Build the return dataframe
     df_ret = pd.concat([df[df.columns[0]], df_ind, df_tp, df_tx], axis=1)
+
+
     df_site = pd.DataFrame.from_records(site, columns=["#SampleID","pc1","pc2","pc3"])
     df_ret = pd.merge(df_ret, df_site, on="#SampleID", how='inner')
 
@@ -398,6 +435,8 @@ def fit_input(input, ind, tp, tx, method):
     :param method: "basinhopping" if not defined in opts
     :return: dataframe: [ind,"pc","sigma","lambda","theta","optimizer","nLogLik","n_parameters","aic",tp,tx,"x"]
     """
+    if tx is not None:
+        cohorts = True
 
     subjects = input[ind].unique()
     values = ['pc1', 'pc2', 'pc3']
@@ -422,13 +461,21 @@ def fit_input(input, ind, tp, tx, method):
             vals.append([numeric, value])
         data.append([sj, tp_t, tx_t, vals])
 
-    # Make an objective function for each row
+    if cohorts:
+        # Need to pass cohort data to new make_ou_objective_fn_cohort(data, verbose=false)
+        # Split the data into each treatment, for each treatment_set, return an objective fn,
+        #   assign each row their associated objective fn
+        pass
+    else:
+        # Make an objective function for each row
+        pass
     fx = []
     for row in data:
         for item in row[3]:
             #[0: function, 1: subject, 2: times, 3: treatment, 4: values, 5:pc1/2/3]
             fx.append([make_OU_objective_fn(item[0], row[1]), row[0], row[1], row[2], item[0], item[1]])
     fit_ts = []
+    #
 
     # Optimize each function
     for row in fx:
@@ -437,7 +484,7 @@ def fit_input(input, ind, tp, tx, method):
             fit_ts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
                            row[1], row[2], row[3], x, row[5]])
             print([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
-                           row[1], row[2], row[3], x, row[5]])
+                           row[1], row[2], row[3], x.tolist(), row[5]])
 
     # Generate output data from optimized functions.
     sig, lam, the, nlogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic_o = ([] for i in range(12))
@@ -451,12 +498,12 @@ def fit_input(input, ind, tp, tx, method):
         ind_o.append(row[1])
         tp_o.append(row[2])
         tx_o.append(row[3])
-        x_o.append(row[4])
-        n_param.append(len(row[4]))
+        x_o.append(row[4].tolist())
+        n_param.append(len(row[4].tolist()))
         pc.append(row[5])
         op.append(method)
         # aic calulated with 2*n_params-2*LN(-1*nloglik)
-        aic_o.append(aic(len(row[4]), row[0][1]))
+        aic_o.append(aic(len(row[4].tolist()), row[0][1]))
 
     if "," in ind:
         ind = ind.replace(",","_")
@@ -490,9 +537,6 @@ def main():
 
     if not os.path.exists(opts.output):
         os.makedirs(opts.output)
-
-    if opts.treatment is not None:
-        cohorts = True
 
     if opts.pcoa_qza is not None:
         # Extract the name of the pcoa qza, and append with '_fit_timeseries'
