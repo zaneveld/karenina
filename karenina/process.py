@@ -27,7 +27,6 @@ class Process(object):
         self.StartCoord = start_coord
         self.Coord = start_coord
         self.History = history
-        #COMMENTED OUT TO REMOVE DUPLICATE DATAPOINTS
         self.History.append(start_coord)
         self.Params = params
         self.ProcessType = motion
