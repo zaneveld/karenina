@@ -367,7 +367,8 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
     :param site: [subjectID, x1, x2, x3]
     :return: input dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]
     """
-
+    #if "," in individual:
+    #    individual = individual.replace(",","_")
     # metadata file will be located in provenance/action/metadata.tsv, opens from QZA if not defined in opts
     df = pd.read_csv(metadata, sep="\t")
 
@@ -410,8 +411,8 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
     if treatment is not None:
         df_tx = df[treatment]
     else:
-        df_tx = df[individual].copy()
-        df_tx.name = str(df_tx.name+"_tx")
+        df_tx = df_ind.copy()
+        df_tx.columns=[str(df_tx.columns.values[0])+"_tx"]
 
     # Force timepoint to numerics
     df_tp = df_tp.replace('[^0-9]','', regex=True)
