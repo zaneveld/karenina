@@ -169,7 +169,7 @@ def benchmark(max_tp = 300, output = None, verbose = False):
                 sim_o.append([Sigma, Lambda, Theta])
                 log.append(str("f at Global min: "+str(f_at_global_min)))
                 nLogLik.append(f_at_global_min)
-                # aic calulated with 2*n_params-2*LN(-1*nloglik)
+                # aic calulated with 2*n_params-2*LN(-1*nLogLik)
                 aic_t = aic(niter,f_at_global_min)
                 log.append(str("aic: " +str(aic_t)))
                 aic_o.append(aic_t)
