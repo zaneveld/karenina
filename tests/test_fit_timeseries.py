@@ -16,7 +16,7 @@ srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
 from karenina.fit_timeseries  import fit_timeseries,fit_normal,\
-  get_OU_nlogLik,make_OU_objective_fn
+  get_OU_nLogLik,make_OU_objective_fn
 from karenina.process import Process
 import numpy.testing as npt
 
@@ -64,7 +64,7 @@ class TestFit(unittest.TestCase):
     def test_fit_normal(self):
         """Return the mean and standard deviation of normal data."""
         for scale,data in self.BasicNormalData.items():
-             est_loc,est_scale,nlogLik = fit_normal(data)
+             est_loc,est_scale,nLogLik = fit_normal(data)
              accurate_to = 3 #decimal places
              npt.assert_almost_equal(est_loc,0,1)
              npt.assert_almost_equal(est_scale,scale,1)
@@ -98,28 +98,28 @@ class TestFit(unittest.TestCase):
                 #True values:
                 #Theta=0, Lambda = 0.20,Sigma=delta=0.25
 
-                #nlogLik estimate with true parameters:
-                true_param_est = get_OU_nlogLik(xs,ts,Lambda=0.20,\
+                #nLogLik estimate with true parameters:
+                true_param_est = get_OU_nLogLik(xs,ts,Lambda=0.20,\
                   Sigma=0.25,Theta=0)
 
-                bad_param_est1 = get_OU_nlogLik(xs,ts,Lambda=0.40,\
+                bad_param_est1 = get_OU_nLogLik(xs,ts,Lambda=0.40,\
                   Sigma=0.25,Theta=0)
 
                 self.assertTrue(true_param_est < bad_param_est1)
 
-                bad_param_est2 = get_OU_nlogLik(xs,ts,Lambda=0.80,\
+                bad_param_est2 = get_OU_nLogLik(xs,ts,Lambda=0.80,\
                   Sigma=0.25,Theta=0)
 
                 self.assertTrue(true_param_est < bad_param_est2)
                 self.assertTrue(bad_param_est1 < bad_param_est2)
 
-                bad_param_est3 = get_OU_nlogLik(xs,ts,Lambda=0.80,\
+                bad_param_est3 = get_OU_nLogLik(xs,ts,Lambda=0.80,\
                   Sigma=0.25,Theta=0.5)
 
                 self.assertTrue(true_param_est < bad_param_est3)
                 self.assertTrue(bad_param_est2 < bad_param_est3)
 
-                bad_param_est4 = get_OU_nlogLik(xs,ts,Lambda=0.20,\
+                bad_param_est4 = get_OU_nLogLik(xs,ts,Lambda=0.20,\
                   Sigma=0.50,Theta=0)
 
                 self.assertTrue(true_param_est < bad_param_est4)
