@@ -97,7 +97,7 @@ def fit_OU_process(data,dts):
     """
     pass
 
-def get_OU_nlogLik(x,times,Sigma,Lambda,Theta):
+def get_OU_nLogLik(x,times,Sigma,Lambda,Theta):
     """Return the negative log likelihood for an OU model given data
     x -- an array of x values, which MUST be ordered by time
     times -- the time values at which x was taken. MUST match x in order.
@@ -132,7 +132,7 @@ def get_OU_nlogLik(x,times,Sigma,Lambda,Theta):
     W_list = W.tolist() #Weiner process rolls
     #For each step, the dx/dt will be based
     #on x in the *previous* step, so offset x's by one
-    total_nlogLik = None
+    total_nLogLik = None
 
     #Sum up logLik's for all the differently scaled, 0-centered
     #normal distributions across all timepoints
@@ -146,12 +146,12 @@ def get_OU_nlogLik(x,times,Sigma,Lambda,Theta):
         eps = 0.0000001
         scale = Sigma**(2*dt)+eps
         curr_W = W_list[i]
-        nlogLik = -1*norm.logpdf(curr_W,loc=loc,scale=scale)
-        if not total_nlogLik:
-            total_nlogLik = nlogLik
+        nLogLik = -1*norm.logpdf(curr_W,loc=loc,scale=scale)
+        if not total_nLogLik:
+            total_nLogLik = nLogLik
         else:
-            total_nlogLik += nlogLik #can validly sum log-likelihoods.
-    return total_nlogLik
+            total_nLogLik += nLogLik #can validly sum log-likelihoods.
+    return total_nLogLik
 
 def make_OU_objective_fn(x,times,verbose=False):
     """Make an objective function for use with basinhopping with data embedded
@@ -175,28 +175,77 @@ def make_OU_objective_fn(x,times,verbose=False):
         # For clarity, binding these to variables
         Sigma, Lambda, Theta = p
         # print([fixed_x,fixed_times,Sigma,Lambda,Theta])
-        nlogLik = get_OU_nlogLik(fixed_x, fixed_times, Sigma, Lambda, Theta)
+        nLogLik = get_OU_nLogLik(fixed_x, fixed_times, Sigma, Lambda, Theta)
         if verbose:
-            print("\nnlogLik:", nlogLik)
+            print("\nnLogLik:", nLogLik)
             # print "\t".join(["Sigma","Lambda","Theta"])
             print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
-        return nlogLik
+        return nLogLik
     return fn_to_optimize
 
 #May not actually need the parametric
 #normal distrubtion fit
 
+def make_OU_objective_fn_cohort(x, times, verbose=False):
+    """Make an objective function for use with basinhopping with data embedded
+
+    scipy.optimize.basinhopping needs a single array p, a function, and will
+    minimize f(p). So we want to embded or dx data and time data *in* the
+    function, and use the values of p to represent parameter values that
+    could produce the data.
+    
+    Overall strategy: Treat this exactly like the per-individual 
+    fitting, BUT within the objective function loop over all individuals
+    in a given treatment (not just one) to get nLogLiklihoods. The nLogLiklihood
+    for the individuals in the treatment is then just the sum of the individual
+    nLogLikelihoods for each individuals timeseries.
+    
+    data -- a dict of {"individual1": (fixed_x,fixed_times)} 
+    """
+
+    if len(x) <= 1:
+        raise ValueError("Single-point observations are not supported.")
+
+    def fn_to_optimize(p):
+        fixed_x = x
+        fixed_times = times
+        if(len(fixed_x) != len(fixed_times)):
+            raise ValueError("Dimensions of X and Times must be equal")
+        if p.shape != (3,):
+            raise ValueError(
+                "OU optimization must operate on a (3,) array representing Sigma,Lamda,and Theta values")
+        # For clarity, binding these to variables
+        Sigma, Lambda, Theta = p
+        #Assuming data is a dict of indiviudal_id: 
+        #start with nLogLik = 0
+        cohort_nLogLik = 0
+        for i in range(len(fixed_x)):
+            # print([fixed_x,fixed_times,Sigma,Lambda,Theta])
+            nLogLik = get_OU_nLogLik(fixed_x[i], fixed_times[i], Sigma, Lambda, Theta)
+            if verbose:
+                print("\nnLogLik:", nLogLik)
+                # print "\t".join(["Sigma","Lambda","Theta"])
+                print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
+            cohort_nLogLik += nLogLik #test by passing in individuals and summing
+        if verbose:
+            print("\nCohort nLogLik:", nLogLik)
+            # print "\t".join(["Sigma","Lambda","Theta"])
+            print("%.2f\t%.2f\t%.2f" % (Sigma, Lambda, Theta))
+        return cohort_nLogLik
+    return fn_to_optimize
+
+
 def fit_normal(data):
     """Return the mean and standard deviation of normal data"""
     estimate = norm.fit(data)
-    nlogLik = norm.nnlf(estimate,data)
+    nLogLik = norm.nnlf(estimate,data)
     mu,std = estimate
-    return mu,std,nlogLik
+    return mu,std,nLogLik
 
 
 def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
   xmax=array([inf,inf,inf]),global_optimizer="basinhopping",
-  local_optimizer="Nelder-Mead",stepsize=0.01,niter=200):
+  local_optimizer="Nelder-Mead",stepsize=0.01,niter=200, verbose=False):
     """Minimize a function returning input & result
     fn_to_optimize -- the function to minimize. Must return a single value or array x.
 
@@ -206,7 +255,6 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
     global_optimizer -- the global optimization method (see scipy.optimize)
     local_optimizer -- the local optimizer (must be supported by global method)
     """
-
     if global_optimizer == "basinhopping":
         local_min_bounds = list(zip(xmin.tolist(),xmax.tolist()))
         local_min_kwargs = {"method":local_optimizer,"bounds":local_min_bounds}
@@ -255,8 +303,6 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
         raise ValueError("Remove all white space from subject identifier.")
     if timepoint is None:
         raise ValueError('Timepoint Column name must be identified.')
-    if treatment is None:
-        raise ValueError('Treatment Column name must be identified.')
 
     # elements of PCoA file are defined here, but only pc1, pc2, and pc3 from site are extracted at this time.
     eigs = []
@@ -278,11 +324,11 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
     for line in lines:
         line = line.decode("utf-8")
         if line.startswith("Eigvals"):
-            eigs = lines[i+1].decode("utf-8").strip('\n').split("\t")
+            eigs = lines[i+1].decode("utf-8").strip('\n').strip('\r').split("\t")
         elif line.startswith("Proportion explained"):
-            propEx = lines[i+1].decode("utf-8").strip('\n').split("\t")
+            propEx = lines[i+1].decode("utf-8").strip('\n').strip('\r').split("\t")
         elif line.startswith("Species"):
-            species = lines[i + 1].decode("utf-8").strip('\n').split("\t")
+            species = lines[i + 1].decode("utf-8").strip('\n').strip('\r').split("\t")
 
         elif line.startswith("Site"):
             # We don't want Site constraints.
@@ -292,7 +338,7 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
             j = i + 1
             while j <= max:
                 t_line = lines[j].decode('utf-8')
-                site.append(t_line.strip('\n').split("\t"))
+                site.append(t_line.strip('\n').strip('\r').split("\t"))
                 j += 1
         i += 1
     t_site = []
@@ -321,7 +367,8 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
     :param site: [subjectID, x1, x2, x3]
     :return: input dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]
     """
-
+    #if "," in individual:
+    #    individual = individual.replace(",","_")
     # metadata file will be located in provenance/action/metadata.tsv, opens from QZA if not defined in opts
     df = pd.read_csv(metadata, sep="\t")
 
@@ -359,14 +406,23 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
         df_ind = df[individual]
 
     df_tp = df[timepoint]
-    df_tx = df[treatment]
+    
+    #Copy individual column into treatment if none assigned
+    if treatment is not None:
+        df_tx = df[treatment]
+    else:
+        df_tx = df_ind.copy()
+        df_tx.columns=[str(df_tx.columns.values[0])+"_tx"]
 
     # Force timepoint to numerics
     df_tp = df_tp.replace('[^0-9]','', regex=True)
 
+
     # Build the return dataframe
     df_ret = pd.concat([df[df.columns[0]], df_ind, df_tp, df_tx], axis=1)
+
     df_site = pd.DataFrame.from_records(site, columns=["#SampleID","pc1","pc2","pc3"])
+
     df_ret = pd.merge(df_ret, df_site, on="#SampleID", how='inner')
 
     if "," in individual:
@@ -375,7 +431,6 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
     #Now have a full dataframe with sampleIDs, Subject Identifiers, timepoints, treatment, and initial x coordinates.
         #Preserves only values which have initial positions, drops null coordinates.
         #In example files, L3S242 was in metadata File, but not in the PCOA file, so there was one less in the df_ret.
-
     return df_ret
 
 def aic(n_param, nLogLik):
@@ -388,6 +443,117 @@ def aic(n_param, nLogLik):
     return 2*n_param-2*(math.log(-1*nLogLik))
 
 
+def gen_output(fit_ts, ind, tp, tx, method):
+    """
+    Generate output dataframe for either cohort, or non-cohort data
+    :param fit_ts: dataframe [0: [[Sigma, Lambda, Theta], nLogLik], 1: Individuals, 2: Times
+        3: Treatments, 4: Values, 5: PC Axis
+    :param ind: individual identifier
+    :param tp: timepoint identifier
+    :param tx: treatment identifier
+    :param method: optimization method
+    :return: Formatted dataframe for csv output
+    """
+    sig, lam, the, nLogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic_o = ([] for i in range(12))
+    for row in fit_ts:
+        # global_min = [sigma, lambda, theta]
+        sig.append(row[0][0][0])
+        lam.append(row[0][0][1])
+        the.append(row[0][0][2])
+        # f_at_global min = nLogLik
+        nLogLik.append(row[0][1])
+        ind_o.append(row[1])
+        tp_o.append(row[2])
+        tx_o.append(row[3])
+        x_o.append(row[4].tolist())
+        n_param.append(len(row[4].tolist()))
+        pc.append(row[5])
+        op.append(method)
+        # aic calulated with 2*n_params-2*LN(-1*nLogLik)
+        aic_o.append(aic(len(row[4].tolist()), row[0][1]))
+
+    if "," in ind:
+        ind = ind.replace(",", "_")
+
+    output = pd.DataFrame({"sigma": sig,
+                           "lambda": lam,
+                           "theta": the,
+                           "nLogLik": nLogLik,
+                           ind: ind_o,
+                           tp: tp_o,
+                           tx: tx_o,
+                           "x": x_o,
+                           "n_parameters": n_param,
+                           "pc": pc,
+                           "optimizer": op,
+                           "aic": aic_o},
+                          columns=[ind, "pc", "sigma", "lambda", "theta", "nLogLik",
+                                   "n_parameters", "aic", "optimizer", tp, tx, "x"])
+    return output
+
+
+def fit_cohorts(input, ind, tp, tx, method, verbose = False):
+    # Need to pass cohort data to new make_ou_objective_fn_cohort(data, verbose=false)
+    # Split the data into each treatment, for each treatment_set, return an objective fn,
+    #   assign each row their associated objective fn
+    fx_cohorts = []
+    #Cycle through all treatments
+    for treatment in input[tx].unique():
+        df = input[input[tx] == treatment]
+
+        # Create empty dataframes for treatment PC axes, and timepoints
+        pc1_values = []
+        pc2_values = []
+        pc3_values = []
+        pc_times = []
+
+        # Append values and times for each individual
+        for subject in df[ind].unique():
+            pc1_values.append(df[df[ind] == subject]["pc1"].values.tolist())
+            pc2_values.append(df[df[ind] == subject]["pc1"].values.tolist())
+            pc3_values.append(df[df[ind] == subject]["pc1"].values.tolist())
+            pc_times.append(df[df[ind] == subject][tp].values.tolist())
+
+        # Force the values to float
+        sub_pc1 = []
+        for item in pc1_values:
+            sub_pc1.append([float(i) for i in item])
+        pc1_values = sub_pc1
+
+        sub_pc2 = []
+        for item in pc2_values:
+            sub_pc2.append([float(i) for i in item])
+        pc2_values = sub_pc2
+
+        sub_pc3 = []
+        for item in pc3_values:
+            sub_pc3.append([float(i) for i in item])
+        pc3_values = sub_pc3
+
+        sub_times = []
+        for item in pc_times:
+            sub_times.append([float(i) for i in item])
+        pc_times = sub_times
+
+        # Append objective functions and metadata to dataframe
+        fx_cohorts.append([make_OU_objective_fn_cohort(pc1_values, pc_times), str(treatment + "_pc1"), pc_times,
+                           treatment, pc1_values, "pc1"])
+        fx_cohorts.append([make_OU_objective_fn_cohort(pc2_values, pc_times), str(treatment + "_pc2"), pc_times,
+                           treatment, pc2_values, "pc2"])
+        fx_cohorts.append([make_OU_objective_fn_cohort(pc3_values, pc_times), str(treatment + "_pc3"), pc_times,
+                           treatment, pc3_values, "pc3"])
+
+    fit_ts_cohorts = []
+
+    # Fit each cohort's timeseries
+    for row in fx_cohorts:
+        x = np.asarray(row[4])
+        if len(x) > 1:
+            fit_ts_cohorts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
+                                   row[1], row[2], row[3], x, row[5]])
+
+    return gen_output(fit_ts_cohorts, ind, tp, tx, method)
+
 def fit_input(input, ind, tp, tx, method):
     """
     Fit and minimize the timeseries for each subject defined
@@ -398,7 +564,11 @@ def fit_input(input, ind, tp, tx, method):
     :param method: "basinhopping" if not defined in opts
     :return: dataframe: [ind,"pc","sigma","lambda","theta","optimizer","nLogLik","n_parameters","aic",tp,tx,"x"]
     """
-
+    if tx is not None:
+        cohorts = True
+    else:
+        cohorts = False
+        tx = str(ind+"_tx")
     subjects = input[ind].unique()
     values = ['pc1', 'pc2', 'pc3']
     data = []
@@ -422,12 +592,15 @@ def fit_input(input, ind, tp, tx, method):
             vals.append([numeric, value])
         data.append([sj, tp_t, tx_t, vals])
 
-    # Make an objective function for each row
     fx = []
     for row in data:
         for item in row[3]:
             #[0: function, 1: subject, 2: times, 3: treatment, 4: values, 5:pc1/2/3]
             fx.append([make_OU_objective_fn(item[0], row[1]), row[0], row[1], row[2], item[0], item[1]])
+
+    if cohorts:
+        cohort_output = fit_cohorts(input, ind, tp, tx, method)
+
     fit_ts = []
 
     # Optimize each function
@@ -436,46 +609,13 @@ def fit_input(input, ind, tp, tx, method):
         if len(x)>1:
             fit_ts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
                            row[1], row[2], row[3], x, row[5]])
-            print([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
-                           row[1], row[2], row[3], x, row[5]])
 
-    # Generate output data from optimized functions.
-    sig, lam, the, nlogLik, ind_o, tp_o, tx_o, x_o, pc, op, n_param, aic_o = ([] for i in range(12))
-    for row in fit_ts:
-        # global_min = [sigma, lambda, theta]
-        sig.append(row[0][0][0])
-        lam.append(row[0][0][1])
-        the.append(row[0][0][2])
-        # f_at_global min = nlogLik
-        nlogLik.append(row[0][1])
-        ind_o.append(row[1])
-        tp_o.append(row[2])
-        tx_o.append(row[3])
-        x_o.append(row[4])
-        n_param.append(len(row[4]))
-        pc.append(row[5])
-        op.append(method)
-        # aic calulated with 2*n_params-2*LN(-1*nloglik)
-        aic_o.append(aic(len(row[4]), row[0][1]))
+    output = gen_output(fit_ts, ind, tp, tx, method)
 
-    if "," in ind:
-        ind = ind.replace(",","_")
-
-    output = pd.DataFrame({"sigma":sig,
-                           "lambda":lam,
-                           "theta":the,
-                           "nLogLik":nlogLik,
-                           ind:ind_o,
-                           tp:tp_o,
-                           tx:tx_o,
-                           "x": x_o,
-                           "n_parameters":n_param,
-                           "pc":pc,
-                           "optimizer":op,
-                           "aic":aic_o},
-                           columns=[ind,"pc","sigma","lambda","theta","nLogLik",
-                                    "n_parameters","aic","optimizer",tp,tx,"x"])
-    return output
+    if cohorts:
+        return output, cohort_output
+    else:
+        return output
 
 
 def main():
@@ -491,15 +631,17 @@ def main():
     if not os.path.exists(opts.output):
         os.makedirs(opts.output)
 
-    if opts.treatment is not None:
-        cohorts = True
-
     if opts.pcoa_qza is not None:
         # Extract the name of the pcoa qza, and append with '_fit_timeseries'
         out_name = opts.pcoa_qza.split("/")[-1].split(".")[0] + "_fit_timeseries.csv"
+        cohort_out_name = opts.pcoa_qza.split("/")[-1].split(".")[0] + "_fit_timeseries_cohorts.csv"
         site, metadata = parse_pcoa(opts.pcoa_qza, opts.individual, opts.timepoint, opts.treatment, opts.metadata)
         input = parse_metadata(metadata,opts.individual, opts.timepoint, opts.treatment, site)
-        output = fit_input(input, opts.individual, opts.timepoint, opts.treatment, opts.fit_method)
+        if opts.treatment is not None:
+            output, cohort_output = fit_input(input, opts.individual, opts.timepoint, opts.treatment, opts.fit_method)
+            cohort_output.to_csv(opts.output+cohort_out_name, index=False)
+        else:
+            output = fit_input(input, opts.individual, opts.timepoint, opts.treatment, opts.fit_method)
         output.to_csv(opts.output+out_name, index=False)
     else:
         parser.print_help()

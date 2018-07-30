@@ -96,7 +96,6 @@ class Experiment(object):
             if self.verbose:
                 print(treatment)
             for i in range(treatment["n_individuals"]):
-
                 curr_subject_id = "%s_%i" %(treatment["treatment_name"],i)
                 curr_subject = Individual(subject_id = curr_subject_id,
                   params = params,\
@@ -154,6 +153,8 @@ class Experiment(object):
                 print ("Simulating timestep: %i" %t)
             self.simulate_timestep(t)
 
+
+
     def simulate_timestep(self,t):
         """Simulate timestep t of the experiemnt
 
@@ -192,11 +193,10 @@ class Experiment(object):
             #With perturbations in place and updated,
             #simulate a timestep for each individual in treatment
             for curr_subject in treatment["individuals"]:
-                    #Simulate the timestep
-                    curr_subject.simulate_movement(1)
-                    curr_data = curr_subject.get_data(1)
-                    self.Data.append("\t".join(map(str,curr_data))+"\n")
-
+                #Simulate the timestep
+                curr_subject.simulate_movement(1)
+                curr_data = curr_subject.get_data(1)
+                self.Data.append("\t".join(map(str,curr_data))+"\n")
     def write_to_movie_file(self,output_folder, verbose=False):
         """Write an MPG movie to output folder"""
         individuals = []
@@ -204,6 +204,12 @@ class Experiment(object):
             for curr_subject in treatment["individuals"]:
                 individuals.append(curr_subject)
             #print("individuals:",individuals)
+
+        for individual in individuals:
+            individual.MovementProcesses["x"].History.pop(0)
+            individual.MovementProcesses["y"].History.pop(0)
+            individual.MovementProcesses["z"].History.pop(0)
+
         visualization.save_simulation_movie(individuals, output_folder,
                                             len(individuals),self.NTimepoints,black_background=True, verbose=self.verbose)
 
