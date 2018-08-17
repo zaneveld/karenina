@@ -18,7 +18,7 @@ setup(
     # visualizers provided as examples. Remove these dependencies when you're
     # ready to develop your plugin, and add your own dependencies (if there are
     # any).
-    install_requires=['qiime >= 2.0.0', 'pandas', 'q2-dummy-types', scipy],
+    install_requires=['qiime2 >= 2.0.0', 'pandas', 'scipy', 'git+https://github.com/zaneveld/karenina.git'],
     author="Jesse Zaneveld",
     author_email="zaneveld@gmail.com",
     description="This script simulates microbiome " +
@@ -43,7 +43,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 	entry_points={
-        "qiime.plugins":
+        "qiime2.plugins":
         ["q2-karenina=q2_karenina.plugin_setup:plugin"]
     }
 )
