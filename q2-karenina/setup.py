@@ -18,11 +18,31 @@ setup(
     # visualizers provided as examples. Remove these dependencies when you're
     # ready to develop your plugin, and add your own dependencies (if there are
     # any).
-    install_requires=['qiime >= 2.0.0', 'pandas', 'q2-dummy-types'],
+    install_requires=['qiime >= 2.0.0', 'pandas', 'q2-dummy-types', scipy],
     author="Jesse Zaneveld",
     author_email="zaneveld@gmail.com",
-    description="Simulation and fitting for Anna Karenina effects in animal microbiomes. ",
-    entry_points={
+    description="This script simulates microbiome " +
+    "change over time using Ornstein-Uhlenbeck (OU) models.  These are " +
+    "similar to Brownian motion models, with the exception that they " +
+    "include reversion to a mean. Output is a tab-delimited data table " +
+    "and figures.",
+    url='https://github.com/zaneveld/karenina',
+    classifiers=[
+        #   3 - Alpha
+        #   4 - Beta
+        #   5 - Production/Stable
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Qiime2 Users',
+        'Topic :: Microbiology :: Visualization and Modeling Tools',
+        'License :: GPL',
+        #'Programming Language :: Python :: 2',
+        #'Programming Language :: Python :: 2.7',
+        #'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        #'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+	entry_points={
         "qiime.plugins":
         ["q2-karenina=q2_karenina.plugin_setup:plugin"]
     }

@@ -1,62 +1,45 @@
 import qiime.plugin
 
 import q2_karenina
+from q2_karenina import fit_timeseries
+from q2_types.ordination import PCoAResults as pcoa
+from qiime2.plugin import Metadata, Str, Choices
 
-# These imports are only included to support the example methods and
-# visualizers. Remove these imports when you are ready to develop your plugin.
-from q2_dummy_types import IntSequence1, IntSequence2, Mapping
-from ._dummy_method import concatenate_ints
-from ._dummy_visualizer import mapping_viz
 
 plugin = qiime.plugin.Plugin(
     name='karenina',
     version=q2_karenina.__version__,
     website='https://github.com/zaneveld/karenina',
     package='q2_karenina',
-    # Information on how to obtain user support should be provided as a free
-    # text string via user_support_text. If None is provided, users will
-    # be referred to the plugin's website for support.
     user_support_text=None,
-    # Information on how the plugin should be cited should be provided as a
-    # free text string via citation_text. If None is provided, users
-    # will be told to use the plugin's website as a citation.
+	description="This script simulates microbiome " +
+    "change over time using Ornstein-Uhlenbeck (OU) models.  These are " +
+    "similar to Brownian motion models, with the exception that they " +
+    "include reversion to a mean. Output is a tab-delimited data table " +
+    "and figures.",
     citation_text=None
 )
 
-# The next two code blocks are examples of how to register methods and
-# visualizers. Replace them with your own registrations when you are ready to
-# develop your plugin.
-
-plugin.methods.register_function(
-    function=concatenate_ints,
-    inputs={
-        'ints1': IntSequence1 | IntSequence2,
-        'ints2': IntSequence1,
-        'ints3': IntSequence2
-    },
-    parameters={
-        'int1': qiime.plugin.Int,
-        'int2': qiime.plugin.Int
-    },
-    outputs=[
-        ('concatenated_ints', IntSequence1)
-    ],
-    name='Concatenate integers',
-    description='This method concatenates integers into a single sequence in '
-                'the order they are provided.'
-)
-
 plugin.visualizers.register_function(
-    function=mapping_viz,
-    inputs={
-        'mapping1': Mapping,
-        'mapping2': Mapping
+    function=q2_karenina.fit_timeseries,
+	inputs={
+		'pcoa' : pcoa
     },
     parameters={
-        'key_label': qiime.plugin.Str,
-        'value_label': qiime.plugin.Str
+        'method' : Str % Choices({'basinhopping'})
+		'metadata' : Metadata
+		'individual' : Str
+		'timepoint' : Str
+		'treatment' : Str
     },
-    name='Visualize two mappings',
-    description='This visualizer produces an HTML visualization of two '
-                'key-value mappings, each sorted in alphabetical order by key.'
+	parameter_descriptions = {
+		'method' : 'global optimization method'
+		'metadata' : 'Sample metadata'
+		'individual' : 'individual column identifier'
+		'timepoint' : 'timepoint column identifier'
+		'treatment' : 'treatment column identifier'
+	}
+    name='Fit OU Models to PCoA Ordination output',
+    description='This visualizer generates OU model parameters for PCoA output'
+                'data, for each individual and each defined treatment cohort.'
 )

@@ -1,8 +1,11 @@
 sudo: false
 language: python
 env:
-  - PYTHON_VERSION=3.5
+  - PYTHON_VERSION=3.6
 before_install:
+  - sudo add-apt-repository ppa:mc3man/trusty-media -y
+  - sudo apt-get update
+  - sudo apt-get install ffmpeg -y
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
   - ./miniconda.sh -b
@@ -18,3 +21,4 @@ install:
 script:
   - nosetests
   - flake8 q2_karenina setup.py
+  - python -m unittest discover tests -v
