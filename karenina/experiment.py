@@ -212,4 +212,22 @@ class Experiment(object):
 
         visualization.save_simulation_movie(individuals, output_folder,
                                             len(individuals),self.NTimepoints,black_background=True, verbose=self.verbose)
+    def q2_data(self):
+        individuals = []
+        for treatment in self.Treatments:
+            for curr_subject in treatment["individuals"]:
+                individuals.append(curr_subject)
+            #print("individuals:",individuals)
 
+        for individual in individuals:
+            individual.MovementProcesses["x"].History.pop(0)
+            individual.MovementProcesses["y"].History.pop(0)
+            individual.MovementProcesses["z"].History.pop(0)
+
+        data = visualization.get_timeseries_data(individuals)
+        ids = []
+
+        for item in individuals:
+            ids.append(item.SubjectId)
+
+        return data,ids
