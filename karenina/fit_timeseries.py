@@ -65,8 +65,9 @@ def make_option_parser():
 
     return parser
 
+"""
 def fit_OU_process(data,dts):
-    """Return the parameters of an OU process over data
+    Return the parameters of an OU process over data
     
     Strategy: this method combines two tools: parameteric
     fitting of normal distributions, and non-parametric 
@@ -94,18 +95,27 @@ def fit_OU_process(data,dts):
     nLogLik for the overall optimization. This can then be fairly
     compared for e.g. BM vs. OU processes using Akaike's Information Criterion
 
-    """
     pass
+"""
 
 def get_OU_nLogLik(x,times,Sigma,Lambda,Theta):
-    """Return the negative log likelihood for an OU model given data
-    x -- an array of x values, which MUST be ordered by time
-    times -- the time values at which x was taken. MUST match x in order.
-    
+    """
+    Return the negative log likelihood for an OU model given data x -- an array of x values,
+    which MUST be ordered by time times -- the time values at which x was taken.
+    MUST match x in order.
+
     OU model parameters
-    Sigma -- estimated Sigma for OU model (extent of change over time)
-    Lambda -- estimated Lambda for OU model (tendency to return to average position)
-    Theta -- estimated Theta for OU model (average or 'home' position)
+
+    1. Sigma -- estimated Sigma for OU model (extent of change over time)
+    2. Lambda -- estimated Lambda for OU model (tendency to return to average position)
+    3. Theta -- estimated Theta for OU model (average or 'home' position)
+
+    :param x: array of values ordered by time
+    :param times: times associated with x values
+    :param Sigma: initial sigma value
+    :param Lambda: initial lambda value
+    :param Theta: initial theta value
+    :return: nLogLik value
     """
     dx = diff(x) 
     dts = diff(times)
@@ -154,12 +164,18 @@ def get_OU_nLogLik(x,times,Sigma,Lambda,Theta):
     return total_nLogLik
 
 def make_OU_objective_fn(x,times,verbose=False):
-    """Make an objective function for use with basinhopping with data embedded
-    
+    """
+    Make an objective function for use with basinhopping with data embedded
+
     scipy.optimize.basinhopping needs a single array p, a function, and will
-    minimize f(p). So we want to embded or dx data and time data *in* the 
+    minimize f(p). So we want to embded or dx data and time data *in* the
     function, and use the values of p to represent parameter values that
-    could produce the data. 
+    could produce the data.
+
+    :param x: individual x values for objective function
+    :param times: timepoints associated with passed-in x values
+    :param verbose: verbose output, default = False
+    :return: fn_to_optimize
     """
     # x and times for each subject/site
     # x is just the individual x's, x1 and timepoints, x2 and timepoints, x3 and timepoints
@@ -187,20 +203,30 @@ def make_OU_objective_fn(x,times,verbose=False):
 #normal distrubtion fit
 
 def make_OU_objective_fn_cohort(x, times, verbose=False):
-    """Make an objective function for use with basinhopping with data embedded
+    """
+    Sums nLogLik and build objective function based on cohorts. Operates in the
+    same manner as make_OU_objective_fn, except that it considers a treatment cohort,
+    not just the individuals.
+
+    Make an objective function for use with basinhopping with data embedded
 
     scipy.optimize.basinhopping needs a single array p, a function, and will
     minimize f(p). So we want to embded or dx data and time data *in* the
     function, and use the values of p to represent parameter values that
     could produce the data.
-    
-    Overall strategy: Treat this exactly like the per-individual 
+
+    Overall strategy: Treat this exactly like the per-individual
     fitting, BUT within the objective function loop over all individuals
     in a given treatment (not just one) to get nLogLiklihoods. The nLogLiklihood
     for the individuals in the treatment is then just the sum of the individual
     nLogLikelihoods for each individuals timeseries.
-    
-    data -- a dict of {"individual1": (fixed_x,fixed_times)} 
+
+    data -- a dict of {"individual1": (fixed_x,fixed_times)}
+
+    :param x: x values for cohort objective function
+    :param times: times associated with x values from cohort
+    :param verbose: verbose output, default = False
+    :return: fn_to_optimize
     """
 
     if len(x) <= 1:
@@ -236,7 +262,12 @@ def make_OU_objective_fn_cohort(x, times, verbose=False):
 
 
 def fit_normal(data):
-    """Return the mean and standard deviation of normal data"""
+    """
+    Return the mean and standard deviation of normal data
+
+    :param data: fit data to normal distribution
+    :return:  mu, std, nLogLik
+    """
     estimate = norm.fit(data)
     nLogLik = norm.nnlf(estimate,data)
     mu,std = estimate
@@ -246,7 +277,8 @@ def fit_normal(data):
 def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
   xmax=array([inf,inf,inf]),global_optimizer="basinhopping",
   local_optimizer="Nelder-Mead",stepsize=0.01,niter=200, verbose=False):
-    """Minimize a function returning input & result
+    """
+    Minimize a function returning input & result
     fn_to_optimize -- the function to minimize. Must return a single value or array x.
 
     x0 -- initial parameter value or array of parameter values
@@ -254,7 +286,19 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
     xmin -- min parameter values (use -inf for infinite)
     global_optimizer -- the global optimization method (see scipy.optimize)
     local_optimizer -- the local optimizer (must be supported by global method)
+
+    :param fn_to_optimize: function that is being optimized, generated from fn_to_optimize
+    :param x0: initial parameter value or array of parameter values
+    :param xmin: min parameter values (-inf for infinite)
+    :param xmax: max parameter values (inf for infinite)
+    :param global_optimizer: global optimization method
+    :param local_optimizer: local optimization method (must be supported by global)
+    :param stepsize: size for each step (.01)
+    :param niter: number of iterations (200)
+    :param verbose: verbose output, default = False
+    :return: global_min, f_at_global_min
     """
+
     if global_optimizer == "basinhopping":
         local_min_bounds = list(zip(xmin.tolist(),xmax.tolist()))
         local_min_kwargs = {"method":local_optimizer,"bounds":local_min_bounds}
@@ -288,6 +332,7 @@ def fit_timeseries(fn_to_optimize,x0,xmin=array([-inf,-inf,-inf]),
 def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
     """
     Load data from PCoA output in Qiime2 Format
+
     :param pcoa_qza: Location of PCoA file
     :param individual: Subject column identifier(s) [ex: Subject; Subject,BodySite]
     :param timepoint: Timepoint column identifier
@@ -360,6 +405,7 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
 def parse_metadata(metadata, individual, timepoint, treatment, site):
     """
     Parse relevant contents from metadata file to complete input dataframe
+
     :param metadata: tsv file location
     :param individual: subject column identifier
     :param timepoint: timepoint column identifier
@@ -436,6 +482,7 @@ def parse_metadata(metadata, individual, timepoint, treatment, site):
 def aic(n_param, nLogLik):
     """
     calculates AIC with 2 * n_parameters - 2 * LN(-1 * nLogLik)
+
     :param n_param: number of parameters
     :param nLogLik: negative log likelihood
     :return: aic score
@@ -446,8 +493,8 @@ def aic(n_param, nLogLik):
 def gen_output(fit_ts, ind, tp, tx, method):
     """
     Generate output dataframe for either cohort, or non-cohort data
-    :param fit_ts: dataframe [0: [[Sigma, Lambda, Theta], nLogLik], 1: Individuals, 2: Times
-        3: Treatments, 4: Values, 5: PC Axis
+
+    :param fit_ts: dataframe [0: [[Sigma, Lambda, Theta], nLogLik], 1: Individuals, 2: Times 3: Treatments, 4: Values, 5: PC Axis
     :param ind: individual identifier
     :param tp: timepoint identifier
     :param tx: treatment identifier
@@ -493,6 +540,18 @@ def gen_output(fit_ts, ind, tp, tx, method):
 
 
 def fit_cohorts(input, ind, tp, tx, method, verbose = False):
+    """
+    Completes the same operation as fit_input, for cohorts.
+    Fit and minimize the timeseries for each subject and cohort defined.
+
+    :param input: dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]
+    :param ind: subject column identifier
+    :param tp: timepoint column identifier
+    :param tx: treatment column identifier
+    :param method: "basinhopping" if not defined in opts
+    :return: dataframe: [ind,"pc","sigma","lambda","theta","optimizer","nLogLik","n_parameters","aic",tp,tx,"x"]
+    """
+
     # Need to pass cohort data to new make_ou_objective_fn_cohort(data, verbose=false)
     # Split the data into each treatment, for each treatment_set, return an objective fn,
     #   assign each row their associated objective fn
@@ -557,6 +616,7 @@ def fit_cohorts(input, ind, tp, tx, method, verbose = False):
 def fit_input(input, ind, tp, tx, method):
     """
     Fit and minimize the timeseries for each subject defined
+
     :param input: dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]
     :param ind: subject column identifier
     :param tp: timepoint column identifier

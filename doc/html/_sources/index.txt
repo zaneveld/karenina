@@ -1,0 +1,102 @@
+.. karenina documentation master file, created by
+   sphinx-quickstart on Sun Aug 19 16:20:06 2018.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Karenina
+====================================
+
+Simulation and modeling tools for studying Anna Karenina effects in animal microbiomes This package aims to develop tools for modeling microbiome variability in disease. Initial versions focus on simulating microbiome change over time using simple Ornstein-Uhlenbeck (OU) models.
+
+Usage & Installation can be found at:
+
+* https://www.github.com/zaneveld/karenina
+
+* https://www.github.com/zaneveld/q2-karenina
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+Spatial Ornstein Uhlenbeck
+===========================
+
+.. automodule:: karenina.spatial_ornstein_uhlenbeck
+	:exclude-members: main, make_option_parser
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Fit Timeseries
+==================
+
+.. automodule:: karenina.fit_timeseries
+	:exclude-members: main, make_option_parser
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Fit Timeseries Benchmark
+=========================
+
+.. automodule:: karenina.fit_timeseries_benchmark
+	:exclude-members: main, make_option_parser
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Visualization
+==================
+
+.. automodule:: karenina.visualization
+	:members:
+	:exclude-members: main, make_option_parser
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Experiment
+==================
+
+.. automodule:: karenina.experiment
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Individual
+==================
+
+.. automodule:: karenina.individual
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Perturbation
+==================
+
+.. automodule:: karenina.perturbation
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:
+
+Process
+==================
+
+.. automodule:: karenina.process
+	:members:
+	:undoc-members:
+	:show-inheritance:
+	:private-members:

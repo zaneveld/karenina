@@ -74,7 +74,15 @@ def get_timeseries_data(individuals,axes=["x","y","z"]):
 
 
 def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints,perturbation_timepoint):
-    """Save a .pdf image of the simulated PCoA plot"""
+    """
+    Save a .pdf image of the simulated PCoA plot
+
+    :param individuals: array of individuals
+    :param output_folder: output filepath
+    :param n_individuals: number of individuals
+    :param n_timepoints: number of timepoints
+    :param perturbation_timepoint: timepoint of perturbation application
+    """
 
     individual_colors = {"healthy":"orange","perturbed":"magenta"}
     import matplotlib.pyplot as plt
@@ -120,6 +128,13 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
 
 
 def save_simulation_data(data, ids, output):
+    """
+    Saves simulation output data in PCoA format
+
+    :param data: data to save
+    :param ids: Sample_IDs
+    :param output: output filepath
+    """
     with open(output+"ordination.txt","w") as outfile:
         # Need to calculate eigenvalues
         # outfile.write("Eigvals\t" + str(len(data)) + "\n\n")
@@ -193,7 +208,16 @@ def save_simulation_data(data, ids, output):
 
 def save_simulation_movie(individuals, output_folder,\
      n_individuals,n_timepoints,black_background=True, verbose=False):
-    """Save an .ffmpg move of the simulated community change"""
+    """
+    Save an .ffmpg move of the simulated community change
+
+    :param individuals: array of individuals to visualize
+    :param output_folder: output directory filepath
+    :param n_individuals: number of individuals
+    :param n_timepoints: number of timepoints
+    :param black_background: T/F, default = True
+    :param verbose: verbose output, default = False
+    """
 
     #TODO: standardize these and put them up above
 
@@ -277,6 +301,16 @@ def save_simulation_movie(individuals, output_folder,\
 
 
 def update_3d_plot(end_t,timeseries_data,ax,lines,points=None,start_t=0):
+    """
+    Updates visualization 3d plot
+
+    :param end_t: end timepoint
+    :param timeseries_data: data from timeseries
+    :param ax: visualization ax
+    :param lines: lines of data
+    :param points: values to update
+    :param start_t: start timepoint (0)
+    """
     for line,data in zip(lines,timeseries_data):
         line.set_data(data[0:2,start_t:end_t])
         #z pos can't be set with set_data

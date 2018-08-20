@@ -1,0 +1,1097 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Karenina &#8212; karenina 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">karenina 0.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="karenina">
+<h1>Karenina<a class="headerlink" href="#karenina" title="Permalink to this headline">¶</a></h1>
+<p>Simulation and modeling tools for studying Anna Karenina effects in animal microbiomes This package aims to develop tools for modeling microbiome variability in disease. Initial versions focus on simulating microbiome change over time using simple Ornstein-Uhlenbeck (OU) models.</p>
+<p>Usage &amp; Installation can be found at:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.github.com/zaneveld/karenina">https://www.github.com/zaneveld/karenina</a></li>
+<li><a class="reference external" href="https://www.github.com/zaneveld/q2-karenina">https://www.github.com/zaneveld/q2-karenina</a></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+<div class="section" id="module-karenina.spatial_ornstein_uhlenbeck">
+<span id="spatial-ornstein-uhlenbeck"></span><h1>Spatial Ornstein Uhlenbeck<a class="headerlink" href="#module-karenina.spatial_ornstein_uhlenbeck" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.check_perturbation_timepoint">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">check_perturbation_timepoint</code><span class="sig-paren">(</span><em>perturbation_timepoint</em>, <em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.check_perturbation_timepoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise ValueError if perturbation_timepoint is &lt; 0 or &gt;n_timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>perturbation_timepoint</strong> – defined timepoint for perturbation application</li>
+<li><strong>n_timepoints</strong> – number of timepoints</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.ensure_exists">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">ensure_exists</code><span class="sig-paren">(</span><em>output_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.ensure_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that output_dir exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_dir</strong> – path to output directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.parse_perturbation_file">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">parse_perturbation_file</code><span class="sig-paren">(</span><em>pert_file_path</em>, <em>perturbation_timepoint</em>, <em>perturbation_duration</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.parse_perturbation_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Return a list of perturbations</div></blockquote>
+<p>infile – a .tsv file describing one perturbation per line
+assume input file is correctly formatted (no warnings if not)</p>
+<p>NOTE: each pertubation should be in the format:</p>
+<p>set_xyz_lambda_low = {“start”:opts.perturbation_timepoint,
+“end”:opts.perturbation_timepoint + opts.perturbation_duration,
+“params”:{“lambda”:0.005}, “update_mode”:”replace”, “axes”:[“x”,”y”,”z”]}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pert_file_path</strong> – perturbation file path</li>
+<li><strong>perturbation_timepoint</strong> – timepoint to apply perturbation</li>
+<li><strong>perturbation_duration</strong> – duration of perturbation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">perturbation list parsed from pert file contents</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.write_options_to_log">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">write_options_to_log</code><span class="sig-paren">(</span><em>log</em>, <em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.write_options_to_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes user’s input options to log file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>log</strong> – log filename</li>
+<li><strong>opts</strong> – options</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.fit_timeseries">
+<span id="fit-timeseries"></span><h1>Fit Timeseries<a class="headerlink" href="#module-karenina.fit_timeseries" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.fit_timeseries.aic">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">aic</code><span class="sig-paren">(</span><em>n_param</em>, <em>nLogLik</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.aic" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates AIC with 2 * n_parameters - 2 * LN(-1 * nLogLik)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_param</strong> – number of parameters</li>
+<li><strong>nLogLik</strong> – negative log likelihood</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">aic score</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_cohorts">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_cohorts</code><span class="sig-paren">(</span><em>input</em>, <em>ind</em>, <em>tp</em>, <em>tx</em>, <em>method</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_cohorts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Completes the same operation as fit_input, for cohorts.
+Fit and minimize the timeseries for each subject and cohort defined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input</strong> – dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]</li>
+<li><strong>ind</strong> – subject column identifier</li>
+<li><strong>tp</strong> – timepoint column identifier</li>
+<li><strong>tx</strong> – treatment column identifier</li>
+<li><strong>method</strong> – “basinhopping” if not defined in opts</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataframe: [ind,”pc”,”sigma”,”lambda”,”theta”,”optimizer”,”nLogLik”,”n_parameters”,”aic”,tp,tx,”x”]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_input">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_input</code><span class="sig-paren">(</span><em>input</em>, <em>ind</em>, <em>tp</em>, <em>tx</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit and minimize the timeseries for each subject defined</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input</strong> – dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]</li>
+<li><strong>ind</strong> – subject column identifier</li>
+<li><strong>tp</strong> – timepoint column identifier</li>
+<li><strong>tx</strong> – treatment column identifier</li>
+<li><strong>method</strong> – “basinhopping” if not defined in opts</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataframe: [ind,”pc”,”sigma”,”lambda”,”theta”,”optimizer”,”nLogLik”,”n_parameters”,”aic”,tp,tx,”x”]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_normal">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_normal</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mean and standard deviation of normal data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – fit data to normal distribution</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mu, std, nLogLik</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_timeseries">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_timeseries</code><span class="sig-paren">(</span><em>fn_to_optimize</em>, <em>x0</em>, <em>xmin=array([-inf</em>, <em>-inf</em>, <em>-inf])</em>, <em>xmax=array([inf</em>, <em>inf</em>, <em>inf])</em>, <em>global_optimizer='basinhopping'</em>, <em>local_optimizer='Nelder-Mead'</em>, <em>stepsize=0.01</em>, <em>niter=200</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize a function returning input &amp; result
+fn_to_optimize – the function to minimize. Must return a single value or array x.</p>
+<p>x0 – initial parameter value or array of parameter values
+xmax – max parameter values (use inf for infinite)
+xmin – min parameter values (use -inf for infinite)
+global_optimizer – the global optimization method (see scipy.optimize)
+local_optimizer – the local optimizer (must be supported by global method)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fn_to_optimize</strong> – function that is being optimized, generated from fn_to_optimize</li>
+<li><strong>x0</strong> – initial parameter value or array of parameter values</li>
+<li><strong>xmin</strong> – min parameter values (-inf for infinite)</li>
+<li><strong>xmax</strong> – max parameter values (inf for infinite)</li>
+<li><strong>global_optimizer</strong> – global optimization method</li>
+<li><strong>local_optimizer</strong> – local optimization method (must be supported by global)</li>
+<li><strong>stepsize</strong> – size for each step (.01)</li>
+<li><strong>niter</strong> – number of iterations (200)</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">global_min, f_at_global_min</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.gen_output">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">gen_output</code><span class="sig-paren">(</span><em>fit_ts</em>, <em>ind</em>, <em>tp</em>, <em>tx</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.gen_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate output dataframe for either cohort, or non-cohort data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fit_ts</strong> – dataframe [0: [[Sigma, Lambda, Theta], nLogLik], 1: Individuals, 2: Times 3: Treatments, 4: Values, 5: PC Axis</li>
+<li><strong>ind</strong> – individual identifier</li>
+<li><strong>tp</strong> – timepoint identifier</li>
+<li><strong>tx</strong> – treatment identifier</li>
+<li><strong>method</strong> – optimization method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Formatted dataframe for csv output</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.get_OU_nLogLik">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">get_OU_nLogLik</code><span class="sig-paren">(</span><em>x</em>, <em>times</em>, <em>Sigma</em>, <em>Lambda</em>, <em>Theta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.get_OU_nLogLik" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the negative log likelihood for an OU model given data x – an array of x values,
+which MUST be ordered by time times – the time values at which x was taken.
+MUST match x in order.</p>
+<p>OU model parameters</p>
+<ol class="arabic simple">
+<li>Sigma – estimated Sigma for OU model (extent of change over time)</li>
+<li>Lambda – estimated Lambda for OU model (tendency to return to average position)</li>
+<li>Theta – estimated Theta for OU model (average or ‘home’ position)</li>
+</ol>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – array of values ordered by time</li>
+<li><strong>times</strong> – times associated with x values</li>
+<li><strong>Sigma</strong> – initial sigma value</li>
+<li><strong>Lambda</strong> – initial lambda value</li>
+<li><strong>Theta</strong> – initial theta value</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nLogLik value</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.make_OU_objective_fn">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">make_OU_objective_fn</code><span class="sig-paren">(</span><em>x</em>, <em>times</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.make_OU_objective_fn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an objective function for use with basinhopping with data embedded</p>
+<p>scipy.optimize.basinhopping needs a single array p, a function, and will
+minimize f(p). So we want to embded or dx data and time data <em>in</em> the
+function, and use the values of p to represent parameter values that
+could produce the data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – individual x values for objective function</li>
+<li><strong>times</strong> – timepoints associated with passed-in x values</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fn_to_optimize</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.make_OU_objective_fn_cohort">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">make_OU_objective_fn_cohort</code><span class="sig-paren">(</span><em>x</em>, <em>times</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.make_OU_objective_fn_cohort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sums nLogLik and build objective function based on cohorts. Operates in the
+same manner as make_OU_objective_fn, except that it considers a treatment cohort,
+not just the individuals.</p>
+<p>Make an objective function for use with basinhopping with data embedded</p>
+<p>scipy.optimize.basinhopping needs a single array p, a function, and will
+minimize f(p). So we want to embded or dx data and time data <em>in</em> the
+function, and use the values of p to represent parameter values that
+could produce the data.</p>
+<p>Overall strategy: Treat this exactly like the per-individual
+fitting, BUT within the objective function loop over all individuals
+in a given treatment (not just one) to get nLogLiklihoods. The nLogLiklihood
+for the individuals in the treatment is then just the sum of the individual
+nLogLikelihoods for each individuals timeseries.</p>
+<p>data – a dict of {“individual1”: (fixed_x,fixed_times)}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – x values for cohort objective function</li>
+<li><strong>times</strong> – times associated with x values from cohort</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fn_to_optimize</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.parse_metadata">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">parse_metadata</code><span class="sig-paren">(</span><em>metadata</em>, <em>individual</em>, <em>timepoint</em>, <em>treatment</em>, <em>site</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.parse_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse relevant contents from metadata file to complete input dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>metadata</strong> – tsv file location</li>
+<li><strong>individual</strong> – subject column identifier</li>
+<li><strong>timepoint</strong> – timepoint column identifier</li>
+<li><strong>treatment</strong> – treatment column identifier</li>
+<li><strong>site</strong> – [subjectID, x1, x2, x3]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">input dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.parse_pcoa">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">parse_pcoa</code><span class="sig-paren">(</span><em>pcoa_qza</em>, <em>individual</em>, <em>timepoint</em>, <em>treatment</em>, <em>metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.parse_pcoa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data from PCoA output in Qiime2 Format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pcoa_qza</strong> – Location of PCoA file</li>
+<li><strong>individual</strong> – Subject column identifier(s) [ex: Subject; Subject,BodySite]</li>
+<li><strong>timepoint</strong> – Timepoint column identifier</li>
+<li><strong>treatment</strong> – Treatment column identifier</li>
+<li><strong>metadata</strong> – optionally defined metadata file location, if not defined, will use metadata from PCoA.qza</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">input dataframe, tsv filepath location</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.fit_timeseries_benchmark">
+<span id="fit-timeseries-benchmark"></span><h1>Fit Timeseries Benchmark<a class="headerlink" href="#module-karenina.fit_timeseries_benchmark" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.fit_timeseries_benchmark.benchmark">
+<code class="descclassname">karenina.fit_timeseries_benchmark.</code><code class="descname">benchmark</code><span class="sig-paren">(</span><em>max_tp=300</em>, <em>output=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries_benchmark.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies that fit_timeseries recovers OU model params</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>output</strong> – location for output log</li>
+<li><strong>max_tp</strong> – maximum timepoints to test</li>
+<li><strong>verbose</strong> – verbosity</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">output dataframe of benchmarked data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries_benchmark.vis">
+<code class="descclassname">karenina.fit_timeseries_benchmark.</code><code class="descname">vis</code><span class="sig-paren">(</span><em>df</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries_benchmark.vis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualizes benchmarking output error for various tested timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> – Dataframe containing model, timepoints, and list of errors</li>
+<li><strong>output</strong> – output directory</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.visualization">
+<span id="visualization"></span><h1>Visualization<a class="headerlink" href="#module-karenina.visualization" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.visualization.get_timeseries_data">
+<code class="descclassname">karenina.visualization.</code><code class="descname">get_timeseries_data</code><span class="sig-paren">(</span><em>individuals, axes=['x', 'y', 'z']</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.get_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.save_simulation_data">
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_data</code><span class="sig-paren">(</span><em>data</em>, <em>ids</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves simulation output data in PCoA format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> – data to save</li>
+<li><strong>ids</strong> – Sample_IDs</li>
+<li><strong>output</strong> – output filepath</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.save_simulation_figure">
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_figure</code><span class="sig-paren">(</span><em>individuals</em>, <em>output_folder</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>perturbation_timepoint</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a .pdf image of the simulated PCoA plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>individuals</strong> – array of individuals</li>
+<li><strong>output_folder</strong> – output filepath</li>
+<li><strong>n_individuals</strong> – number of individuals</li>
+<li><strong>n_timepoints</strong> – number of timepoints</li>
+<li><strong>perturbation_timepoint</strong> – timepoint of perturbation application</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.save_simulation_movie">
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_movie</code><span class="sig-paren">(</span><em>individuals</em>, <em>output_folder</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>black_background=True</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an .ffmpg move of the simulated community change</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>individuals</strong> – array of individuals to visualize</li>
+<li><strong>output_folder</strong> – output directory filepath</li>
+<li><strong>n_individuals</strong> – number of individuals</li>
+<li><strong>n_timepoints</strong> – number of timepoints</li>
+<li><strong>black_background</strong> – T/F, default = True</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.update_3d_plot">
+<code class="descclassname">karenina.visualization.</code><code class="descname">update_3d_plot</code><span class="sig-paren">(</span><em>end_t</em>, <em>timeseries_data</em>, <em>ax</em>, <em>lines</em>, <em>points=None</em>, <em>start_t=0</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.update_3d_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates visualization 3d plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>end_t</strong> – end timepoint</li>
+<li><strong>timeseries_data</strong> – data from timeseries</li>
+<li><strong>ax</strong> – visualization ax</li>
+<li><strong>lines</strong> – lines of data</li>
+<li><strong>points</strong> – values to update</li>
+<li><strong>start_t</strong> – start timepoint (0)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.experiment">
+<span id="experiment"></span><h1>Experiment<a class="headerlink" href="#module-karenina.experiment" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.experiment.Experiment">
+<em class="property">class </em><code class="descclassname">karenina.experiment.</code><code class="descname">Experiment</code><span class="sig-paren">(</span><em>treatment_names</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>individual_base_params</em>, <em>treatment_params</em>, <em>interindividual_variation</em>, <em>verbose</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class has responsibility for simulating an experimental design for simulation.</p>
+<p>A fixed number of individuals are simulated across experimental conditions called ‘treatments’
+Each treatment can have different numbers of individuals.
+All treatment must have the same number of timepoints.</p>
+<p>Each treatment can be associated with the imposition of one or more Perturbations.
+Each perturbation is inserted or removed from all individuals at a fixed time-point.</p>
+<dl class="method">
+<dt id="karenina.experiment.Experiment.check_n_timepoints_is_int">
+<code class="descname">check_n_timepoints_is_int</code><span class="sig-paren">(</span><em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.check_n_timepoints_is_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a ValueError if n_timepoints can’t be cast as an int</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n_timepoints</strong> – number of timepoints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.check_variable_specified_per_treatment">
+<code class="descname">check_variable_specified_per_treatment</code><span class="sig-paren">(</span><em>v</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.check_variable_specified_per_treatment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a ValueError if v is not the same length as the number of treatments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> – variable</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.q2_data">
+<code class="descname">q2_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.q2_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate output data from object’s self for Qiime2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">data, ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the experiment, simulating timesteps; saves the simulation figure and movie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.simulate_timestep">
+<code class="descname">simulate_timestep</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.simulate_timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate timestep t of the experiemnt</p>
+<p>Approach:</p>
+<ol class="arabic simple">
+<li>First apply any perturbations that should be active but aren’t yet</li>
+<li>Second, simulate the timestep</li>
+<li>Third, remove any perturbations that should be off</li>
+</ol>
+<p>NOTE: this means that a perturbation that starts and ends at t=1 will be active at t=1
+That is, the start and end times are inclusive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> – timestep</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.simulate_timesteps">
+<code class="descname">simulate_timesteps</code><span class="sig-paren">(</span><em>t_start</em>, <em>t_end</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.simulate_timesteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate multiple timesteps</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t_start</strong> – start timepoint</li>
+<li><strong>t_end</strong> – end timepoint</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.write_to_movie_file">
+<code class="descname">write_to_movie_file</code><span class="sig-paren">(</span><em>output_folder</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.write_to_movie_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write an MPG movie to output folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output_folder</strong> – output directory</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.individual">
+<span id="individual"></span><h1>Individual<a class="headerlink" href="#module-karenina.individual" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.individual.Individual">
+<em class="property">class </em><code class="descclassname">karenina.individual.</code><code class="descname">Individual</code><span class="sig-paren">(</span><em>subject_id, coords=['x', 'y', 'z'], metadata={}, params={}, interindividual_variation=0.01, verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generates an individual for OU simulation</p>
+<dl class="method">
+<dt id="karenina.individual.Individual.apply_perturbation">
+<code class="descname">apply_perturbation</code><span class="sig-paren">(</span><em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.apply_perturbation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a perturbation to the appropriate axes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>perturbation</strong> – perturbation to apply</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.apply_perturbation_to_axis">
+<code class="descname">apply_perturbation_to_axis</code><span class="sig-paren">(</span><em>axis</em>, <em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.apply_perturbation_to_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a perturbation to a Processes objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>axis</strong> – Axis to apply perturbation to</li>
+<li><strong>perturbation</strong> – perturbation to apply</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.check_identity">
+<code class="descname">check_identity</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.check_identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check identity of movement process
+:param verbose: verbose output, default = False
+:return: True if processes are equivalent, False if not</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>get data from movement processes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n_timepoints</strong> – number of timepoints to gather data for</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">data for timepoints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.remove_perturbation">
+<code class="descname">remove_perturbation</code><span class="sig-paren">(</span><em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.remove_perturbation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a perturbation from the appropriate axes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>perturbation</strong> – perturbation to remove</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.remove_perturbation_from_axis">
+<code class="descname">remove_perturbation_from_axis</code><span class="sig-paren">(</span><em>axis</em>, <em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.remove_perturbation_from_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a perturbation from one or more Process objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>axis</strong> – axis to remove perturbation from</li>
+<li><strong>perturbation</strong> – perturbation to remove from axis</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.simulate_movement">
+<code class="descname">simulate_movement</code><span class="sig-paren">(</span><em>n_timepoints</em>, <em>params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.simulate_movement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate movement over timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_timepoints</strong> – number of timepoints to simulate</li>
+<li><strong>params</strong> – parameters to change from baseparams</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.individual.random">
+<code class="descclassname">karenina.individual.</code><code class="descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; x in the interval [0, 1).<a class="headerlink" href="#karenina.individual.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-karenina.perturbation">
+<span id="perturbation"></span><h1>Perturbation<a class="headerlink" href="#module-karenina.perturbation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.perturbation.Perturbation">
+<em class="property">class </em><code class="descclassname">karenina.perturbation.</code><code class="descname">Perturbation</code><span class="sig-paren">(</span><em>start, end, params, update_mode='replace', axes=['x', 'y', 'z']</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Alter a simulation to impose a press disturbance,
+shifting the microbiome torwards a new configuration</p>
+<p>start –inclusive timepoint to start perturbation.  Note that this is read at the
+Experiment level, not by underlying Process objects.</p>
+<p>end – inclusive timepoint to end perturbation. Note that this is read at the
+Experiment level, not by underlying Process objects.</p>
+<p>params – dict of parameter values altered by the disturbance</p>
+<ul class="simple">
+<li>‘mode’ – how the perturbation updates parameter values.</li>
+<li>‘replace’ – replace old value with new one</li>
+<li>‘add’ – add new value to old one</li>
+<li>‘multiply’ – multiply the two values</li>
+</ul>
+<p>axes – axes to which the perturbation applies.  Like Start and End this is a
+‘dumb’ value, read externally by the Experiment object</p>
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.is_active">
+<code class="descname">is_active</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.is_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>determines if timepoint is active</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> – timepoint</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if timepoint is active, False if not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_by_addition">
+<code class="descname">update_by_addition</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_addition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update parameters by addition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>curr_param</strong> – current parameter</li>
+<li><strong>perturbation_param</strong> – new parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">curr_param + perturbation_param</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_by_multiplication">
+<code class="descname">update_by_multiplication</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_multiplication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update parameters by multiplication</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>curr_param</strong> – current parameter</li>
+<li><strong>perturbation_param</strong> – new parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">curr_param * perturbation_param</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_by_replacement">
+<code class="descname">update_by_replacement</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>update parameters by replacement
+:param curr_param: current parameter
+:param perturbation_param: new parameter
+:return: perturbation_param</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_params">
+<code class="descname">update_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update baseparams</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> – params to update</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new_params</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.process">
+<span id="process"></span><h1>Process<a class="headerlink" href="#module-karenina.process" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.process.Process">
+<em class="property">class </em><code class="descclassname">karenina.process.</code><code class="descname">Process</code><span class="sig-paren">(</span><em>start_coord</em>, <em>motion='Ornstein-Uhlenbeck'</em>, <em>history=None</em>, <em>params={'L': 0.2</em>, <em>'delta': 0.25}</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a 1d process in a Euclidean space</p>
+<dl class="method">
+<dt id="karenina.process.Process.bm_change">
+<code class="descname">bm_change</code><span class="sig-paren">(</span><em>dt</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.bm_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the Brownian motion process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>delta</strong> – delta value to adjust</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">change</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.bm_update">
+<code class="descname">bm_update</code><span class="sig-paren">(</span><em>dt</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.bm_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Brownian motion process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>delta</strong> – delta value to adjust</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">change</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.ou_change">
+<code class="descname">ou_change</code><span class="sig-paren">(</span><em>dt</em>, <em>mu</em>, <em>L</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.ou_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the Ornstein Uhlenbeck motion process</p>
+<p>The Ornstein Uhlenbeck process is modelled as:</p>
+<p>ds = lambda * (mu - s) * dt + dW</p>
+<p>ds – change in our process from the last timepoint
+L – lambda, the speed of reversion to mean
+(NOTE: lambda is a reserved keyword in Python so I use L)
+mu – mean position
+s – current position
+dt – how much time has elapsed since last update
+dW – the Weiner Process (basic Brownian motion)</p>
+<p>This says we update as usual for Brownian motion,
+but add in a term that reverts us to some
+mean position (mu) over time (dt) at some speed (lambda)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>delta</strong> – delta value to adjust</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">change in process since last timepoint</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.ou_update">
+<code class="descname">ou_update</code><span class="sig-paren">(</span><em>dt</em>, <em>mu</em>, <em>L</em>, <em>delta</em>, <em>min_bound=-1.0</em>, <em>max_bound=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.ou_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Brownian motion process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>mu</strong> – mean position</li>
+<li><strong>L</strong> – speed of reversion to the mean</li>
+<li><strong>delta</strong> – variance from the mean</li>
+<li><strong>min_bound</strong> – minimum bound</li>
+<li><strong>max_bound</strong> – maximum bound</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt</strong> – time elapsed since last update</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Karenina</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#module-karenina.spatial_ornstein_uhlenbeck">Spatial Ornstein Uhlenbeck</a></li>
+<li><a class="reference internal" href="#module-karenina.fit_timeseries">Fit Timeseries</a></li>
+<li><a class="reference internal" href="#module-karenina.fit_timeseries_benchmark">Fit Timeseries Benchmark</a></li>
+<li><a class="reference internal" href="#module-karenina.visualization">Visualization</a></li>
+<li><a class="reference internal" href="#module-karenina.experiment">Experiment</a></li>
+<li><a class="reference internal" href="#module-karenina.individual">Individual</a></li>
+<li><a class="reference internal" href="#module-karenina.perturbation">Perturbation</a></li>
+<li><a class="reference internal" href="#module-karenina.process">Process</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">karenina 0.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Jesse Zaneveld.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
+    </div>
+  </body>
+</html>
