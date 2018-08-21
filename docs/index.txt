@@ -8,25 +8,410 @@ Karenina
 
 Simulation and modeling tools for studying Anna Karenina effects in animal microbiomes This package aims to develop tools for modeling microbiome variability in disease. Initial versions focus on simulating microbiome change over time using simple Ornstein-Uhlenbeck (OU) models.
 
-Usage & Installation can be found at:
-
-* https://www.github.com/zaneveld/karenina
-
-* https://www.github.com/zaneveld/q2-karenina
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
 
-Indices and tables
-==================
+Links
+=================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+* https://qiime2.org
+* https://github.com/zaneveld/karenina
+* https://github.com/zaneveld/q2-karenina
 
-Spatial Ornstein Uhlenbeck
-===========================
+Installation
+=============
+
+Karenina is in active development and is available as a direct command-line program (karenina), or as a Qiime2 plugin (q2-karenina).
+Karenina is a python3.5+ program and requires *scipy, pandas, matplotlib,* and *seaborn*. 
+
+1. Install ffmpeg (visualization dependency)
+
+.. code-block:: bash
+	
+	sudo apt-get install ffmpeg -y
+
+2. Install karenina
+
+.. code-block:: bash
+
+	pip install git+https://github.com/zaneveld/karenina.git
+
+Qiime2 Users
+-------------
+
+3. Install q2-karenina
+
+.. code-block:: bash
+
+	pip install git+https://github.com/zaneveld/q2-karenina.git
+
+4. Update Qiime2 cache to enable newly installed plugin.
+
+.. code-block:: bash
+
+	qiime dev refresh-cache
+
+Usage
+=====
+
+karenina
+--------
+
+spatial_ornstein_uhlenbeck.py
+______________________________
+
+.. code-block:: python
+
+	>spatial_ornstein_uhlenbeck.py -h
+	
+.. code-block:: python
+
+	Usage: spatial_ornstein_uhlenbeck.py -o ./simulation_results
+
+	This script simulates microbiome change over time using Ornstein-Uhlenbeck
+	(OU) models.  These are similar to Brownian motion models, with the exception
+	that they include reversion to a mean. Output is a tab-delimited data table
+	and figures.
+
+	Options:
+	  --version             show program's version number and exit
+	  -h, --help            show this help message and exit
+
+	  Required options:
+		-o OUTPUT, --output=OUTPUT
+							the output folder for the simulation results
+
+	  Optional options:
+		--pert_file_path=PERT_FILE_PATH
+							file path to a perturbation file specifying parameters
+							for the simulation results [default:
+							C:\Users\Ripti\Anaconda3\lib\site-packages\karenina-0.
+							0.1-py3.6.egg\data\perturbations\set_xyz_lambda_zero.t
+							sv]
+		--treatment_names=TREATMENT_NAMES
+							Comma seperated list of treatment named
+							[default:control,destabilizing_treatment]
+		-n N_INDIVIDUALS, --n_individuals=N_INDIVIDUALS
+							Comma-separated number of individuals to simulate per
+							treatment.Note: This value must be enclosed in quotes.
+							Example: "35,35". [default: 35,35]
+		-t N_TIMEPOINTS, --n_timepoints=N_TIMEPOINTS
+							Number of timepoints to simulate. (One number, which
+							is the same for all treatments) [default: 10]
+		-p PERTURBATION_TIMEPOINT, --perturbation_timepoint=PERTURBATION_TIMEPOINT
+							Timepoint at which to apply a perturbation. Must be
+							less than --n_timepoints [default: 5]
+		-d PERTURBATION_DURATION, --perturbation_duration=PERTURBATION_DURATION
+							Duration that the perturbation lasts. [default: 100]
+		--interindividual_variation=INTERINDIVIDUAL_VARIATION
+							Starting variability between individuals. [default:
+							0.01]
+		--delta=DELTA       Starting delta parameter for Brownian motion and
+							Ornstein-Uhlenbeck processes. A higher number
+							indicates more variability over time. [default: 0.25]
+		-l L, --L=L         Starting lambda parameter for Ornstein-Uhlenbeck
+							processes. A higher number indicates a greater
+							tendancy to revert to the mean value. [default: 0.2]
+		--fixed_start_pos=FIXED_START_POS
+							Starting x,y,z position for all points, as comma
+							separated floating point values, e.g. 0.0,0.1,0.2. If
+							not supplied, starting positions will be randomized
+							based on the interindividual_variation parameter
+							[default: none]
+		-v, --verbose       -v, allows for verbose output [default: False]
+
+content
+
+fit_timeseries.py
+__________________
+
+.. code-block:: python
+
+	>fit_timeseries.py -h
+	
+.. code-block:: python
+
+	Usage: fit_timeseries.py -o ./simulation_results
+
+	This script fits microbiome change over time to Ornstein-Uhlenbeck (OU)
+	models.Demo fitting an OU model using default parameters.
+
+	Options:
+	  --version             show program's version number and exit
+	  -h, --help            show this help message and exit
+
+	  Required options:
+		-o OUTPUT, --output=OUTPUT
+							the output folder for the simulation results
+
+	  Optional options:
+		--fit_method=FIT_METHOD
+							Global optimization_method to use
+							[default:basinhopping]
+		--pcoa_qza=PCOA_QZA
+							The input PCoA qza file
+		--metadata=METADATA
+							The input metadata tsv file, if not defined, metadata
+							will be extracted from PCoA qza
+		--individual=INDIVIDUAL
+							The host subject ID column identifier, separate by
+							comma to combine TWO columns
+		--timepoint=TIMEPOINT
+							The timepoint column identifier
+		--treatment=TREATMENT
+							The treatment column identifier
+		-v, --verbose       
+							allows for verbose output [default: False]
+
+content
+
+karenina_visualization.py
+__________________________
+
+.. code-block:: python
+
+	>karenina_visualization.py -h
+	
+.. code-block:: python
+
+	Usage: karenina_visualization.py -o ./simulation_results
+
+	This script fits microbiome change over time to Ornstein-Uhlenbeck (OU)
+	models.Demo fitting an OU model using default parameters.
+
+	Options:
+	  --version             show program's version number and exit
+	  -h, --help            show this help message and exit
+
+	  Required options:
+		-o OUTPUT, --output=OUTPUT
+							the output folder for the simulation results
+
+	  Optional options:
+		--pcoa_qza=PCOA_QZA
+							The input PCoA qza file
+		--metadata=METADATA
+							The input metadata tsv file, if not defined, metadata
+							will be extracted from PCoA qza
+		--individual=INDIVIDUAL
+							The host subject ID column identifier, separate by
+							comma to combine TWO columns
+		--timepoint=TIMEPOINT
+							The timepoint column identifier
+		--treatment=TREATMENT
+							The treatment column identifier
+		-v, --verbose        
+							allows for verbose output [default: False]
+
+content
+
+q2-karenina
+------------
+
+.. code-block:: python
+
+	>qiime karenina --help
+	
+.. code-block:: python
+
+	Usage: qiime karenina [OPTIONS] COMMAND [ARGS]...
+
+	Description: This script simulates microbiome change over time using
+	Ornstein-Uhlenbeck (OU) models.  These are similar to Brownian motion
+	models, with the exception that they include reversion to a mean. Output
+	is a tab-delimited data table and figures.
+
+	Plugin website: https://github.com/zaneveld/karenina
+
+	Getting user support: Please post to the QIIME 2 forum for help with this
+	plugin: https://forum.qiime2.org
+
+	Options:
+		--version    Show the version and exit.
+		--citations  Show citations and exit.
+		--help       Show this message and exit.
+
+	Commands:
+	fit-timeseries              Fit OU Models to PCoA Ordination output
+	spatial-ornstein-uhlenbeck  Spatial Ornstein Uhlenbeck microbial community
+								simulation
+	visualization               Generates 3D animations of PCoA Timeseries
+
+spatial-ornstein-uhlenbeck
+______________________________
+
+.. code-block:: python
+
+	>qiime karenina spatial-ornstein-uhlenbeck --help
+	
+.. code-block:: python
+
+	Usage: qiime karenina spatial-ornstein-uhlenbeck [OPTIONS]
+
+	This method simulates microbial behavior over time usingOrnstein Uhlenbeck
+	models. This are similar to Brownian Motionwith the exception that they
+	include reversion to a mean.
+
+	Options:
+		--p-perturbation-fp TEXT        
+									filepath for perturbation parameters for
+									simulation results  [required]
+		--p-treatment-names TEXT        
+									['control,destabalizing_treatment'] Names
+									for simulation treatments  [required]
+		--p-n-individuals TEXT      
+									['35,35'] Number of individuals per
+									treatment  [required]
+		--p-n-timepoints INTEGER    
+									['10'] Number of simulation timepoints
+									[required]
+		--p-perturbation-timepoint INTEGER
+									['5'] Timepoint at which to apply treatment
+									(<n_timepoints)  [required]
+		--p-perturbation-duration INTEGER
+									['100'] Duration of perturbation.
+									[required]
+		--p-interindividual-variation FLOAT
+									['0.01']Starting variability between
+									individuals  [required]
+		--p-delta FLOAT                 
+									['0.25'] Starting Delta parameter for
+									Brownian Motion/ OU models. Higher values
+									indicate greater variability over time
+									[required]
+		--p-lam FLOAT               
+									['0.20'] Starting Lambda value for OU
+									process. Higher values indicate a greater
+									tendancy to revert to the mean value.
+									[required]
+		--p-fixed-start-pos TEXT 
+									Starting x,y,z position for each point. If
+									not defined, starting positions will be
+									randomized based on
+									interindividual_variation; type: string, eg:
+									['0.0,0.1,0.2'].  [required]
+		--o-ordination ARTIFACT PATH PCoAResults
+									Sample PCoA file containing simulation data
+									[required if not passing --output-dir]
+		--o-distance-matrix ARTIFACT PATH DistanceMatrix
+									Sample Distance Matrix containing simulation
+									data  [required if not passing --output-dir]
+		--output-dir DIRECTORY    
+									Output unspecified results to a directory
+		--cmd-config PATH   
+									Use config file for command options
+		--verbose           
+									Display verbose output to stdout and/or
+									stderr during execution of this action.
+									[default: False]
+		--quiet             
+									Silence output if execution is successful
+									(silence is golden).  [default: False]
+		--citations         
+									Show citations and exit.
+		--help              
+									Show this message and exit.
+
+content
+
+fit-timeseries
+__________________
+
+.. code-block:: python
+
+	>qiime karenina fit-timeseries --help
+	
+.. code-block:: python
+
+	Usage: qiime karenina fit-timeseries [OPTIONS]
+
+	This visualizer generates OU model parameters for PCoA outputdata, for
+	each individual and each defined treatment cohort.
+
+	Options:
+		--p-pcoa TEXT                   
+									filepath to PCoA results  [required]
+		--p-metadata TEXT           
+									filepath to Sample metadata  [required]
+		--p-method [basinhopping] 
+									global optimization method  [required]
+		--p-individual-col TEXT 
+									individual column identifier  [required]
+		--p-timepoint-col TEXT 
+									timepoint column identifier  [required]
+		--p-treatment-col TEXT 
+									treatment column identifier  [required]
+		--o-visualization VISUALIZATION PATH
+									[required if not passing --output-dir]
+		--output-dir DIRECTORY
+									Output unspecified results to a directory
+		--cmd-config PATH    
+									Use config file for command options
+		--verbose           
+									Display verbose output to stdout and/or
+									stderr during execution of this action.
+									[default: False]
+		--quiet             
+									Silence output if execution is successful
+									(silence is golden).  [default: False]
+		--citations         
+									Show citations and exit.
+		--help              
+									Show this message and exit.
+
+content
+
+visualization.py
+_________________
+
+.. code-block:: python
+
+	>qiime karenina visualization --help
+	
+.. code-block:: python
+
+	Usage: qiime karenina visualization [OPTIONS]
+
+	This visualizer generates 3D animations of PCoA Timeseries.
+
+	Options:
+		--p-pcoa TEXT                  
+									filepath to PCoA results  [required]
+		--p-metadata TEXT   
+									filepath to Sample metadata  [required]
+		--p-individual-col TEXT 
+									individual column identifier  [required]
+		--p-timepoint-col TEXT 
+									timepoint column identifier  [required]
+		--p-treatment-col TEXT 
+									treatment column identifier  [required]
+		--o-visualization VISUALIZATION PATH
+									[required if not passing --output-dir]
+		--output-dir DIRECTORY
+									Output unspecified results to a directory
+		--cmd-config PATH    
+									Use config file for command options
+		--verbose           
+									Display verbose output to stdout and/or
+									stderr during execution of this action.
+									[default: False]
+		--quiet             
+									Silence output if execution is successful
+									(silence is golden).  [default: False]
+		--citations         
+									Show citations and exit.
+		--help              
+									Show this message and exit.
+
+content
+
+spatial_ornstein_uhlenbeck.py
+=============================
 
 .. automodule:: karenina.spatial_ornstein_uhlenbeck
 	:exclude-members: main, make_option_parser
@@ -35,7 +420,7 @@ Spatial Ornstein Uhlenbeck
 	:show-inheritance:
 	:private-members:
 
-Fit Timeseries
+fit_timeseries.py
 ==================
 
 .. automodule:: karenina.fit_timeseries
@@ -45,8 +430,8 @@ Fit Timeseries
 	:show-inheritance:
 	:private-members:
 
-Fit Timeseries Benchmark
-=========================
+fit_timeseries_benchmark.py
+===========================
 
 .. automodule:: karenina.fit_timeseries_benchmark
 	:exclude-members: main, make_option_parser
@@ -55,7 +440,7 @@ Fit Timeseries Benchmark
 	:show-inheritance:
 	:private-members:
 
-Visualization
+visualization.py
 ==================
 
 .. automodule:: karenina.visualization
@@ -65,7 +450,7 @@ Visualization
 	:show-inheritance:
 	:private-members:
 
-Experiment
+experiment.py
 ==================
 
 .. automodule:: karenina.experiment
@@ -74,7 +459,7 @@ Experiment
 	:show-inheritance:
 	:private-members:
 
-Individual
+individual.py
 ==================
 
 .. automodule:: karenina.individual
@@ -83,7 +468,7 @@ Individual
 	:show-inheritance:
 	:private-members:
 
-Perturbation
+perturbation.py
 ==================
 
 .. automodule:: karenina.perturbation
@@ -92,7 +477,7 @@ Perturbation
 	:show-inheritance:
 	:private-members:
 
-Process
+process.py
 ==================
 
 .. automodule:: karenina.process
