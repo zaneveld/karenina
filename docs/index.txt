@@ -8,6 +8,9 @@ Karenina
 
 Simulation and modeling tools for studying Anna Karenina effects in animal microbiomes This package aims to develop tools for modeling microbiome variability in disease. Initial versions focus on simulating microbiome change over time using simple Ornstein-Uhlenbeck (OU) models.
 
+Happy families are all alike; every unhappy family is unhappy in its own way.
+	Leo Tolstoy
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
