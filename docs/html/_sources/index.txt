@@ -123,7 +123,8 @@ ______________________________
 							not supplied, starting positions will be randomized
 							based on the interindividual_variation parameter
 							[default: none]
-		-v, --verbose       -v, allows for verbose output [default: False]
+		-v, --verbose      
+							allows for verbose output [default: False]
 
 content
 
