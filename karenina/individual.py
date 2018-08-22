@@ -89,6 +89,7 @@ class Individual(object):
     def check_identity(self, verbose=False):
         """
         Check identity of movement process
+        
         :param verbose: verbose output, default = False
         :return: True if processes are equivalent, False if not
         """
