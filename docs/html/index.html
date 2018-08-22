@@ -842,7 +842,23 @@ nLogLikelihoods for each individuals timeseries.</p>
 <span class="target" id="module-karenina.visualization"></span><dl class="function">
 <dt id="karenina.visualization.get_timeseries_data">
 <code class="descclassname">karenina.visualization.</code><code class="descname">get_timeseries_data</code><span class="sig-paren">(</span><em>individuals, axes=['x', 'y', 'z']</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.get_timeseries_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Provides timeseries data from list of individuals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>individuals</strong> – array of individual objects</li>
+<li><strong>axes</strong> – [x,y,z] axes to return</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array of timeseries data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="karenina.visualization.save_simulation_data">
@@ -1258,10 +1274,22 @@ Experiment level, not by underlying Process objects.</p>
 <dl class="method">
 <dt id="karenina.perturbation.Perturbation.update_by_replacement">
 <code class="descname">update_by_replacement</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_replacement" title="Permalink to this definition">¶</a></dt>
-<dd><p>update parameters by replacement
-:param curr_param: current parameter
-:param perturbation_param: new parameter
-:return: perturbation_param</p>
+<dd><p>Update parameters by replacement</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>curr_param</strong> – current parameter</li>
+<li><strong>perturbation_param</strong> – new parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">perturbation_param</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">

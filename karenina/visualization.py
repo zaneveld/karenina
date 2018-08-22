@@ -63,6 +63,13 @@ def make_option_parser():
     return parser
 
 def get_timeseries_data(individuals,axes=["x","y","z"]):
+    """
+    Provides timeseries data from list of individuals.
+
+    :param individuals: array of individual objects
+    :param axes: [x,y,z] axes to return
+    :return: array of timeseries data
+    """
     results = []
     for i,curr_subject in enumerate(individuals):
         result = []

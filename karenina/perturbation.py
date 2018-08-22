@@ -78,7 +78,8 @@ class Perturbation(object):
 
     def update_by_replacement(self,curr_param, perturbation_param):
         """
-        update parameters by replacement
+        Update parameters by replacement
+
         :param curr_param: current parameter
         :param perturbation_param: new parameter
         :return: perturbation_param
