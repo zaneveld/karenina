@@ -160,7 +160,7 @@ def write_options_to_log(log, opts):
 
 def parse_perturbation_file(pert_file_path, perturbation_timepoint,perturbation_duration):
     """
-        Return a list of perturbations
+    Return a list of perturbations
     infile -- a .tsv file describing one perturbation per line
     assume input file is correctly formatted (no warnings if not)
 
