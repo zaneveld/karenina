@@ -41,7 +41,8 @@ setup(
     keywords='karenina ornstein uhlenbeck brownian motion',
     packages=find_packages(exclude=['docs', 'tests', 'q2-karenina']),
     install_requires=['scipy'],
-    data_files=[('data/perturbations',
+    package_data={
+        "karenina.data":[('data/perturbations',
                  ['data/perturbations/add_x_mu_high.tsv', 'data/perturbations/all_perturbations.tsv',
                   'data/perturbations/double_xyz_delta.tsv', 'data/perturbations/double_z_delta.tsv',
                   'data/perturbations/README.txt', 'data/perturbations/set_x_lambda_high.tsv',
@@ -51,7 +52,7 @@ setup(
                   'data/perturbations/set_yz_lambda_high.tsv', 'data/perturbations/set_z_lambda_zero.tsv',
                   'data/perturbations/set_x_mu_low.tsv', 'data/perturbations/set_xyz_lambda_low.tsv',
                   'data/perturbations/set_xyz_lambda_zero.tsv', 'data/perturbations/set_xyz_lambda_zero.tsv',
-                  'data/perturbations/set_y_lambda_medium.tsv', 'data/perturbations/set_yz_lambda_medium.tsv',])],
+                  'data/perturbations/set_y_lambda_medium.tsv', 'data/perturbations/set_yz_lambda_medium.tsv',])]},
 
     entry_points={
         'console_scripts': [
