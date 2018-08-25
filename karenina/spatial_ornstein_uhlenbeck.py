@@ -16,6 +16,8 @@ from karenina.experiment import Experiment
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname
+import os
+from pkg_resources import resource_filename
 from os import makedirs
 import pandas as pd
 
@@ -41,8 +43,7 @@ def make_option_parser():
     optional_options = OptionGroup(parser, "Optional options")
 
     optional_options.add_option('--pert_file_path',\
-      default = join(dirname(dirname(realpath(__file__))),'data',\
-      'perturbations','set_xyz_lambda_zero.tsv'),\
+      default = os.path.abspath(resource_filename('karenina.data','set_xyz_lambda_zero.tsv')),\
       type = "string",\
       help = 'file path to a perturbation file specifying parameters for' +
       ' the simulation results [default: %default]')
