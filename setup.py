@@ -42,7 +42,7 @@ setup(
     packages=find_packages(exclude=['docs', 'tests', 'q2-karenina']),
     install_requires=['scipy'],
     package_data={
-        "karenina.data":["data/perturbations/*.tsv"]},
+        "karenina.data":["*.tsv"]},
 
     entry_points={
         'console_scripts': [
