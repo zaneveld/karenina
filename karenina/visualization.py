@@ -252,8 +252,9 @@ def save_simulation_movie(individuals, output_folder,\
     ids = []
     for item in individuals:
         ids.append(item.SubjectId)
+    print("saving data")
     save_simulation_data(data, ids, output_folder)
-
+    print("data saved?")
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
     pointstyle = 'o' #cheat to use lines to represent points

@@ -11,6 +11,7 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
+import karenina.visualization
 from karenina.experiment import Experiment
 from optparse import OptionParser
 from optparse import OptionGroup
