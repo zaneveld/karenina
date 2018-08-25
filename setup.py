@@ -42,17 +42,16 @@ setup(
     packages=find_packages(exclude=['docs', 'tests', 'q2-karenina']),
     install_requires=['scipy'],
     package_data={
-        "karenina.data":[('data/perturbations',
-                 ['data/perturbations/add_x_mu_high.tsv', 'data/perturbations/all_perturbations.tsv',
-                  'data/perturbations/double_xyz_delta.tsv', 'data/perturbations/double_z_delta.tsv',
-                  'data/perturbations/README.txt', 'data/perturbations/set_x_lambda_high.tsv',
-                  'data/perturbations/set_x_lambda_medium.tsv', 'data/perturbations/set_x_lambda_small.tsv',
-                  'data/perturbations/set_x_mu_high.tsv', 'data/perturbations/set_xyz_mu_high.tsv',
-                  'data/perturbations/set_xyz_mu_low.tsv', 'data/perturbations/set_y_lambda_high.tsv',
-                  'data/perturbations/set_yz_lambda_high.tsv', 'data/perturbations/set_z_lambda_zero.tsv',
-                  'data/perturbations/set_x_mu_low.tsv', 'data/perturbations/set_xyz_lambda_low.tsv',
-                  'data/perturbations/set_xyz_lambda_zero.tsv', 'data/perturbations/set_xyz_lambda_zero.tsv',
-                  'data/perturbations/set_y_lambda_medium.tsv', 'data/perturbations/set_yz_lambda_medium.tsv',])]},
+        "karenina.data":['add_x_mu_high.tsv', 'all_perturbations.tsv',
+                  'double_xyz_delta.tsv', 'double_z_delta.tsv',
+                  'README.txt', 'set_x_lambda_high.tsv',
+                  'set_x_lambda_medium.tsv', 'set_x_lambda_small.tsv',
+                  'set_x_mu_high.tsv', 'set_xyz_mu_high.tsv',
+                  'set_xyz_mu_low.tsv', 'set_y_lambda_high.tsv',
+                  'set_yz_lambda_high.tsv', 'set_z_lambda_zero.tsv',
+                  'set_x_mu_low.tsv', 'set_xyz_lambda_low.tsv',
+                  'set_xyz_lambda_zero.tsv', 'set_xyz_lambda_zero.tsv',
+                  'set_y_lambda_medium.tsv', 'set_yz_lambda_medium.tsv',]},
 
     entry_points={
         'console_scripts': [
