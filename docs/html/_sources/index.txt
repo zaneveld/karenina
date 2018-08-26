@@ -344,9 +344,13 @@ After installing **karenina** the following command can be ran from the same dir
 	--individual Subject,BodySite 
 	--timepoint DaysSinceExperimentStart
 
+The output data from this execution can be found here:
+
+https://github.com/zaneveld/karenina/blob/master/data/outputs/fit_timeseries/tx_undefined
+
 +----------------------------+---+-------+-------+-------+-------+-------+
 |Subject_BodySite            |pc |sigma  |lambda |theta  |nLogLik|aic    |
-+----------------------------+---+-------+-------+-------+-------+-------+
++============================+===+=======+=======+=======+=======+=======+
 |subject-1_gut               |pc1|0.41463|0.00360|-0.5421|-30.398|1.17122|
 +----------------------------+---+-------+-------+-------+-------+-------+
 |subject-1_gut               |pc2|-0.4051|0.03268|0.02503|-30.398|1.17122|
@@ -395,11 +399,6 @@ After installing **karenina** the following command can be ran from the same dir
 +----------------------------+---+-------+-------+-------+-------+-------+
 |subject-2_tongue            |pc3|0.41374|-0.1617|0.07803|-30.398|1.17122|
 +----------------------------+---+-------+-------+-------+-------+-------+
-	
-
-The output data from this execution can be found here:
-
-https://github.com/zaneveld/karenina/blob/master/data/outputs/fit_timeseries/tx_undefined
 
 
 karenina_visualization
@@ -709,9 +708,7 @@ A successful visualization provides the following output:
 	
 Within the visualization.qzv, we have two output data files which contain our modeled timeseries results. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries modeled individuals and cohorts, which can be found here:
 
-https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/individual_fit_timeseries.csv
-
-https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/cohort_fit_timeseries.csv
+https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts
 
 Below is a sample of the cohort output generated.
 
@@ -731,7 +728,98 @@ Below is a sample of the cohort output generated.
 |destabilizing_treatment_pc3 |pc3|0.25289|0.00647|0.09974|-4563.9|53.1482|
 +----------------------------+---+-------+-------+-------+-------+-------+
 
+Because the simulation data is quite large, and thus takes a long time to process, we can alternatively
+fit the timeseries from **Moving Pictures**. The weighted_unifract_pcoa_results.qza file will be used.
 
+The PCoA data can be found here:
+
+https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true
+
+Because the Moving Pictures data contains single-point observations for their treatments, being that their treatments are applied at timepoint-0 only, fit_timeseries will fit OU models to only individuals if we do not define a treatment identifier.
+
+After installing **q2-karenina** the following command can be ran from the same directory as *weighted_unifrac_pcoa_results.qza*.
+
+.. note::
+
+	The individual column combines the columns **Subject** and **BodySite**, this is entered as a comma-separated list.
+	
+.. note::
+
+	The treatments are single-point observations, so fit_timeseries will fit to only individuals if *treatment-col* is **None**.
+
+.. code-block:: python
+
+	qiime karenina fit-timeseries \
+	--p-pcoa ./weighted_unifrac_pcoa_results.qza \
+	--p-metadata None \
+	--p-method basinhopping \
+	--p-individual-col Subject,BodySite \
+	--p-timepoint-col DaysSinceExperimentStart \
+	--p-treatment-col None \
+	--output-dir ./moving_pictures_fit_ts/
+
+A successful visualization provides the following output:
+
+.. code-block:: python
+
+	Saved Visualization to: ./moving_pictures_fit_ts/visualization.qzv
+	
+The output data from this execution can be found here:
+
+https://github.com/zaneveld/q2-karenina/blob/master/data/moving_pictures_fit_ts
+
++----------------------------+---+-------+-------+-------+-------+-------+
+|Subject_BodySite            |pc |sigma  |lambda |theta  |nLogLik|aic    |
++============================+===+=======+=======+=======+=======+=======+
+|subject-1_gut               |pc1|0.41463|0.00360|-0.5421|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_gut               |pc2|-0.4051|0.03268|0.02503|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_gut               |pc3|0.42444|0.04177|-0.0019|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_left-palm         |pc1|-0.4043|0.02676|0.18309|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_left-palm         |pc2|-0.4021|-0.0245|-0.2053|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_left-palm         |pc3|0.39130|-0.0246|0.28571|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_right-palm        |pc1|-0.4045|0.03113|0.15796|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_right-palm        |pc2|0.41556|0.00018|-2.5981|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_right-palm        |pc3|0.41527|-0.2349|0.13882|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_tongue            |pc1|-0.8731|0.04062|0.27590|-27.550|3.36793|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_tongue            |pc2|-0.8970|0.00520|0.29044|-24.257|3.62250|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-1_tongue            |pc3|-0.8792|0.03174|-0.0404|-26.767|3.42560|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_gut               |pc1|0.40325|-0.0210|-0.5796|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_gut               |pc2|-0.4024|0.00664|0.01683|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_gut               |pc3|-0.4132|0.01286|0.00126|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_left-palm         |pc1|0.39737|0.01596|0.18911|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_left-palm         |pc2|0.41552|0.03488|0.04242|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_left-palm         |pc3|-0.4025|-0.0174|0.09704|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_right-palm        |pc1|-0.4023|0.00992|0.33786|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_right-palm        |pc2|-0.4132|0.04034|-0.0563|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_right-palm        |pc3|0.41496|0.00458|-0.0590|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_tongue            |pc1|-0.4038|0.46210|0.29795|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_tongue            |pc2|-0.4145|0.33915|0.21338|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+|subject-2_tongue            |pc3|0.41374|-0.1617|0.07803|-30.398|1.17122|
++----------------------------+---+-------+-------+-------+-------+-------+
+	
 qiime karenina visualization
 _____________________________
 
