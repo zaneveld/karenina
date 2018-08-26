@@ -527,15 +527,12 @@ def gen_output(fit_ts, ind, tp, tx, method):
                            "theta": the,
                            "nLogLik": nLogLik,
                            ind: ind_o,
-                           tp: tp_o,
-                           tx: tx_o,
-                           "x": x_o,
                            "n_parameters": n_param,
                            "pc": pc,
                            "optimizer": op,
                            "aic": aic_o},
                           columns=[ind, "pc", "sigma", "lambda", "theta", "nLogLik",
-                                   "n_parameters", "aic", "optimizer", tp, tx, "x"])
+                                   "n_parameters", "aic", "optimizer"])
     return output
 
 
