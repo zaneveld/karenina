@@ -65,6 +65,22 @@ compatible with other Q2 plugins. **q2-karenina** requires both **ffmpeg** and *
 Usage
 =====
 
++------------------------------------------+-----------------------------------+
+|Script                                    |Description                        |
++==========================================+===================================+
+|spatial_ornstein_uhlenbeck                |OU Simulation Modeling             |
++------------------------------------------+-----------------------------------+
+|fit_timeseries                            |Fit PCoA Data to OU Models         |
++------------------------------------------+-----------------------------------+
+|karenina_visualization                    |Visualize PCoA Timeseries          |
++------------------------------------------+-----------------------------------+
+|qiime karenina spatial-ornstein-uhlenbeck |Q2 application of OU Modeling      |
++------------------------------------------+-----------------------------------+
+|qiime karenina fit-timeseries             |Q2 application of PCoA fitting     |
++------------------------------------------+-----------------------------------+
+|qiime karenina visualization              |Q2 application of 3D Visualization |
++------------------------------------------+-----------------------------------+
+
 karenina
 --------
 
