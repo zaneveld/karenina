@@ -419,8 +419,8 @@ q2-karenina
 								simulation
 	visualization               Generates 3D animations of PCoA Timeseries
 
-karenina spatial-ornstein-uhlenbeck
-_____________________________________
+qiime karenina spatial-ornstein-uhlenbeck
+___________________________________________
 
 .. warning::
 
@@ -503,8 +503,8 @@ _____________________________________
 
 	The tutorial for this Q2 Method is being created and will be available in the future.
 
-karenina fit-timeseries
-________________________
+qiime karenina fit-timeseries
+______________________________
 
 .. note::
 
@@ -638,8 +638,8 @@ Below is a sample of the cohort output generated.
 
 	
 
-karenina visualization
-_______________________
+qiime karenina visualization
+_____________________________
 
 .. warning::
 
