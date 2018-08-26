@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Karenina &#8212; karenina 0.0.0 documentation</title>
-    <link rel="stylesheet" href="classic.css" type="text/css" />
-    <link rel="stylesheet" href="pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="documentation_options.js"></script>
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="underscore.js"></script>
-    <script type="text/javascript" src="doctools.js"></script>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
@@ -306,14 +306,17 @@ and thus takes quite some time on larger datasets. Because this simulation data 
 optimization of over 7000 entries, we have provided the data below.</p>
 </div>
 <p>With the <em>treatment</em> column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated.</p>
+<p>This data can be found at the following link:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined">https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined</a></p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="47%" />
+<col width="42%" />
 <col width="5%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Subject</th>
@@ -322,55 +325,290 @@ optimization of over 7000 entries, we have provided the data below.</p>
 <th class="head">lambda</th>
 <th class="head">theta</th>
 <th class="head">nLogLik</th>
+<th class="head">aic</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>control_pc1</td>
 <td>pc1</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25064</td>
+<td>0.20376</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
 </tr>
 <tr class="row-odd"><td>control_pc2</td>
 <td>pc2</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25064</td>
+<td>0.20379</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
 </tr>
 <tr class="row-even"><td>control_pc3</td>
 <td>pc3</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25064</td>
+<td>0.20378</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc1</td>
 <td>pc1</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09973</td>
+<td>-4563.9</td>
+<td>53.1482</td>
 </tr>
 <tr class="row-even"><td>destabilizing_treatment_pc2</td>
 <td>pc2</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09971</td>
+<td>-4563.9</td>
+<td>53.1482</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc3</td>
 <td>pc3</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09974</td>
+<td>-4563.9</td>
+<td>53.1482</td>
 </tr>
 </tbody>
 </table>
-<p>This data can be found at the following link:</p>
-<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries_simulation/tx_defined">https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries_simulation/tx_defined</a></p>
+<p>Because the simulation data is quite large, and thus takes a long time to process, we can alternatively fit
+the timeseries from <strong>Moving Pictures</strong>. The weighted_unifrac_pcoa_results.qza file will be used.</p>
+<p>The PCoA data can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true">https://github.com/zaneveld/karenina/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true</a></p>
+<p>Because the Moving Pictures data contains single-point observations for their treatments, being that their
+treatments are applied at timepoint-0 only, fit_timeseries will fit OU models to only individuals if we do not define
+a treatment identifier.</p>
+<p>After installing <strong>karenina</strong> the following command can be ran from the same directory as <em>weighted_unifrac_pcoa_results.qza</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_timeseries</span> \
+<span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">moving_pictures_fit_ts</span><span class="o">/</span>
+<span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">weighted_unifrac_pcoa_results</span><span class="o">.</span><span class="n">qza</span>
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span><span class="p">,</span><span class="n">BodySite</span>
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">DaysSinceExperimentStart</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="5%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Subject_BodySite</td>
+<td>pc</td>
+<td>sigma</td>
+<td>lambda</td>
+<td>theta</td>
+<td>nLogLik</td>
+<td>aic</td>
+</tr>
+<tr class="row-even"><td>subject-1_gut</td>
+<td>pc1</td>
+<td>0.41463</td>
+<td>0.00360</td>
+<td>-0.5421</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_gut</td>
+<td>pc2</td>
+<td>-0.4051</td>
+<td>0.03268</td>
+<td>0.02503</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_gut</td>
+<td>pc3</td>
+<td>0.42444</td>
+<td>0.04177</td>
+<td>-0.0019</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_left-palm</td>
+<td>pc1</td>
+<td>-0.4043</td>
+<td>0.02676</td>
+<td>0.18309</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_left-palm</td>
+<td>pc2</td>
+<td>-0.4021</td>
+<td>-0.0245</td>
+<td>-0.2053</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_left-palm</td>
+<td>pc3</td>
+<td>0.39130</td>
+<td>-0.0246</td>
+<td>0.28571</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_right-palm</td>
+<td>pc1</td>
+<td>-0.4045</td>
+<td>0.03113</td>
+<td>0.15796</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_right-palm</td>
+<td>pc2</td>
+<td>0.41556</td>
+<td>0.00018</td>
+<td>-2.5981</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_right-palm</td>
+<td>pc3</td>
+<td>0.41527</td>
+<td>-0.2349</td>
+<td>0.13882</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_tongue</td>
+<td>pc1</td>
+<td>-0.8731</td>
+<td>0.04062</td>
+<td>0.27590</td>
+<td>-27.550</td>
+<td>3.36793</td>
+</tr>
+<tr class="row-even"><td>subject-1_tongue</td>
+<td>pc2</td>
+<td>-0.8970</td>
+<td>0.00520</td>
+<td>0.29044</td>
+<td>-24.257</td>
+<td>3.62250</td>
+</tr>
+<tr class="row-odd"><td>subject-1_tongue</td>
+<td>pc3</td>
+<td>-0.8792</td>
+<td>0.03174</td>
+<td>-0.0404</td>
+<td>-26.767</td>
+<td>3.42560</td>
+</tr>
+<tr class="row-even"><td>subject-2_gut</td>
+<td>pc1</td>
+<td>0.40325</td>
+<td>-0.0210</td>
+<td>-0.5796</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_gut</td>
+<td>pc2</td>
+<td>-0.4024</td>
+<td>0.00664</td>
+<td>0.01683</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_gut</td>
+<td>pc3</td>
+<td>-0.4132</td>
+<td>0.01286</td>
+<td>0.00126</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_left-palm</td>
+<td>pc1</td>
+<td>0.39737</td>
+<td>0.01596</td>
+<td>0.18911</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_left-palm</td>
+<td>pc2</td>
+<td>0.41552</td>
+<td>0.03488</td>
+<td>0.04242</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_left-palm</td>
+<td>pc3</td>
+<td>-0.4025</td>
+<td>-0.0174</td>
+<td>0.09704</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_right-palm</td>
+<td>pc1</td>
+<td>-0.4023</td>
+<td>0.00992</td>
+<td>0.33786</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_right-palm</td>
+<td>pc2</td>
+<td>-0.4132</td>
+<td>0.04034</td>
+<td>-0.0563</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_right-palm</td>
+<td>pc3</td>
+<td>0.41496</td>
+<td>0.00458</td>
+<td>-0.0590</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_tongue</td>
+<td>pc1</td>
+<td>-0.4038</td>
+<td>0.46210</td>
+<td>0.29795</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_tongue</td>
+<td>pc2</td>
+<td>-0.4145</td>
+<td>0.33915</td>
+<td>0.21338</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_tongue</td>
+<td>pc3</td>
+<td>0.41374</td>
+<td>-0.1617</td>
+<td>0.07803</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+</tbody>
+</table>
+<p>The output data from this execution can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/outputs/fit_timeseries/tx_undefined">https://github.com/zaneveld/karenina/blob/master/data/outputs/fit_timeseries/tx_undefined</a></p>
 </div>
 <div class="section" id="karenina-visualization">
 <h3>karenina_visualization<a class="headerlink" href="#karenina-visualization" title="Permalink to this headline">¶</a></h3>
@@ -434,7 +672,7 @@ program will visualize the PCoA Results, and return an mp4 movie called <em>simu
 </pre></div>
 </div>
 <p>The output video can be viewed below, and the file can be found here:</p>
-<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/visualization">https://github.com/zaneveld/karenina/tree/master/data/visualization</a></p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/visualization">https://github.com/zaneveld/karenina/tree/master/data/outputs/visualization</a></p>
 <div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
 </div>
 <div class="section" id="q2-karenina">
@@ -644,12 +882,13 @@ we will walk through the use of this plugin.</p>
 <p>Below is a sample of the cohort output generated.</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="47%" />
+<col width="42%" />
 <col width="5%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Subject</th>
@@ -658,50 +897,57 @@ we will walk through the use of this plugin.</p>
 <th class="head">lambda</th>
 <th class="head">theta</th>
 <th class="head">nLogLik</th>
+<th class="head">aic</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>control_pc1</td>
 <td>pc1</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25064</td>
+<td>0.20376</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
 </tr>
 <tr class="row-odd"><td>control_pc2</td>
 <td>pc2</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25064</td>
+<td>0.20379</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
 </tr>
 <tr class="row-even"><td>control_pc3</td>
 <td>pc3</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25064</td>
+<td>0.20378</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc1</td>
 <td>pc1</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09973</td>
+<td>-4563.9</td>
+<td>53.1482</td>
 </tr>
 <tr class="row-even"><td>destabilizing_treatment_pc2</td>
 <td>pc2</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09971</td>
+<td>-4563.9</td>
+<td>53.1482</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc3</td>
 <td>pc3</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.00000</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09974</td>
+<td>-4563.9</td>
+<td>53.1482</td>
 </tr>
 </tbody>
 </table>
