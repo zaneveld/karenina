@@ -239,8 +239,12 @@ class Experiment(object):
             individual.MovementProcesses["y"].History.pop(0)
             individual.MovementProcesses["z"].History.pop(0)
 
+        for item in individuals:
+            print(vars(item))
         visualization.save_simulation_movie(individuals, output_folder,
-                                            len(individuals),self.NTimepoints,black_background=True, verbose=self.verbose)
+                                            len(individuals),self.NTimepoints,
+                                            black_background=True,
+                                            data_o = True, verbose=self.verbose)
     def q2_data(self):
         """
         generate output data from object's self for Qiime2

@@ -19,6 +19,7 @@ from os.path import join
 from numpy import array
 from scipy.spatial import distance
 import os
+import re
 import random
 import csv
 
@@ -214,7 +215,7 @@ def save_simulation_data(data, ids, output):
 
 
 def save_simulation_movie(individuals, output_folder,\
-     n_individuals,n_timepoints,black_background=True, verbose=False):
+     n_individuals,n_timepoints,black_background=True, data_o = False, verbose=False):
     """
     Save an .ffmpg move of the simulated community change
 
@@ -252,7 +253,8 @@ def save_simulation_movie(individuals, output_folder,\
     ids = []
     for item in individuals:
         ids.append(item.SubjectId)
-    save_simulation_data(data, ids, output_folder)
+    if data_o:
+        save_simulation_data(data, ids, output_folder)
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
     pointstyle = 'o' #cheat to use lines to represent points
@@ -353,14 +355,13 @@ def main():
     site, metadata = parse_pcoa(opts.pcoa_qza, opts.individual, opts.timepoint, opts.treatment, opts.metadata)
     df = parse_metadata(metadata, opts.individual, opts.timepoint, opts.treatment, site)
 
-    i=0
-
     colors = ['fuchsia', 'cyan', 'darkorange', 'blue', 'yellow']
     tx = opts.treatment
     treatments = df[tx].unique()
     while len(colors) < len(treatments):
         colors.append('lightgray')
 
+    i=0
     for row in df.iterrows():
         curr_subject_id = "%s_%i" % (df[opts.individual], i)
         j=0
@@ -371,13 +372,18 @@ def main():
         params['color'] = color
         curr_subject = Individual(subject_id=curr_subject_id,
                                   params=params, \
-                                  metadata={opts.treatment: df[opts.treatment]}, \
+                                  metadata={opts.treatment: row[1][3]}, \
                                   interindividual_variation=.01, verbose=verbose)
         ind.append(curr_subject)
         i+=1
 
-    save_simulation_figure(individuals=ind, output_folder=output, n_timepoints=50, perturbation_timepoint=25, n_individuals=50)
-    save_simulation_movie(individuals=ind,output_folder=output,n_timepoints=50,n_individuals=50, verbose=verbose)
+
+    #save_simulation_figure(individuals=ind, output_folder=output, n_timepoints=50, perturbation_timepoint=25, n_individuals=50)
+    save_simulation_movie(individuals=ind,
+                          output_folder=output,
+                          n_timepoints=len(df[opts.timepoint].unique()),
+                          n_individuals=len(df[opts.individual].unique()),
+                          verbose=verbose)
 
 if __name__ == "__main__":
     main()

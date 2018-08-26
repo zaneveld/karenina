@@ -93,8 +93,8 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2>karenina<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="spatial-ornstein-uhlenbeck-py">
-<h3>spatial_ornstein_uhlenbeck.py<a class="headerlink" href="#spatial-ornstein-uhlenbeck-py" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="spatial-ornstein-uhlenbeck">
+<h3>spatial_ornstein_uhlenbeck<a class="headerlink" href="#spatial-ornstein-uhlenbeck" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">spatial_ornstein_uhlenbeck</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>
 </div>
@@ -154,10 +154,43 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
                                                 <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>content</p>
+<p>The spatial_ornstein_uhlenbeck.py function takes in simulation parameters and develops
+a distance matrix, PCoA ordination, and metadata file for use in other processes.
+This tutorial will explore the functionality of the script, and provide sample input data
+for fit_timeseries.py and karenina_visualization.py.</p>
+<p>The following parameters are used to generate a simulation using Ornstein Uhlenbeck and Brownian motion models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
+<span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span>
+<span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">25</span>
+</pre></div>
 </div>
-<div class="section" id="fit-timeseries-py">
-<h3>fit_timeseries.py<a class="headerlink" href="#fit-timeseries-py" title="Permalink to this headline">¶</a></h3>
+<p>The following parameters were used as their default input:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">treatment_names</span> <span class="n">control</span><span class="p">,</span><span class="n">destabilizing_treatment</span>
+<span class="o">--</span><span class="n">pert_file_path</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;karenina.data&#39;</span><span class="p">,</span><span class="s1">&#39;set_xyz_lambda_zero.tsv&#39;</span><span class="p">))</span>
+<span class="o">--</span><span class="n">n_individuals</span> <span class="mi">35</span><span class="p">,</span><span class="mi">35</span>
+<span class="o">--</span><span class="n">perturbation_duration</span> <span class="mi">100</span>
+<span class="o">--</span><span class="n">interindividual_variation</span> <span class="mf">0.01</span>
+<span class="o">--</span><span class="n">delta</span> <span class="mf">0.25</span>
+<span class="o">--</span><span class="n">L</span> <span class="mf">0.20</span>
+</pre></div>
+</div>
+<p>After installing <strong>karenina</strong>, the following command is used to execute the simulation from within the output directory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spatial_ornstein_uhlenbeck</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span> <span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">25</span>
+</pre></div>
+</div>
+<p>This generates the following files:</p>
+<ul class="simple">
+<li>ordination.txt : Simulation PCoA data</li>
+<li>metadata.tsv : Simulation metadata file</li>
+<li>log.txt : Simulation parameters</li>
+<li>euclidean.txt : Euclidean distance-matrix of Simulation data</li>
+<li>simulation_video.mp4 : Visualization of simulated data</li>
+</ul>
+<p>These files can be viewed here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/simulation/OU_simulation">https://github.com/zaneveld/karenina/tree/master/data/outputs/simulation/OU_simulation</a></p>
+<div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
+<div class="section" id="fit-timeseries">
+<h3>fit_timeseries<a class="headerlink" href="#fit-timeseries" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">fit_timeseries</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>
 </div>
@@ -194,10 +227,124 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
                                                 <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>content</p>
+<p>The fit_timeseries process allows users to fit PCoA and Metadata information to
+Ornstein Uhlenbeck models.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This script does not allow for optimization of single-point observations, where individuals are only measured or treated at one specific timepoint. If subjects are applied treatments at a single timepoint, it may be necessary to manually modify the metadata file to apply a boolean label to “treatment x applied” or not.</p>
 </div>
-<div class="section" id="karenina-visualization-py">
-<h3>karenina_visualization.py<a class="headerlink" href="#karenina-visualization-py" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The optimal number of measured timepoints is roughly 50 per subject, based on benchmarking.</p>
+</div>
+<img alt="Benchmark Lambda Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_lambda_err.png?raw=true" />
+<img alt="Benchmark Sigma Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_sigma_err.png?raw=true" />
+<img alt="Benchmark Theta Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_theta_err.png?raw=true" />
+<p>Using the data from the previously ran simulation (see spatial_ornstein_uhlenbeck), the fit_timeseries process
+will attempt to fit Ornstein Uhlenbeck models to the individuals and treatment cohorts of the input data.</p>
+<p>The data being used for this tutorial can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>fit_timeseries is currently configured to utilize <strong>basinhopping</strong> as its global optimizer, and more optimization methods will be added in the future.</p>
+<p class="last">fit_timeseries is currently configured to only accept Qiime2 formatted data, but will accept direct PCoA and metadata files in the future.</p>
+</div>
+<p>The following parameters are defined to fit the PCoA data to OU models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span>
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span>
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>After installing <strong>karenina</strong> the following command may be used to generate OU model parameter output from within the same directory as <em>simulation.qza</em>. The output folder in this instance is <em>/simulation_fit_ts</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_timeseries</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_fit_ts</span><span class="o">/</span> \
+<span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">simulation</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span> \
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span> \
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">fit_timeseries will create and optimize models for <em>n_timepoints</em> and <em>n_individuals</em>,
+and thus takes quite some time on larger datasets. Because this simulation data requires
+optimization of over 7000 entries, we have provided the data below.</p>
+</div>
+<p>With the <em>treatment</em> column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="5%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subject</th>
+<th class="head">pc</th>
+<th class="head">sigma</th>
+<th class="head">lambda</th>
+<th class="head">theta</th>
+<th class="head">nLogLik</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>control_pc1</td>
+<td>pc1</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-odd"><td>control_pc2</td>
+<td>pc2</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-even"><td>control_pc3</td>
+<td>pc3</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc1</td>
+<td>pc1</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-even"><td>destabilizing_treatment_pc2</td>
+<td>pc2</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc3</td>
+<td>pc3</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+</tbody>
+</table>
+<p>This data can be found at the following link:</p>
+<p><a class="reference external" href="https://github.com/SLPeoples/karenina/tree/master/data/outputs/simulation/tx_defined">https://github.com/SLPeoples/karenina/tree/master/data/outputs/simulation/tx_defined</a></p>
+</div>
+<div class="section" id="karenina-visualization">
+<h3>karenina_visualization<a class="headerlink" href="#karenina-visualization" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function is currently experiencing some bugs, and is not recommended for use at this time.
+Visualizations can be generated with spatial_ornstein_uhlenbeck simulations, and is currently
+being addressed.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">karenina_visualization</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>
 </div>
@@ -231,8 +378,27 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
                                                 <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>content</p>
+<p>The karenina_visualization function allows users to visualize their PCoA results as an mp4 movie.</p>
+<p>Using the data from the previously ran simulation (see spatial_ornstein_uhlenbeck), the karenina_visualization
+program will visualize the PCoA Results, and return an mp4 movie called <em>simulation_video.mp4</em>.</p>
+<p>The following parameters are defined to fit the PCoA data to OU models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span>
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span>
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
 </div>
+<p>After installing <strong>karenina</strong> the following command may be used to generate a 3d visualization video from within the same directory as <em>simulation.qza</em>. The output folder in this instance is <em>/simulation_vis</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">karenina_visualization</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_vis</span><span class="o">/</span> \
+<span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">simulation</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span> \
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span> \
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>The output video can be viewed below, and the file can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/visualization">https://github.com/zaneveld/karenina/tree/master/data/visualization</a></p>
+<div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
 </div>
 <div class="section" id="q2-karenina">
 <h2>q2-karenina<a class="headerlink" href="#q2-karenina" title="Permalink to this headline">¶</a></h2>
@@ -263,8 +429,8 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
 <span class="n">visualization</span>               <span class="n">Generates</span> <span class="mi">3</span><span class="n">D</span> <span class="n">animations</span> <span class="n">of</span> <span class="n">PCoA</span> <span class="n">Timeseries</span>
 </pre></div>
 </div>
-<div class="section" id="spatial-ornstein-uhlenbeck">
-<h3>spatial-ornstein-uhlenbeck<a class="headerlink" href="#spatial-ornstein-uhlenbeck" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>spatial-ornstein-uhlenbeck<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">spatial</span><span class="o">-</span><span class="n">ornstein</span><span class="o">-</span><span class="n">uhlenbeck</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
@@ -279,7 +445,7 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
                                                                 <span class="n">filepath</span> <span class="k">for</span> <span class="n">perturbation</span> <span class="n">parameters</span> <span class="k">for</span>
                                                                 <span class="n">simulation</span> <span class="n">results</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
         <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">names</span> <span class="n">TEXT</span>
-                                                                <span class="p">[</span><span class="s1">&#39;control,destabalizing_treatment&#39;</span><span class="p">]</span> <span class="n">Names</span>
+                                                                <span class="p">[</span><span class="s1">&#39;control,destabilizing_treatment&#39;</span><span class="p">]</span> <span class="n">Names</span>
                                                                 <span class="k">for</span> <span class="n">simulation</span> <span class="n">treatments</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
         <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">individuals</span> <span class="n">TEXT</span>
                                                                 <span class="p">[</span><span class="s1">&#39;35,35&#39;</span><span class="p">]</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">individuals</span> <span class="n">per</span>
@@ -337,8 +503,8 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
 </div>
 <p>content</p>
 </div>
-<div class="section" id="fit-timeseries">
-<h3>fit-timeseries<a class="headerlink" href="#fit-timeseries" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>fit-timeseries<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
@@ -424,9 +590,9 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
 </div>
 </div>
 </div>
-<div class="section" id="id2">
-<h1>spatial_ornstein_uhlenbeck.py<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-karenina.spatial_ornstein_uhlenbeck"></span><dl class="function">
+<div class="section" id="module-karenina.spatial_ornstein_uhlenbeck">
+<span id="spatial-ornstein-uhlenbeck-py"></span><h1>spatial_ornstein_uhlenbeck.py<a class="headerlink" href="#module-karenina.spatial_ornstein_uhlenbeck" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
 <dt id="karenina.spatial_ornstein_uhlenbeck.check_perturbation_timepoint">
 <code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">check_perturbation_timepoint</code><span class="sig-paren">(</span><em>perturbation_timepoint</em>, <em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.check_perturbation_timepoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raise ValueError if perturbation_timepoint is &lt; 0 or &gt;n_timepoints</p>
@@ -461,9 +627,8 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
 <dl class="function">
 <dt id="karenina.spatial_ornstein_uhlenbeck.parse_perturbation_file">
 <code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">parse_perturbation_file</code><span class="sig-paren">(</span><em>pert_file_path</em>, <em>perturbation_timepoint</em>, <em>perturbation_duration</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.parse_perturbation_file" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Return a list of perturbations</div></blockquote>
-<p>infile – a .tsv file describing one perturbation per line
+<dd><p>Return a list of perturbations
+infile – a .tsv file describing one perturbation per line
 assume input file is correctly formatted (no warnings if not)</p>
 <p>NOTE: each pertubation should be in the format:</p>
 <p>set_xyz_lambda_low = {“start”:opts.perturbation_timepoint,
@@ -506,9 +671,9 @@ assume input file is correctly formatted (no warnings if not)</p>
 </dd></dl>
 
 </div>
-<div class="section" id="id3">
-<h1>fit_timeseries.py<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-karenina.fit_timeseries"></span><dl class="function">
+<div class="section" id="module-karenina.fit_timeseries">
+<span id="fit-timeseries-py"></span><h1>fit_timeseries.py<a class="headerlink" href="#module-karenina.fit_timeseries" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
 <dt id="karenina.fit_timeseries.aic">
 <code class="descclassname">karenina.fit_timeseries.</code><code class="descname">aic</code><span class="sig-paren">(</span><em>n_param</em>, <em>nLogLik</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.aic" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates AIC with 2 * n_parameters - 2 * LN(-1 * nLogLik)</p>
@@ -902,7 +1067,7 @@ nLogLikelihoods for each individuals timeseries.</p>
 
 <dl class="function">
 <dt id="karenina.visualization.save_simulation_movie">
-<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_movie</code><span class="sig-paren">(</span><em>individuals</em>, <em>output_folder</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>black_background=True</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_movie" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_movie</code><span class="sig-paren">(</span><em>individuals</em>, <em>output_folder</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>black_background=True</em>, <em>data_o=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_movie" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save an .ffmpg move of the simulated community change</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1457,21 +1622,21 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
 </li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#id1">karenina</a><ul>
-<li><a class="reference internal" href="#spatial-ornstein-uhlenbeck-py">spatial_ornstein_uhlenbeck.py</a></li>
-<li><a class="reference internal" href="#fit-timeseries-py">fit_timeseries.py</a></li>
-<li><a class="reference internal" href="#karenina-visualization-py">karenina_visualization.py</a></li>
+<li><a class="reference internal" href="#spatial-ornstein-uhlenbeck">spatial_ornstein_uhlenbeck</a></li>
+<li><a class="reference internal" href="#fit-timeseries">fit_timeseries</a></li>
+<li><a class="reference internal" href="#karenina-visualization">karenina_visualization</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#q2-karenina">q2-karenina</a><ul>
-<li><a class="reference internal" href="#spatial-ornstein-uhlenbeck">spatial-ornstein-uhlenbeck</a></li>
-<li><a class="reference internal" href="#fit-timeseries">fit-timeseries</a></li>
+<li><a class="reference internal" href="#id2">spatial-ornstein-uhlenbeck</a></li>
+<li><a class="reference internal" href="#id3">fit-timeseries</a></li>
 <li><a class="reference internal" href="#visualization-py">visualization.py</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">spatial_ornstein_uhlenbeck.py</a></li>
-<li><a class="reference internal" href="#id3">fit_timeseries.py</a></li>
+<li><a class="reference internal" href="#module-karenina.spatial_ornstein_uhlenbeck">spatial_ornstein_uhlenbeck.py</a></li>
+<li><a class="reference internal" href="#module-karenina.fit_timeseries">fit_timeseries.py</a></li>
 <li><a class="reference internal" href="#module-karenina.fit_timeseries_benchmark">fit_timeseries_benchmark.py</a></li>
 <li><a class="reference internal" href="#id4">visualization.py</a></li>
 <li><a class="reference internal" href="#module-karenina.experiment">experiment.py</a></li>
