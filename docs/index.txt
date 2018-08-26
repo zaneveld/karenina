@@ -73,11 +73,11 @@ ______________________________
 
 .. code-block:: python
 
-	>spatial_ornstein_uhlenbeck.py -h
+	>spatial_ornstein_uhlenbeck -h
 	
 .. code-block:: python
 
-	Usage: spatial_ornstein_uhlenbeck.py -o ./simulation_results
+	Usage: spatial_ornstein_uhlenbeck -o ./simulation_results
 
 	This script simulates microbiome change over time using Ornstein-Uhlenbeck
 	(OU) models.  These are similar to Brownian motion models, with the exception
@@ -188,11 +188,11 @@ __________________
 
 .. code-block:: python
 
-	>fit_timeseries.py -h
+	>fit_timeseries -h
 	
 .. code-block:: python
 
-	Usage: fit_timeseries.py -o ./simulation_results
+	Usage: fit_timeseries -o ./simulation_results
 
 	This script fits microbiome change over time to Ornstein-Uhlenbeck (OU)
 	models.Demo fitting an OU model using default parameters.
@@ -318,11 +318,11 @@ __________________________
 	
 .. code-block:: python
 
-	>karenina_visualization.py -h
+	>karenina_visualization -h
 	
 .. code-block:: python
 
-	Usage: karenina_visualization.py -o ./simulation_results
+	Usage: karenina_visualization -o ./simulation_results
 
 	This script fits microbiome change over time to Ornstein-Uhlenbeck (OU)
 	models.Demo fitting an OU model using default parameters.
