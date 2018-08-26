@@ -658,6 +658,26 @@ The visualization allows for the use of Qiime 2 to fit Ornstein Uhlenbeck models
 to PCoA data. Utilizing previous simulation data which can be found at the following link,
 we will walk through the use of this plugin.
 
+.. warning ::
+
+	This script does not allow for optimization of single-point observations, where individuals are only measured or treated at one specific timepoint. If subjects are applied treatments at a single timepoint, it may be necessary to manually modify the metadata file to apply a boolean label to "treatment x applied" or not. 
+	
+.. note ::
+	
+	The optimal number of measured timepoints is roughly 50 per subject, based on benchmarking.
+
+.. image :: https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_lambda_err.png?raw=true
+	:alt: Benchmark Lambda Error
+	:align: center
+	
+.. image :: https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_sigma_err.png?raw=true
+	:alt: Benchmark Sigma Error
+	:align: center
+	
+.. image :: https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_theta_err.png?raw=true
+	:alt: Benchmark Theta Error
+	:align: center
+
 The data being used for this tutorial can be found here:
 
 https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true

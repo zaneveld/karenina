@@ -845,6 +845,17 @@ to implement this method, please reference karenina spatial_ornstein_uhlenbeck.<
 <p>The visualization allows for the use of Qiime 2 to fit Ornstein Uhlenbeck models
 to PCoA data. Utilizing previous simulation data which can be found at the following link,
 we will walk through the use of this plugin.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This script does not allow for optimization of single-point observations, where individuals are only measured or treated at one specific timepoint. If subjects are applied treatments at a single timepoint, it may be necessary to manually modify the metadata file to apply a boolean label to “treatment x applied” or not.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The optimal number of measured timepoints is roughly 50 per subject, based on benchmarking.</p>
+</div>
+<img alt="Benchmark Lambda Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_lambda_err.png?raw=true" />
+<img alt="Benchmark Sigma Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_sigma_err.png?raw=true" />
+<img alt="Benchmark Theta Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_theta_err.png?raw=true" />
 <p>The data being used for this tutorial can be found here:</p>
 <p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
 <p>The following parameters are defined to fit the PCoA data to OU models:</p>
