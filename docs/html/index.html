@@ -387,6 +387,14 @@ the timeseries from <strong>Moving Pictures</strong>. The weighted_unifrac_pcoa_
 treatments are applied at timepoint-0 only, fit_timeseries will fit OU models to only individuals if we do not define
 a treatment identifier.</p>
 <p>After installing <strong>karenina</strong> the following command can be ran from the same directory as <em>weighted_unifrac_pcoa_results.qza</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The individual column combines the columns <strong>Subject</strong> and <strong>BodySite</strong>, this is entered as a comma-separated list.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The treatments are single-point observations, so fit_timeseries will fit to only individuals if <em>treatment-col</em> is <strong>None</strong>.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_timeseries</span> \
 <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">moving_pictures_fit_ts</span><span class="o">/</span>
 <span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">weighted_unifrac_pcoa_results</span><span class="o">.</span><span class="n">qza</span>

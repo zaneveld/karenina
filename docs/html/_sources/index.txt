@@ -336,6 +336,14 @@ a treatment identifier.
 
 After installing **karenina** the following command can be ran from the same directory as *weighted_unifrac_pcoa_results.qza*.
 
+.. note::
+
+	The individual column combines the columns **Subject** and **BodySite**, this is entered as a comma-separated list.
+	
+.. note::
+
+	The treatments are single-point observations, so fit_timeseries will fit to only individuals if *treatment-col* is **None**.
+
 .. code-block:: python
 
 	fit_timeseries \
