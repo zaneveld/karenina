@@ -186,8 +186,12 @@ for fit_timeseries.py and karenina_visualization.py.</p>
 <li>euclidean.txt : Euclidean distance-matrix of Simulation data</li>
 <li>simulation_video.mp4 : Visualization of simulated data</li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">euclidean.txt has been compressed due to large size.</p>
+</div>
 <p>These files can be viewed here:</p>
-<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/simulation/OU_simulation">https://github.com/zaneveld/karenina/tree/master/data/outputs/simulation/OU_simulation</a></p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation">https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation</a></p>
 <div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
 <div class="section" id="fit-timeseries">
 <h3>fit_timeseries<a class="headerlink" href="#fit-timeseries" title="Permalink to this headline">¶</a></h3>
@@ -335,14 +339,14 @@ optimization of over 7000 entries, we have provided the data below.</p>
 </tbody>
 </table>
 <p>This data can be found at the following link:</p>
-<p><a class="reference external" href="https://github.com/SLPeoples/karenina/tree/master/data/outputs/simulation/tx_defined">https://github.com/SLPeoples/karenina/tree/master/data/outputs/simulation/tx_defined</a></p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries_simulation/tx_defined">https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries_simulation/tx_defined</a></p>
 </div>
 <div class="section" id="karenina-visualization">
 <h3>karenina_visualization<a class="headerlink" href="#karenina-visualization" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This function is currently experiencing some bugs, and is not recommended for use at this time.
-Visualizations can be generated with spatial_ornstein_uhlenbeck simulations, and is currently
+Visualizations can be generated through execution of <strong>spatial_ornstein_uhlenbeck</strong>, and is currently
 being addressed.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">karenina_visualization</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
@@ -381,7 +385,9 @@ being addressed.</p>
 <p>The karenina_visualization function allows users to visualize their PCoA results as an mp4 movie.</p>
 <p>Using the data from the previously ran simulation (see spatial_ornstein_uhlenbeck), the karenina_visualization
 program will visualize the PCoA Results, and return an mp4 movie called <em>simulation_video.mp4</em>.</p>
-<p>The following parameters are defined to fit the PCoA data to OU models:</p>
+<p>The data being used for this tutorial can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
+<p>The following parameters are defined to visualize the PCoA data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
 <span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span>
 <span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span>
@@ -429,8 +435,13 @@ program will visualize the PCoA Results, and return an mp4 movie called <em>simu
 <span class="n">visualization</span>               <span class="n">Generates</span> <span class="mi">3</span><span class="n">D</span> <span class="n">animations</span> <span class="n">of</span> <span class="n">PCoA</span> <span class="n">Timeseries</span>
 </pre></div>
 </div>
-<div class="section" id="id2">
-<h3>spatial-ornstein-uhlenbeck<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="karenina-spatial-ornstein-uhlenbeck">
+<h3>karenina spatial-ornstein-uhlenbeck<a class="headerlink" href="#karenina-spatial-ornstein-uhlenbeck" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method is currently under construction and will be available for use in Qiime2 in the near future.
+to implement this method, please reference karenina spatial_ornstein_uhlenbeck.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">spatial</span><span class="o">-</span><span class="n">ornstein</span><span class="o">-</span><span class="n">uhlenbeck</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
@@ -501,10 +512,17 @@ program will visualize the PCoA Results, and return an mp4 movie called <em>simu
                                                                 <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>content</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The tutorial for this Q2 Method is being created and will be available in the future.</p>
 </div>
-<div class="section" id="id3">
-<h3>fit-timeseries<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="karenina-fit-timeseries">
+<h3>karenina fit-timeseries<a class="headerlink" href="#karenina-fit-timeseries" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This visualization currently does not accept Qiime2 artifacts, and is currently being addressed. Please note that the input is the <strong>filepath</strong> to the PCoA Results qza file.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
@@ -545,10 +563,125 @@ program will visualize the PCoA Results, and return an mp4 movie called <em>simu
                                                                 <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>content</p>
+<p>The visualization allows for the use of Qiime 2 to fit Ornstein Uhlenbeck models
+to PCoA data. Utilizing previous simulation data which can be found at the following link,
+we will walk through the use of this plugin.</p>
+<p>The data being used for this tutorial can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
+<p>The following parameters are defined to fit the PCoA data to OU models:</p>
+<p>Notice the metadata is within the qza file, so the metadata parameter is defined as <em>None</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">pcoaResults</span><span class="o">.</span><span class="n">qza</span><span class="p">]</span>
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="bp">None</span>
+</pre></div>
 </div>
-<div class="section" id="visualization-py">
-<h3>visualization.py<a class="headerlink" href="#visualization-py" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The only optimization method employed at this time is basinhopping</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">method</span> <span class="n">basinhopping</span>
+</pre></div>
+</div>
+<p>Within the metadata file, we see that the column identifying individuals, timepoints, and treatment are <em>Subject, Timepoint, Treatment</em>.</p>
+<p>We define the following parameters to match these identifiers</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">Subject</span>
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">Timepoint</span>
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>The output directory is defined as such:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">qiime2</span><span class="o">/</span><span class="n">simulation_ou_fit_ts</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>After installing <strong>q2-karenina</strong> the following command may be used to generate OU model parameter output from within the same directory as <em>simulation.qza</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="o">./</span><span class="n">simulation</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="bp">None</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">method</span> <span class="n">basinhopping</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">Subject</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">Timepoint</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="n">Treatment</span> \
+<span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">qiime2</span><span class="o">/</span><span class="n">simulation_ou_fit_ts</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>A successful visualization provides the following output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Saved</span> <span class="n">Visualization</span> <span class="n">to</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">qiime2</span><span class="o">/</span><span class="n">simulation_ou_visualization</span><span class="o">/</span><span class="n">visualization</span><span class="o">.</span><span class="n">qzv</span>
+</pre></div>
+</div>
+<p>Within the visualization.qzv, we have two output data files which contain our modeled timeseries results. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries modeled individuals and cohorts, which can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/individual_fit_timeseries.csv">https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/individual_fit_timeseries.csv</a></p>
+<p><a class="reference external" href="https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/cohort_fit_timeseries.csv">https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/cohort_fit_timeseries.csv</a></p>
+<p>Below is a sample of the cohort output generated.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="5%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subject</th>
+<th class="head">pc</th>
+<th class="head">sigma</th>
+<th class="head">lambda</th>
+<th class="head">theta</th>
+<th class="head">nLogLik</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>control_pc1</td>
+<td>pc1</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-odd"><td>control_pc2</td>
+<td>pc2</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-even"><td>control_pc3</td>
+<td>pc3</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc1</td>
+<td>pc1</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-even"><td>destabilizing_treatment_pc2</td>
+<td>pc2</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc3</td>
+<td>pc3</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id2">
+<h3>karenina visualization<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This visualization is currently under construction and will be available for use in Qiime2 in the near future.
+to implement this method, please reference karenina_visualization.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">visualization</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
@@ -586,7 +719,10 @@ program will visualize the PCoA Results, and return an mp4 movie called <em>simu
                                                                 <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>content</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The tutorial for this Q2 Visualization is being created and will be available in the future.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1002,9 +1138,9 @@ nLogLikelihoods for each individuals timeseries.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="id4">
-<h1>visualization.py<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-karenina.visualization"></span><dl class="function">
+<div class="section" id="module-karenina.visualization">
+<span id="visualization-py"></span><h1>visualization.py<a class="headerlink" href="#module-karenina.visualization" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
 <dt id="karenina.visualization.get_timeseries_data">
 <code class="descclassname">karenina.visualization.</code><code class="descname">get_timeseries_data</code><span class="sig-paren">(</span><em>individuals, axes=['x', 'y', 'z']</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.get_timeseries_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides timeseries data from list of individuals.</p>
@@ -1628,9 +1764,9 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#q2-karenina">q2-karenina</a><ul>
-<li><a class="reference internal" href="#id2">spatial-ornstein-uhlenbeck</a></li>
-<li><a class="reference internal" href="#id3">fit-timeseries</a></li>
-<li><a class="reference internal" href="#visualization-py">visualization.py</a></li>
+<li><a class="reference internal" href="#karenina-spatial-ornstein-uhlenbeck">karenina spatial-ornstein-uhlenbeck</a></li>
+<li><a class="reference internal" href="#karenina-fit-timeseries">karenina fit-timeseries</a></li>
+<li><a class="reference internal" href="#id2">karenina visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -1638,7 +1774,7 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
 <li><a class="reference internal" href="#module-karenina.spatial_ornstein_uhlenbeck">spatial_ornstein_uhlenbeck.py</a></li>
 <li><a class="reference internal" href="#module-karenina.fit_timeseries">fit_timeseries.py</a></li>
 <li><a class="reference internal" href="#module-karenina.fit_timeseries_benchmark">fit_timeseries_benchmark.py</a></li>
-<li><a class="reference internal" href="#id4">visualization.py</a></li>
+<li><a class="reference internal" href="#module-karenina.visualization">visualization.py</a></li>
 <li><a class="reference internal" href="#module-karenina.experiment">experiment.py</a></li>
 <li><a class="reference internal" href="#module-karenina.individual">individual.py</a></li>
 <li><a class="reference internal" href="#module-karenina.perturbation">perturbation.py</a></li>

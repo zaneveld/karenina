@@ -171,9 +171,13 @@ This generates the following files:
 * euclidean.txt : Euclidean distance-matrix of Simulation data
 * simulation_video.mp4 : Visualization of simulated data
 
+.. note::
+
+	euclidean.txt has been compressed due to large size.
+
 These files can be viewed here:
 
-https://github.com/zaneveld/karenina/tree/master/data/outputs/simulation/OU_simulation
+https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation
 
 .. raw:: html
 
@@ -301,7 +305,7 @@ With the *treatment* column identified, the program will generate two output fil
 
 This data can be found at the following link:
 
-https://github.com/SLPeoples/karenina/tree/master/data/outputs/simulation/tx_defined
+https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries_simulation/tx_defined
 
 karenina_visualization
 __________________________
@@ -309,7 +313,7 @@ __________________________
 .. warning::
 
 	This function is currently experiencing some bugs, and is not recommended for use at this time.
-	Visualizations can be generated with spatial_ornstein_uhlenbeck simulations, and is currently
+	Visualizations can be generated through execution of **spatial_ornstein_uhlenbeck**, and is currently
 	being addressed.
 	
 .. code-block:: python
@@ -352,7 +356,11 @@ The karenina_visualization function allows users to visualize their PCoA results
 Using the data from the previously ran simulation (see spatial_ornstein_uhlenbeck), the karenina_visualization
 program will visualize the PCoA Results, and return an mp4 movie called *simulation_video.mp4*.
 
-The following parameters are defined to fit the PCoA data to OU models:
+The data being used for this tutorial can be found here:
+
+https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true
+
+The following parameters are defined to visualize the PCoA data:
 
 .. code-block:: python
 
@@ -411,8 +419,13 @@ q2-karenina
 								simulation
 	visualization               Generates 3D animations of PCoA Timeseries
 
-spatial-ornstein-uhlenbeck
-______________________________
+karenina spatial-ornstein-uhlenbeck
+_____________________________________
+
+.. warning::
+
+	This method is currently under construction and will be available for use in Qiime2 in the near future.
+	to implement this method, please reference karenina spatial_ornstein_uhlenbeck.
 
 .. code-block:: python
 
@@ -486,10 +499,16 @@ ______________________________
 		--help              
 									Show this message and exit.
 
-content
+.. note::
 
-fit-timeseries
-__________________
+	The tutorial for this Q2 Method is being created and will be available in the future.
+
+karenina fit-timeseries
+________________________
+
+.. note::
+
+	This visualization currently does not accept Qiime2 artifacts, and is currently being addressed. Please note that the input is the **filepath** to the PCoA Results qza file.
 
 .. code-block:: python
 
@@ -533,10 +552,99 @@ __________________
 		--help              
 									Show this message and exit.
 
-content
+The visualization allows for the use of Qiime 2 to fit Ornstein Uhlenbeck models
+to PCoA data. Utilizing previous simulation data which can be found at the following link,
+we will walk through the use of this plugin.
 
-visualization.py
-_________________
+The data being used for this tutorial can be found here:
+
+https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true
+
+The following parameters are defined to fit the PCoA data to OU models:
+
+Notice the metadata is within the qza file, so the metadata parameter is defined as *None*
+	
+.. code-block:: python
+
+	--p-pcoa [Direct/filepath/to/pcoaResults.qza]
+	--p-metadata None
+	
+.. note::
+
+	The only optimization method employed at this time is basinhopping
+	
+.. code-block:: python
+
+	--p-method basinhopping
+	
+Within the metadata file, we see that the column identifying individuals, timepoints, and treatment are *Subject, Timepoint, Treatment*.
+	
+We define the following parameters to match these identifiers
+	
+.. code-block:: python
+
+	--p-individual-col Subject
+	--p-timepoint-col Timepoint
+	--p-treatment-col Treatment
+	
+The output directory is defined as such:
+
+.. code-block:: python
+
+	--output-dir /home/qiime2/simulation_ou_fit_ts/
+
+After installing **q2-karenina** the following command may be used to generate OU model parameter output from within the same directory as *simulation.qza*.
+
+.. code-block:: python
+
+	karenina fit-timeseries \
+	--p-pcoa ./simulation.qza \
+	--p-metadata None \
+	--p-method basinhopping \
+	--p-individual-col Subject \
+	--p-timepoint-col Timepoint \
+	--p-treatment-col Treatment \
+	--output-dir /home/qiime2/simulation_ou_fit_ts/
+	
+A successful visualization provides the following output:
+
+.. code-block:: python
+
+	Saved Visualization to: /home/qiime2/simulation_ou_visualization/visualization.qzv
+	
+Within the visualization.qzv, we have two output data files which contain our modeled timeseries results. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries modeled individuals and cohorts, which can be found here:
+
+https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/individual_fit_timeseries.csv
+
+https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts/cohort_fit_timeseries.csv
+
+Below is a sample of the cohort output generated.
+
++----------------------------+---+-------+-------+-------+-------+
+|Subject                     |pc |sigma  |lambda |theta  |nLogLik|
++============================+===+=======+=======+=======+=======+
+|control_pc1                 |pc1|0.00000|0.00000|0.00000|0.00000|
++----------------------------+---+-------+-------+-------+-------+
+|control_pc2                 |pc2|0.00000|0.00000|0.00000|0.00000|
++----------------------------+---+-------+-------+-------+-------+
+|control_pc3                 |pc3|0.00000|0.00000|0.00000|0.00000|
++----------------------------+---+-------+-------+-------+-------+
+|destabilizing_treatment_pc1 |pc1|0.00000|0.00000|0.00000|0.00000|
++----------------------------+---+-------+-------+-------+-------+
+|destabilizing_treatment_pc2 |pc2|0.00000|0.00000|0.00000|0.00000|
++----------------------------+---+-------+-------+-------+-------+
+|destabilizing_treatment_pc3 |pc3|0.00000|0.00000|0.00000|0.00000|
++----------------------------+---+-------+-------+-------+-------+
+
+	
+
+karenina visualization
+_______________________
+
+.. warning::
+
+	This visualization is currently under construction and will be available for use in Qiime2 in the near future.
+	to implement this method, please reference karenina_visualization.
 
 .. code-block:: python
 
@@ -577,7 +685,9 @@ _________________
 		--help              
 									Show this message and exit.
 
-content
+.. note::
+
+	The tutorial for this Q2 Visualization is being created and will be available in the future.
 
 spatial_ornstein_uhlenbeck.py
 =============================
