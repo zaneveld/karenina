@@ -597,7 +597,7 @@ After installing **q2-karenina** the following command may be used to generate O
 
 .. code-block:: python
 
-	karenina fit-timeseries \
+	qiime karenina fit-timeseries \
 	--p-pcoa ./simulation.qza \
 	--p-metadata None \
 	--p-method basinhopping \
