@@ -1,7 +1,7 @@
 .. karenina documentation master file, created by
    sphinx-quickstart on Sun Aug 19 16:20:06 2018.
    You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   contain the root `toctree`   directive.
 
 Karenina
 ====================================
@@ -148,10 +148,10 @@ ______________________________
 		-v, --verbose      
 							allows for verbose output [default: False]
 
-The spatial_ornstein_uhlenbeck.py function takes in simulation parameters and develops
+The spatial_ornstein_uhlenbeck function takes in simulation parameters and develops
 a distance matrix, PCoA ordination, and metadata file for use in other processes.
 This tutorial will explore the functionality of the script, and provide sample input data
-for fit_timeseries.py and karenina_visualization.py.
+for fit_timeseries and karenina_visualization.
 
 The following parameters are used to generate a simulation using Ornstein Uhlenbeck and Brownian motion models:
 
@@ -301,11 +301,16 @@ After installing **karenina** the following command may be used to generate OU m
 	and thus takes quite some time on larger datasets. Because this simulation data requires
 	optimization of over 7000 entries, we have provided the data below.
 	
-With the *treatment* column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated.
+With the *treatment* column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries process estimates the Ornstein Uhlenbeck
+model parameters.
 
 This data can be found at the following link:
 
 https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined
+
+Below is a sample of the cohort output generated, which estimates the control cohort to have parameters approaching
+the input. The perturbation set *lambda* to zero, and the estimation clearly displays the parameter approaching zero in
+the destabilizing_treatment cohort.
 
 +----------------------------+---+-------+-------+-------+-------+-------+
 |Subject                     |pc |sigma  |lambda |theta  |nLogLik|aic    |
@@ -738,7 +743,9 @@ Within the visualization.qzv, we have two output data files which contain our mo
 
 https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts
 
-Below is a sample of the cohort output generated.
+Below is a sample of the cohort output generated, which estimates the control cohort to have parameters approaching
+the input. The perturbation set *lambda* to zero, and the estimation clearly displays the parameter approaching zero in
+the destabilizing_treatment cohort.
 
 +----------------------------+---+-------+-------+-------+-------+-------+
 |Subject                     |pc |sigma  |lambda |theta  |nLogLik|aic    |

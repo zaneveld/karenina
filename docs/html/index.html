@@ -185,10 +185,10 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
                                                 <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>The spatial_ornstein_uhlenbeck.py function takes in simulation parameters and develops
+<p>The spatial_ornstein_uhlenbeck function takes in simulation parameters and develops
 a distance matrix, PCoA ordination, and metadata file for use in other processes.
 This tutorial will explore the functionality of the script, and provide sample input data
-for fit_timeseries.py and karenina_visualization.py.</p>
+for fit_timeseries and karenina_visualization.</p>
 <p>The following parameters are used to generate a simulation using Ornstein Uhlenbeck and Brownian motion models:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
 <span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span>
@@ -305,9 +305,13 @@ will attempt to fit Ornstein Uhlenbeck models to the individuals and treatment c
 and thus takes quite some time on larger datasets. Because this simulation data requires
 optimization of over 7000 entries, we have provided the data below.</p>
 </div>
-<p>With the <em>treatment</em> column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated.</p>
+<p>With the <em>treatment</em> column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries process estimates the Ornstein Uhlenbeck
+model parameters.</p>
 <p>This data can be found at the following link:</p>
 <p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined">https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined</a></p>
+<p>Below is a sample of the cohort output generated, which estimates the control cohort to have parameters approaching
+the input. The perturbation set <em>lambda</em> to zero, and the estimation clearly displays the parameter approaching zero in
+the destabilizing_treatment cohort.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="42%" />
@@ -899,7 +903,9 @@ we will walk through the use of this plugin.</p>
 </div>
 <p>Within the visualization.qzv, we have two output data files which contain our modeled timeseries results. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries modeled individuals and cohorts, which can be found here:</p>
 <p><a class="reference external" href="https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts">https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts</a></p>
-<p>Below is a sample of the cohort output generated.</p>
+<p>Below is a sample of the cohort output generated, which estimates the control cohort to have parameters approaching
+the input. The perturbation set <em>lambda</em> to zero, and the estimation clearly displays the parameter approaching zero in
+the destabilizing_treatment cohort.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="42%" />
