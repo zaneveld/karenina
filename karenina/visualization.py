@@ -157,13 +157,11 @@ def save_simulation_data(data, ids, output):
 
         # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
         dm = {}
-        j=0
-        for row in data:
+        for j,row in enumerate(data):
             identifier = ids[j]
             for i in range(len(row[0])):
                 outfile.write(str(identifier)+"_t"+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
                 dm.update({str(identifier)+"."+str(i):[row[0][i],row[1][i],row[2][i]]})
-            j+=1
 
         outfile.write("\n")
         outfile.write("Biplot\t0\t0\n\n")
@@ -203,13 +201,11 @@ def save_simulation_data(data, ids, output):
         metadata.append(row)
     with open(output+"metadata.tsv","w") as outfile:
         for row in metadata:
-            i=0
-            for item in row:
+            for i,item in enumerate(row):
                 if i < len(row)-1:
                     outfile.write(str(item)+"\t")
                 if i==len(row)-1:
                     outfile.write(str(item))
-                i+=1
             outfile.write("\n")
     outfile.close()
 
@@ -361,8 +357,7 @@ def main():
     while len(colors) < len(treatments):
         colors.append('lightgray')
 
-    i=0
-    for row in df.iterrows():
+    for i,row in enumerate(df.iterrows()):
         curr_subject_id = "%s_%i" % (df[opts.individual], i)
         j=0
         while row[1][3] != treatments[j]:
@@ -370,12 +365,12 @@ def main():
         color = colors[j]
         params = {'lambda': 0.2, 'delta': 0.25, 'interindividual_variation': 0.01}
         params['color'] = color
+        row_tx = row[1][3]
         curr_subject = Individual(subject_id=curr_subject_id,
                                   params=params, \
-                                  metadata={opts.treatment: row[1][3]}, \
+                                  metadata={opts.treatment: row_tx}, \
                                   interindividual_variation=.01, verbose=verbose)
         ind.append(curr_subject)
-        i+=1
 
 
     #save_simulation_figure(individuals=ind, output_folder=output, n_timepoints=50, perturbation_timepoint=25, n_individuals=50)

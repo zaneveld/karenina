@@ -388,7 +388,11 @@ def parse_pcoa(pcoa_qza, individual, timepoint, treatment, metadata):
         i += 1
     t_site = []
     for item in site:
-        t_site.append([item[0],item[1],item[2],item[3]])
+        t_subj_id = item[0]
+        t_pc1 = item[1]
+        t_pc2 = item[2]
+        t_pc3 = item[3]
+        t_site.append([t_subj_id, t_pc1, t_pc2, t_pc3])
     site = t_site
 
     #We now have variables:
@@ -605,8 +609,15 @@ def fit_cohorts(input, ind, tp, tx, method, verbose = False):
     for row in fx_cohorts:
         x = np.asarray(row[4])
         if len(x) > 1:
-            fit_ts_cohorts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
-                                   row[1], row[2], row[3], x, row[5]])
+            row_ou_fn = row[0]
+            row_subj_id = row[1]
+            row_times = row[2]
+            row_tx = row[3]
+            row_pc_val = x
+            row_pc_axis = row[5]
+
+            fit_ts_cohorts.append([fit_timeseries(row_ou_fn, [0.1, 0.0, np.mean(x)], global_optimizer=method),
+                                   row_subj_id, row_times, row_tx, row_pc_val, row_pc_axis])
 
     return gen_output(fit_ts_cohorts, ind, tp, tx, method)
 
@@ -651,9 +662,15 @@ def fit_input(input, ind, tp, tx, method):
 
     fx = []
     for row in data:
-        for item in row[3]:
+        axis = row[3]
+        for item in axis:
             #[0: function, 1: subject, 2: times, 3: treatment, 4: values, 5:pc1/2/3]
-            fx.append([make_OU_objective_fn(item[0], row[1]), row[0], row[1], row[2], item[0], item[1]])
+            axis_data = item[0]
+            row_times = row[1]
+            row_subj_id = row[0]
+            row_tx = row[2]
+            axis_label = item[1]
+            fx.append([make_OU_objective_fn(axis_data, row_times), row_subj_id, row_times, row_tx, axis_data, axis_label])
 
     if cohorts:
         cohort_output = fit_cohorts(input, ind, tp, tx, method)
@@ -664,8 +681,14 @@ def fit_input(input, ind, tp, tx, method):
     for row in fx:
         x = np.asarray(row[4])
         if len(x)>1:
-            fit_ts.append([fit_timeseries(row[0], [0.1, 0.0, np.mean(x)], global_optimizer=method),
-                           row[1], row[2], row[3], x, row[5]])
+            row_ou_fn = row[0]
+            row_subj_id = row[1]
+            row_times = row[2]
+            row_tx = row[3]
+            row_val = x
+            row_axis_label = row[5]
+            fit_ts.append([fit_timeseries(row_ou_fn, [0.1, 0.0, np.mean(x)], global_optimizer=method),
+                           row_subj_id, row_times, row_tx, row_val, row_axis_label])
 
     output = gen_output(fit_ts, ind, tp, tx, method)
 
