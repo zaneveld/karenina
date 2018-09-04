@@ -19,6 +19,7 @@ from os.path import join
 from numpy import array
 from scipy.spatial import distance
 import os
+import re
 import random
 import csv
 
@@ -63,6 +64,13 @@ def make_option_parser():
     return parser
 
 def get_timeseries_data(individuals,axes=["x","y","z"]):
+    """
+    Provides timeseries data from list of individuals.
+
+    :param individuals: array of individual objects
+    :param axes: [x,y,z] axes to return
+    :return: array of timeseries data
+    """
     results = []
     for i,curr_subject in enumerate(individuals):
         result = []
@@ -74,7 +82,15 @@ def get_timeseries_data(individuals,axes=["x","y","z"]):
 
 
 def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints,perturbation_timepoint):
-    """Save a .pdf image of the simulated PCoA plot"""
+    """
+    Save a .pdf image of the simulated PCoA plot
+
+    :param individuals: array of individuals
+    :param output_folder: output filepath
+    :param n_individuals: number of individuals
+    :param n_timepoints: number of timepoints
+    :param perturbation_timepoint: timepoint of perturbation application
+    """
 
     individual_colors = {"healthy":"orange","perturbed":"magenta"}
     import matplotlib.pyplot as plt
@@ -120,6 +136,13 @@ def save_simulation_figure(individuals, output_folder,n_individuals,n_timepoints
 
 
 def save_simulation_data(data, ids, output):
+    """
+    Saves simulation output data in PCoA format
+
+    :param data: data to save
+    :param ids: Sample_IDs
+    :param output: output filepath
+    """
     with open(output+"ordination.txt","w") as outfile:
         # Need to calculate eigenvalues
         # outfile.write("Eigvals\t" + str(len(data)) + "\n\n")
@@ -134,13 +157,11 @@ def save_simulation_data(data, ids, output):
 
         # Need to separate pc1,2,3 and assign unique identifiers based on hash and timepoint.
         dm = {}
-        j=0
-        for row in data:
+        for j,row in enumerate(data):
             identifier = ids[j]
             for i in range(len(row[0])):
                 outfile.write(str(identifier)+"_t"+str(i)+"\t"+str(row[0][i])+"\t"+str(row[1][i])+"\t"+str(row[2][i])+"\n")
                 dm.update({str(identifier)+"."+str(i):[row[0][i],row[1][i],row[2][i]]})
-            j+=1
 
         outfile.write("\n")
         outfile.write("Biplot\t0\t0\n\n")
@@ -180,20 +201,27 @@ def save_simulation_data(data, ids, output):
         metadata.append(row)
     with open(output+"metadata.tsv","w") as outfile:
         for row in metadata:
-            i=0
-            for item in row:
+            for i,item in enumerate(row):
                 if i < len(row)-1:
                     outfile.write(str(item)+"\t")
                 if i==len(row)-1:
                     outfile.write(str(item))
-                i+=1
             outfile.write("\n")
     outfile.close()
 
 
 def save_simulation_movie(individuals, output_folder,\
-     n_individuals,n_timepoints,black_background=True, verbose=False):
-    """Save an .ffmpg move of the simulated community change"""
+     n_individuals,n_timepoints,black_background=True, data_o = False, verbose=False):
+    """
+    Save an .ffmpg move of the simulated community change
+
+    :param individuals: array of individuals to visualize
+    :param output_folder: output directory filepath
+    :param n_individuals: number of individuals
+    :param n_timepoints: number of timepoints
+    :param black_background: T/F, default = True
+    :param verbose: verbose output, default = False
+    """
 
     #TODO: standardize these and put them up above
 
@@ -221,8 +249,8 @@ def save_simulation_movie(individuals, output_folder,\
     ids = []
     for item in individuals:
         ids.append(item.SubjectId)
-    save_simulation_data(data, ids, output_folder)
-
+    if data_o:
+        save_simulation_data(data, ids, output_folder)
     # NOTE: Can't pass empty arrays into 3d version of plot()
     linestyle = '-'
     pointstyle = 'o' #cheat to use lines to represent points
@@ -277,6 +305,16 @@ def save_simulation_movie(individuals, output_folder,\
 
 
 def update_3d_plot(end_t,timeseries_data,ax,lines,points=None,start_t=0):
+    """
+    Updates visualization 3d plot
+
+    :param end_t: end timepoint
+    :param timeseries_data: data from timeseries
+    :param ax: visualization ax
+    :param lines: lines of data
+    :param points: values to update
+    :param start_t: start timepoint (0)
+    """
     for line,data in zip(lines,timeseries_data):
         line.set_data(data[0:2,start_t:end_t])
         #z pos can't be set with set_data
@@ -313,15 +351,13 @@ def main():
     site, metadata = parse_pcoa(opts.pcoa_qza, opts.individual, opts.timepoint, opts.treatment, opts.metadata)
     df = parse_metadata(metadata, opts.individual, opts.timepoint, opts.treatment, site)
 
-    i=0
-
     colors = ['fuchsia', 'cyan', 'darkorange', 'blue', 'yellow']
     tx = opts.treatment
     treatments = df[tx].unique()
     while len(colors) < len(treatments):
         colors.append('lightgray')
 
-    for row in df.iterrows():
+    for i,row in enumerate(df.iterrows()):
         curr_subject_id = "%s_%i" % (df[opts.individual], i)
         j=0
         while row[1][3] != treatments[j]:
@@ -329,15 +365,20 @@ def main():
         color = colors[j]
         params = {'lambda': 0.2, 'delta': 0.25, 'interindividual_variation': 0.01}
         params['color'] = color
+        row_tx = row[1][3]
         curr_subject = Individual(subject_id=curr_subject_id,
                                   params=params, \
-                                  metadata={opts.treatment: df[opts.treatment]}, \
+                                  metadata={opts.treatment: row_tx}, \
                                   interindividual_variation=.01, verbose=verbose)
         ind.append(curr_subject)
-        i+=1
 
-    save_simulation_figure(individuals=ind, output_folder=output, n_timepoints=50, perturbation_timepoint=25, n_individuals=50)
-    save_simulation_movie(individuals=ind,output_folder=output,n_timepoints=50,n_individuals=50, verbose=verbose)
+
+    #save_simulation_figure(individuals=ind, output_folder=output, n_timepoints=50, perturbation_timepoint=25, n_individuals=50)
+    save_simulation_movie(individuals=ind,
+                          output_folder=output,
+                          n_timepoints=len(df[opts.timepoint].unique()),
+                          n_individuals=len(df[opts.individual].unique()),
+                          verbose=verbose)
 
 if __name__ == "__main__":
     main()

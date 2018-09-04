@@ -15,7 +15,9 @@ from scipy.stats import norm
 from copy import copy
 
 class Process(object):
-    """Represents a 1d process in a Euclidean space"""
+    """
+    Represents a 1d process in a Euclidean space
+    """
 
     def __init__(self,start_coord, motion = "Ornstein-Uhlenbeck",\
         history = None,params={"L":0.20,"delta":0.25}):
@@ -33,6 +35,11 @@ class Process(object):
         self.Perturbations = []
 
     def update(self,dt):
+        """
+        Update the process
+
+        :param dt: time elapsed since last update
+        """
         curr_params = copy(self.Params)
         for p in self.Perturbations:
             curr_params = p.update_params(curr_params)
@@ -44,19 +51,34 @@ class Process(object):
             L=curr_params["lambda"])
 
     def bm_change(self,dt,delta):
+        """
+        Change the Brownian motion process
+
+        :param dt: time elapsed since last update
+        :param delta: delta value to adjust
+        :return: change
+        """
         change =  norm.rvs(loc=0,size=1,scale=delta**2*dt)
         return change
 
     def bm_update(self,dt,delta):
+        """
+        Update the Brownian motion process
+
+        :param dt: time elapsed since last update
+        :param delta: delta value to adjust
+        :return: change
+        """
         curr_coord = self.Coord
         self.History.append(curr_coord)
         change = self.bm_change(dt,delta)
         self.Coord = curr_coord + change
 
 
-    def ou_change(self,dt,mu,\
-        L,delta):
+    def ou_change(self,dt,mu,L,delta):
         """
+        Change the Ornstein Uhlenbeck motion process
+
         The Ornstein Uhlenbeck process is modelled as:
 
         ds = lambda * (mu - s) * dt + dW
@@ -73,6 +95,9 @@ class Process(object):
         but add in a term that reverts us to some
         mean position (mu) over time (dt) at some speed (lambda)
 
+        :param dt: time elapsed since last update
+        :param delta: delta value to adjust
+        :return: change in process since last timepoint
         """
 
         dW = self.bm_change(dt=dt,delta=delta)
@@ -81,6 +106,16 @@ class Process(object):
 
     def ou_update(self,dt,mu,\
         L,delta,min_bound=-1.0,max_bound=1.0):
+        """
+        Update the Brownian motion process
+
+        :param dt: time elapsed since last update
+        :param mu: mean position
+        :param L: speed of reversion to the mean
+        :param delta: variance from the mean
+        :param min_bound: minimum bound
+        :param max_bound: maximum bound
+        """
         curr_coord = self.Coord
         self.History.append(self.Coord)
         change = self.ou_change(dt=dt,mu=mu,L=L,delta=delta)

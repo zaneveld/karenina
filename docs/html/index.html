@@ -1,0 +1,2372 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Karenina &#8212; karenina 0.0.0 documentation</title>
+    <link rel="stylesheet" href="classic.css" type="text/css" />
+    <link rel="stylesheet" href="pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="documentation_options.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript" src="doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">karenina 0.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="karenina">
+<h1>Karenina<a class="headerlink" href="#karenina" title="Permalink to this headline">¶</a></h1>
+<p>Simulation and modeling tools for studying Anna Karenina effects in animal microbiomes This package aims to develop tools for modeling microbiome variability in disease. Initial versions focus on simulating microbiome change over time using simple Ornstein-Uhlenbeck (OU) models.</p>
+<dl class="docutils">
+<dt><em>Happy families are all alike; every unhappy family is unhappy in its own way.</em></dt>
+<dd><em>Leo Tolstoy</em></dd>
+</dl>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="links">
+<h1>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+<li><a class="reference external" href="https://qiime2.org">https://qiime2.org</a></li>
+<li><a class="reference external" href="https://github.com/zaneveld/karenina">https://github.com/zaneveld/karenina</a></li>
+<li><a class="reference external" href="https://github.com/zaneveld/q2-karenina">https://github.com/zaneveld/q2-karenina</a></li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Karenina is in active development and is available as a direct command-line program (<strong>karenina</strong>), or as a Qiime2 plugin (<strong>q2-karenina</strong>).
+Karenina is a python3.5+ program and requires <strong>scipy</strong>, <strong>pandas</strong>, <strong>matplotlib,</strong> and <strong>seaborn</strong>.</p>
+<ol class="arabic simple">
+<li>Install <strong>ffmpeg</strong> (visualization dependency)</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install ffmpeg -y
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Install <strong>karenina</strong></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/zaneveld/karenina.git
+</pre></div>
+</div>
+<div class="section" id="qiime2-users">
+<h2>Qiime2 Users<a class="headerlink" href="#qiime2-users" title="Permalink to this headline">¶</a></h2>
+<p>Qiime2 users will have the ability to use their Q2 Artifacts and receive output
+compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <strong>ffmpeg</strong> and <strong>karenina</strong>.</p>
+<ol class="arabic simple" start="3">
+<li>Install <strong>q2-karenina</strong></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/zaneveld/q2-karenina.git
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Update Qiime2 cache to enable newly installed plugin.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime dev refresh-cache
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Script</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>spatial_ornstein_uhlenbeck</td>
+<td>OU Simulation Modeling</td>
+</tr>
+<tr class="row-odd"><td>fit_timeseries</td>
+<td>Fit PCoA Data to OU Models</td>
+</tr>
+<tr class="row-even"><td>karenina_visualization</td>
+<td>Visualize PCoA Timeseries</td>
+</tr>
+<tr class="row-odd"><td>qiime karenina spatial-ornstein-uhlenbeck</td>
+<td>Q2 application of OU Modeling</td>
+</tr>
+<tr class="row-even"><td>qiime karenina fit-timeseries</td>
+<td>Q2 application of PCoA fitting</td>
+</tr>
+<tr class="row-odd"><td>qiime karenina visualization</td>
+<td>Q2 application of 3D Visualization</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id1">
+<h2>karenina<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="spatial-ornstein-uhlenbeck">
+<h3>spatial_ornstein_uhlenbeck<a class="headerlink" href="#spatial-ornstein-uhlenbeck" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">spatial_ornstein_uhlenbeck</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">spatial_ornstein_uhlenbeck</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_results</span>
+
+<span class="n">This</span> <span class="n">script</span> <span class="n">simulates</span> <span class="n">microbiome</span> <span class="n">change</span> <span class="n">over</span> <span class="n">time</span> <span class="n">using</span> <span class="n">Ornstein</span><span class="o">-</span><span class="n">Uhlenbeck</span>
+<span class="p">(</span><span class="n">OU</span><span class="p">)</span> <span class="n">models</span><span class="o">.</span>  <span class="n">These</span> <span class="n">are</span> <span class="n">similar</span> <span class="n">to</span> <span class="n">Brownian</span> <span class="n">motion</span> <span class="n">models</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="n">exception</span>
+<span class="n">that</span> <span class="n">they</span> <span class="n">include</span> <span class="n">reversion</span> <span class="n">to</span> <span class="n">a</span> <span class="n">mean</span><span class="o">.</span> <span class="n">Output</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">tab</span><span class="o">-</span><span class="n">delimited</span> <span class="n">data</span> <span class="n">table</span>
+<span class="ow">and</span> <span class="n">figures</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">version</span>             <span class="n">show</span> <span class="n">program</span><span class="s1">&#39;s version number and exit</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
+
+  <span class="n">Required</span> <span class="n">options</span><span class="p">:</span>
+        <span class="o">-</span><span class="n">o</span> <span class="n">OUTPUT</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span>
+                                                <span class="n">the</span> <span class="n">output</span> <span class="n">folder</span> <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">results</span>
+
+  <span class="n">Optional</span> <span class="n">options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">pert_file_path</span><span class="o">=</span><span class="n">PERT_FILE_PATH</span>
+                                                <span class="nb">file</span> <span class="n">path</span> <span class="n">to</span> <span class="n">a</span> <span class="n">perturbation</span> <span class="nb">file</span> <span class="n">specifying</span> <span class="n">parameters</span>
+                                                <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">results</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span>
+                                                <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Ripti</span>\<span class="n">Anaconda3</span>\<span class="n">lib</span>\<span class="n">site</span><span class="o">-</span><span class="n">packages</span>\<span class="n">karenina</span><span class="o">-</span><span class="mf">0.</span>
+                                                <span class="mf">0.1</span><span class="o">-</span><span class="n">py3</span><span class="o">.</span><span class="mf">6.</span><span class="n">egg</span>\<span class="n">data</span>\<span class="n">perturbations</span>\<span class="n">set_xyz_lambda_zero</span><span class="o">.</span><span class="n">t</span>
+                                                <span class="n">sv</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">treatment_names</span><span class="o">=</span><span class="n">TREATMENT_NAMES</span>
+                                                <span class="n">Comma</span> <span class="n">seperated</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">treatment</span> <span class="n">named</span>
+                                                <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="n">control</span><span class="p">,</span><span class="n">destabilizing_treatment</span><span class="p">]</span>
+        <span class="o">-</span><span class="n">n</span> <span class="n">N_INDIVIDUALS</span><span class="p">,</span> <span class="o">--</span><span class="n">n_individuals</span><span class="o">=</span><span class="n">N_INDIVIDUALS</span>
+                                                <span class="n">Comma</span><span class="o">-</span><span class="n">separated</span> <span class="n">number</span> <span class="n">of</span> <span class="n">individuals</span> <span class="n">to</span> <span class="n">simulate</span> <span class="n">per</span>
+                                                <span class="n">treatment</span><span class="o">.</span><span class="n">Note</span><span class="p">:</span> <span class="n">This</span> <span class="n">value</span> <span class="n">must</span> <span class="n">be</span> <span class="n">enclosed</span> <span class="ow">in</span> <span class="n">quotes</span><span class="o">.</span>
+                                                <span class="n">Example</span><span class="p">:</span> <span class="s2">&quot;35,35&quot;</span><span class="o">.</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span><span class="mi">35</span><span class="p">]</span>
+        <span class="o">-</span><span class="n">t</span> <span class="n">N_TIMEPOINTS</span><span class="p">,</span> <span class="o">--</span><span class="n">n_timepoints</span><span class="o">=</span><span class="n">N_TIMEPOINTS</span>
+                                                <span class="n">Number</span> <span class="n">of</span> <span class="n">timepoints</span> <span class="n">to</span> <span class="n">simulate</span><span class="o">.</span> <span class="p">(</span><span class="n">One</span> <span class="n">number</span><span class="p">,</span> <span class="n">which</span>
+                                                <span class="ow">is</span> <span class="n">the</span> <span class="n">same</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">treatments</span><span class="p">)</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="mi">10</span><span class="p">]</span>
+        <span class="o">-</span><span class="n">p</span> <span class="n">PERTURBATION_TIMEPOINT</span><span class="p">,</span> <span class="o">--</span><span class="n">perturbation_timepoint</span><span class="o">=</span><span class="n">PERTURBATION_TIMEPOINT</span>
+                                                <span class="n">Timepoint</span> <span class="n">at</span> <span class="n">which</span> <span class="n">to</span> <span class="nb">apply</span> <span class="n">a</span> <span class="n">perturbation</span><span class="o">.</span> <span class="n">Must</span> <span class="n">be</span>
+                                                <span class="n">less</span> <span class="n">than</span> <span class="o">--</span><span class="n">n_timepoints</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="mi">5</span><span class="p">]</span>
+        <span class="o">-</span><span class="n">d</span> <span class="n">PERTURBATION_DURATION</span><span class="p">,</span> <span class="o">--</span><span class="n">perturbation_duration</span><span class="o">=</span><span class="n">PERTURBATION_DURATION</span>
+                                                <span class="n">Duration</span> <span class="n">that</span> <span class="n">the</span> <span class="n">perturbation</span> <span class="n">lasts</span><span class="o">.</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="mi">100</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">interindividual_variation</span><span class="o">=</span><span class="n">INTERINDIVIDUAL_VARIATION</span>
+                                                <span class="n">Starting</span> <span class="n">variability</span> <span class="n">between</span> <span class="n">individuals</span><span class="o">.</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span>
+                                                <span class="mf">0.01</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">delta</span><span class="o">=</span><span class="n">DELTA</span>       <span class="n">Starting</span> <span class="n">delta</span> <span class="n">parameter</span> <span class="k">for</span> <span class="n">Brownian</span> <span class="n">motion</span> <span class="ow">and</span>
+                                                <span class="n">Ornstein</span><span class="o">-</span><span class="n">Uhlenbeck</span> <span class="n">processes</span><span class="o">.</span> <span class="n">A</span> <span class="n">higher</span> <span class="n">number</span>
+                                                <span class="n">indicates</span> <span class="n">more</span> <span class="n">variability</span> <span class="n">over</span> <span class="n">time</span><span class="o">.</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">]</span>
+        <span class="o">-</span><span class="n">l</span> <span class="n">L</span><span class="p">,</span> <span class="o">--</span><span class="n">L</span><span class="o">=</span><span class="n">L</span>         <span class="n">Starting</span> <span class="k">lambda</span> <span class="n">parameter</span> <span class="k">for</span> <span class="n">Ornstein</span><span class="o">-</span><span class="n">Uhlenbeck</span>
+                                                <span class="n">processes</span><span class="o">.</span> <span class="n">A</span> <span class="n">higher</span> <span class="n">number</span> <span class="n">indicates</span> <span class="n">a</span> <span class="n">greater</span>
+                                                <span class="n">tendancy</span> <span class="n">to</span> <span class="n">revert</span> <span class="n">to</span> <span class="n">the</span> <span class="n">mean</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">fixed_start_pos</span><span class="o">=</span><span class="n">FIXED_START_POS</span>
+                                                <span class="n">Starting</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="n">position</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">points</span><span class="p">,</span> <span class="k">as</span> <span class="n">comma</span>
+                                                <span class="n">separated</span> <span class="n">floating</span> <span class="n">point</span> <span class="n">values</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="mf">0.0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="o">.</span> <span class="n">If</span>
+                                                <span class="ow">not</span> <span class="n">supplied</span><span class="p">,</span> <span class="n">starting</span> <span class="n">positions</span> <span class="n">will</span> <span class="n">be</span> <span class="n">randomized</span>
+                                                <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">interindividual_variation</span> <span class="n">parameter</span>
+                                                <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="n">none</span><span class="p">]</span>
+        <span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>
+                                                <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The spatial_ornstein_uhlenbeck function takes in simulation parameters and develops
+a distance matrix, PCoA ordination, and metadata file for use in other processes.
+This tutorial will explore the functionality of the script, and provide sample input data
+for fit_timeseries and karenina_visualization.</p>
+<p>The following parameters are used to generate a simulation using Ornstein Uhlenbeck and Brownian motion models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
+<span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span>
+<span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">25</span>
+</pre></div>
+</div>
+<p>The following parameters were used as their default input:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">treatment_names</span> <span class="n">control</span><span class="p">,</span><span class="n">destabilizing_treatment</span>
+<span class="o">--</span><span class="n">pert_file_path</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;karenina.data&#39;</span><span class="p">,</span><span class="s1">&#39;set_xyz_lambda_zero.tsv&#39;</span><span class="p">))</span>
+<span class="o">--</span><span class="n">n_individuals</span> <span class="mi">35</span><span class="p">,</span><span class="mi">35</span>
+<span class="o">--</span><span class="n">perturbation_duration</span> <span class="mi">100</span>
+<span class="o">--</span><span class="n">interindividual_variation</span> <span class="mf">0.01</span>
+<span class="o">--</span><span class="n">delta</span> <span class="mf">0.25</span>
+<span class="o">--</span><span class="n">L</span> <span class="mf">0.20</span>
+</pre></div>
+</div>
+<p>After installing <strong>karenina</strong>, the following command is used to execute the simulation from within the output directory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spatial_ornstein_uhlenbeck</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span> <span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">25</span>
+</pre></div>
+</div>
+<p>This generates the following files:</p>
+<ul class="simple">
+<li>ordination.txt : Simulation PCoA data</li>
+<li>metadata.tsv : Simulation metadata file</li>
+<li>log.txt : Simulation parameters</li>
+<li>euclidean.txt : Euclidean distance-matrix of Simulation data</li>
+<li>simulation_video.mp4 : Visualization of simulated data</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">euclidean.txt has been compressed due to large size.</p>
+</div>
+<p>These files can be viewed here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation">https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation</a></p>
+<div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
+<div class="section" id="fit-timeseries">
+<h3>fit_timeseries<a class="headerlink" href="#fit-timeseries" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">fit_timeseries</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">fit_timeseries</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_results</span>
+
+<span class="n">This</span> <span class="n">script</span> <span class="n">fits</span> <span class="n">microbiome</span> <span class="n">change</span> <span class="n">over</span> <span class="n">time</span> <span class="n">to</span> <span class="n">Ornstein</span><span class="o">-</span><span class="n">Uhlenbeck</span> <span class="p">(</span><span class="n">OU</span><span class="p">)</span>
+<span class="n">models</span><span class="o">.</span><span class="n">Demo</span> <span class="n">fitting</span> <span class="n">an</span> <span class="n">OU</span> <span class="n">model</span> <span class="n">using</span> <span class="n">default</span> <span class="n">parameters</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">version</span>             <span class="n">show</span> <span class="n">program</span><span class="s1">&#39;s version number and exit</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
+
+  <span class="n">Required</span> <span class="n">options</span><span class="p">:</span>
+        <span class="o">-</span><span class="n">o</span> <span class="n">OUTPUT</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span>
+                                                <span class="n">the</span> <span class="n">output</span> <span class="n">folder</span> <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">results</span>
+
+  <span class="n">Optional</span> <span class="n">options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">fit_method</span><span class="o">=</span><span class="n">FIT_METHOD</span>
+                                                <span class="n">Global</span> <span class="n">optimization_method</span> <span class="n">to</span> <span class="n">use</span>
+                                                <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="n">basinhopping</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">pcoa_qza</span><span class="o">=</span><span class="n">PCOA_QZA</span>
+                                                <span class="n">The</span> <span class="nb">input</span> <span class="n">PCoA</span> <span class="n">qza</span> <span class="nb">file</span>
+        <span class="o">--</span><span class="n">metadata</span><span class="o">=</span><span class="n">METADATA</span>
+                                                <span class="n">The</span> <span class="nb">input</span> <span class="n">metadata</span> <span class="n">tsv</span> <span class="nb">file</span><span class="p">,</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">defined</span><span class="p">,</span> <span class="n">metadata</span>
+                                                <span class="n">will</span> <span class="n">be</span> <span class="n">extracted</span> <span class="kn">from</span> <span class="nn">PCoA</span> <span class="nn">qza</span>
+        <span class="o">--</span><span class="n">individual</span><span class="o">=</span><span class="n">INDIVIDUAL</span>
+                                                <span class="n">The</span> <span class="n">host</span> <span class="n">subject</span> <span class="n">ID</span> <span class="n">column</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">separate</span> <span class="n">by</span>
+                                                <span class="n">comma</span> <span class="n">to</span> <span class="n">combine</span> <span class="n">TWO</span> <span class="n">columns</span>
+        <span class="o">--</span><span class="n">timepoint</span><span class="o">=</span><span class="n">TIMEPOINT</span>
+                                                <span class="n">The</span> <span class="n">timepoint</span> <span class="n">column</span> <span class="n">identifier</span>
+        <span class="o">--</span><span class="n">treatment</span><span class="o">=</span><span class="n">TREATMENT</span>
+                                                <span class="n">The</span> <span class="n">treatment</span> <span class="n">column</span> <span class="n">identifier</span>
+        <span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>
+                                                <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The fit_timeseries process allows users to fit PCoA and Metadata information to
+Ornstein Uhlenbeck models.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This script does not allow for optimization of single-point observations, where individuals are only measured or treated at one specific timepoint. If subjects are applied treatments at a single timepoint, it may be necessary to manually modify the metadata file to apply a boolean label to “treatment x applied” or not.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The optimal number of measured timepoints is roughly 50 per subject, based on benchmarking.</p>
+</div>
+<img alt="Benchmark Lambda Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_lambda_err.png?raw=true" />
+<img alt="Benchmark Sigma Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_sigma_err.png?raw=true" />
+<img alt="Benchmark Theta Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_theta_err.png?raw=true" />
+<p>Using the data from the previously ran simulation (see spatial_ornstein_uhlenbeck), the fit_timeseries process
+will attempt to fit Ornstein Uhlenbeck models to the individuals and treatment cohorts of the input data.</p>
+<p>The data being used for this tutorial can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>fit_timeseries is currently configured to utilize <strong>basinhopping</strong> as its global optimizer, and more optimization methods will be added in the future.</p>
+<p class="last">fit_timeseries is currently configured to only accept Qiime2 formatted data, but will accept direct PCoA and metadata files in the future.</p>
+</div>
+<p>The following parameters are defined to fit the PCoA data to OU models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span>
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span>
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>After installing <strong>karenina</strong> the following command may be used to generate OU model parameter output from within the same directory as <em>simulation.qza</em>. The output folder in this instance is <em>/simulation_fit_ts</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_timeseries</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_fit_ts</span><span class="o">/</span> \
+<span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">simulation</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span> \
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span> \
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">fit_timeseries will create and optimize models for <em>n_timepoints</em> and <em>n_individuals</em>,
+and thus takes quite some time on larger datasets. Because this simulation data requires
+optimization of over 7000 entries, we have provided the data below.</p>
+</div>
+<p>With the <em>treatment</em> column identified, the program will generate two output files containing metadata for individuals and cohorts. Below is a sample of the cohort output generated. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries process estimates the Ornstein Uhlenbeck
+model parameters.</p>
+<p>This data can be found at the following link:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined">https://github.com/zaneveld/karenina/tree/master/data/outputs/fit_timeseries/tx_defined</a></p>
+<p>Below is a sample of the cohort output generated, which estimates the control cohort to have parameters approaching
+the input. The perturbation set <em>lambda</em> to zero, and the estimation clearly displays the parameter approaching zero in
+the destabilizing_treatment cohort.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="5%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subject</th>
+<th class="head">pc</th>
+<th class="head">sigma</th>
+<th class="head">lambda</th>
+<th class="head">theta</th>
+<th class="head">nLogLik</th>
+<th class="head">aic</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>control_pc1</td>
+<td>pc1</td>
+<td>0.25064</td>
+<td>0.20376</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
+</tr>
+<tr class="row-odd"><td>control_pc2</td>
+<td>pc2</td>
+<td>0.25064</td>
+<td>0.20379</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
+</tr>
+<tr class="row-even"><td>control_pc3</td>
+<td>pc3</td>
+<td>0.25064</td>
+<td>0.20378</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc1</td>
+<td>pc1</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09973</td>
+<td>-4563.9</td>
+<td>53.1482</td>
+</tr>
+<tr class="row-even"><td>destabilizing_treatment_pc2</td>
+<td>pc2</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09971</td>
+<td>-4563.9</td>
+<td>53.1482</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc3</td>
+<td>pc3</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09974</td>
+<td>-4563.9</td>
+<td>53.1482</td>
+</tr>
+</tbody>
+</table>
+<p>Because the simulation data is quite large, and thus takes a long time to process, we can alternatively fit
+the timeseries from <strong>Moving Pictures</strong>. The weighted_unifrac_pcoa_results.qza file will be used.</p>
+<p>The PCoA data can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true">https://github.com/zaneveld/karenina/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true</a></p>
+<p>Because the Moving Pictures data contains single-point observations for their treatments, being that their
+treatments are applied at timepoint-0 only, fit_timeseries will fit OU models to only individuals if we do not define
+a treatment identifier.</p>
+<p>After installing <strong>karenina</strong> the following command can be ran from the same directory as <em>weighted_unifrac_pcoa_results.qza</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The individual column combines the columns <strong>Subject</strong> and <strong>BodySite</strong>, this is entered as a comma-separated list.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The treatments are single-point observations, so fit_timeseries will fit to only individuals if <em>treatment-col</em> is <strong>None</strong>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_timeseries</span> \
+<span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">moving_pictures_fit_ts</span><span class="o">/</span>
+<span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">weighted_unifrac_pcoa_results</span><span class="o">.</span><span class="n">qza</span>
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span><span class="p">,</span><span class="n">BodySite</span>
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">DaysSinceExperimentStart</span>
+</pre></div>
+</div>
+<p>The output data from this execution can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/outputs/fit_timeseries/tx_undefined">https://github.com/zaneveld/karenina/blob/master/data/outputs/fit_timeseries/tx_undefined</a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="5%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subject_BodySite</th>
+<th class="head">pc</th>
+<th class="head">sigma</th>
+<th class="head">lambda</th>
+<th class="head">theta</th>
+<th class="head">nLogLik</th>
+<th class="head">aic</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>subject-1_gut</td>
+<td>pc1</td>
+<td>0.41463</td>
+<td>0.00360</td>
+<td>-0.5421</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_gut</td>
+<td>pc2</td>
+<td>-0.4051</td>
+<td>0.03268</td>
+<td>0.02503</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_gut</td>
+<td>pc3</td>
+<td>0.42444</td>
+<td>0.04177</td>
+<td>-0.0019</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_left-palm</td>
+<td>pc1</td>
+<td>-0.4043</td>
+<td>0.02676</td>
+<td>0.18309</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_left-palm</td>
+<td>pc2</td>
+<td>-0.4021</td>
+<td>-0.0245</td>
+<td>-0.2053</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_left-palm</td>
+<td>pc3</td>
+<td>0.39130</td>
+<td>-0.0246</td>
+<td>0.28571</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_right-palm</td>
+<td>pc1</td>
+<td>-0.4045</td>
+<td>0.03113</td>
+<td>0.15796</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_right-palm</td>
+<td>pc2</td>
+<td>0.41556</td>
+<td>0.00018</td>
+<td>-2.5981</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_right-palm</td>
+<td>pc3</td>
+<td>0.41527</td>
+<td>-0.2349</td>
+<td>0.13882</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_tongue</td>
+<td>pc1</td>
+<td>-0.8731</td>
+<td>0.04062</td>
+<td>0.27590</td>
+<td>-27.550</td>
+<td>3.36793</td>
+</tr>
+<tr class="row-even"><td>subject-1_tongue</td>
+<td>pc2</td>
+<td>-0.8970</td>
+<td>0.00520</td>
+<td>0.29044</td>
+<td>-24.257</td>
+<td>3.62250</td>
+</tr>
+<tr class="row-odd"><td>subject-1_tongue</td>
+<td>pc3</td>
+<td>-0.8792</td>
+<td>0.03174</td>
+<td>-0.0404</td>
+<td>-26.767</td>
+<td>3.42560</td>
+</tr>
+<tr class="row-even"><td>subject-2_gut</td>
+<td>pc1</td>
+<td>0.40325</td>
+<td>-0.0210</td>
+<td>-0.5796</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_gut</td>
+<td>pc2</td>
+<td>-0.4024</td>
+<td>0.00664</td>
+<td>0.01683</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_gut</td>
+<td>pc3</td>
+<td>-0.4132</td>
+<td>0.01286</td>
+<td>0.00126</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_left-palm</td>
+<td>pc1</td>
+<td>0.39737</td>
+<td>0.01596</td>
+<td>0.18911</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_left-palm</td>
+<td>pc2</td>
+<td>0.41552</td>
+<td>0.03488</td>
+<td>0.04242</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_left-palm</td>
+<td>pc3</td>
+<td>-0.4025</td>
+<td>-0.0174</td>
+<td>0.09704</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_right-palm</td>
+<td>pc1</td>
+<td>-0.4023</td>
+<td>0.00992</td>
+<td>0.33786</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_right-palm</td>
+<td>pc2</td>
+<td>-0.4132</td>
+<td>0.04034</td>
+<td>-0.0563</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_right-palm</td>
+<td>pc3</td>
+<td>0.41496</td>
+<td>0.00458</td>
+<td>-0.0590</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_tongue</td>
+<td>pc1</td>
+<td>-0.4038</td>
+<td>0.46210</td>
+<td>0.29795</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_tongue</td>
+<td>pc2</td>
+<td>-0.4145</td>
+<td>0.33915</td>
+<td>0.21338</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_tongue</td>
+<td>pc3</td>
+<td>0.41374</td>
+<td>-0.1617</td>
+<td>0.07803</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="karenina-visualization">
+<h3>karenina_visualization<a class="headerlink" href="#karenina-visualization" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function is currently experiencing some bugs, and is not recommended for use at this time.
+Visualizations can be generated through execution of <strong>spatial_ornstein_uhlenbeck</strong>, and is currently
+being addressed.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">karenina_visualization</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">karenina_visualization</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_results</span>
+
+<span class="n">This</span> <span class="n">script</span> <span class="n">fits</span> <span class="n">microbiome</span> <span class="n">change</span> <span class="n">over</span> <span class="n">time</span> <span class="n">to</span> <span class="n">Ornstein</span><span class="o">-</span><span class="n">Uhlenbeck</span> <span class="p">(</span><span class="n">OU</span><span class="p">)</span>
+<span class="n">models</span><span class="o">.</span><span class="n">Demo</span> <span class="n">fitting</span> <span class="n">an</span> <span class="n">OU</span> <span class="n">model</span> <span class="n">using</span> <span class="n">default</span> <span class="n">parameters</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">version</span>             <span class="n">show</span> <span class="n">program</span><span class="s1">&#39;s version number and exit</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
+
+  <span class="n">Required</span> <span class="n">options</span><span class="p">:</span>
+        <span class="o">-</span><span class="n">o</span> <span class="n">OUTPUT</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span>
+                                                <span class="n">the</span> <span class="n">output</span> <span class="n">folder</span> <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">results</span>
+
+  <span class="n">Optional</span> <span class="n">options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">pcoa_qza</span><span class="o">=</span><span class="n">PCOA_QZA</span>
+                                                <span class="n">The</span> <span class="nb">input</span> <span class="n">PCoA</span> <span class="n">qza</span> <span class="nb">file</span>
+        <span class="o">--</span><span class="n">metadata</span><span class="o">=</span><span class="n">METADATA</span>
+                                                <span class="n">The</span> <span class="nb">input</span> <span class="n">metadata</span> <span class="n">tsv</span> <span class="nb">file</span><span class="p">,</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">defined</span><span class="p">,</span> <span class="n">metadata</span>
+                                                <span class="n">will</span> <span class="n">be</span> <span class="n">extracted</span> <span class="kn">from</span> <span class="nn">PCoA</span> <span class="nn">qza</span>
+        <span class="o">--</span><span class="n">individual</span><span class="o">=</span><span class="n">INDIVIDUAL</span>
+                                                <span class="n">The</span> <span class="n">host</span> <span class="n">subject</span> <span class="n">ID</span> <span class="n">column</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">separate</span> <span class="n">by</span>
+                                                <span class="n">comma</span> <span class="n">to</span> <span class="n">combine</span> <span class="n">TWO</span> <span class="n">columns</span>
+        <span class="o">--</span><span class="n">timepoint</span><span class="o">=</span><span class="n">TIMEPOINT</span>
+                                                <span class="n">The</span> <span class="n">timepoint</span> <span class="n">column</span> <span class="n">identifier</span>
+        <span class="o">--</span><span class="n">treatment</span><span class="o">=</span><span class="n">TREATMENT</span>
+                                                <span class="n">The</span> <span class="n">treatment</span> <span class="n">column</span> <span class="n">identifier</span>
+        <span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>
+                                                <span class="n">allows</span> <span class="k">for</span> <span class="n">verbose</span> <span class="n">output</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The karenina_visualization function allows users to visualize their PCoA results as an mp4 movie.</p>
+<p>Using the data from the previously ran simulation (see spatial_ornstein_uhlenbeck), the karenina_visualization
+program will visualize the PCoA Results, and return an mp4 movie called <em>simulation_video.mp4</em>.</p>
+<p>The data being used for this tutorial can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
+<p>The following parameters are defined to visualize the PCoA data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span>
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span>
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>After installing <strong>karenina</strong> the following command may be used to generate a 3d visualization video from within the same directory as <em>simulation.qza</em>. The output folder in this instance is <em>/simulation_vis</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">karenina_visualization</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span><span class="n">simulation_vis</span><span class="o">/</span> \
+<span class="o">--</span><span class="n">pcoa_qza</span> <span class="o">./</span><span class="n">simulation</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">individual</span> <span class="n">Subject</span> \
+<span class="o">--</span><span class="n">timepoint</span> <span class="n">Timepoint</span> \
+<span class="o">--</span><span class="n">treatment</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>The output video can be viewed below, and the file can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/visualization">https://github.com/zaneveld/karenina/tree/master/data/outputs/visualization</a></p>
+<div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
+</div>
+<div class="section" id="q2-karenina">
+<h2>q2-karenina<a class="headerlink" href="#q2-karenina" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">qiime</span> <span class="n">karenina</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">COMMAND</span> <span class="p">[</span><span class="n">ARGS</span><span class="p">]</span><span class="o">...</span>
+
+<span class="n">Description</span><span class="p">:</span> <span class="n">This</span> <span class="n">script</span> <span class="n">simulates</span> <span class="n">microbiome</span> <span class="n">change</span> <span class="n">over</span> <span class="n">time</span> <span class="n">using</span>
+<span class="n">Ornstein</span><span class="o">-</span><span class="n">Uhlenbeck</span> <span class="p">(</span><span class="n">OU</span><span class="p">)</span> <span class="n">models</span><span class="o">.</span>  <span class="n">These</span> <span class="n">are</span> <span class="n">similar</span> <span class="n">to</span> <span class="n">Brownian</span> <span class="n">motion</span>
+<span class="n">models</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="n">exception</span> <span class="n">that</span> <span class="n">they</span> <span class="n">include</span> <span class="n">reversion</span> <span class="n">to</span> <span class="n">a</span> <span class="n">mean</span><span class="o">.</span> <span class="n">Output</span>
+<span class="ow">is</span> <span class="n">a</span> <span class="n">tab</span><span class="o">-</span><span class="n">delimited</span> <span class="n">data</span> <span class="n">table</span> <span class="ow">and</span> <span class="n">figures</span><span class="o">.</span>
+
+<span class="n">Plugin</span> <span class="n">website</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">zaneveld</span><span class="o">/</span><span class="n">karenina</span>
+
+<span class="n">Getting</span> <span class="n">user</span> <span class="n">support</span><span class="p">:</span> <span class="n">Please</span> <span class="n">post</span> <span class="n">to</span> <span class="n">the</span> <span class="n">QIIME</span> <span class="mi">2</span> <span class="n">forum</span> <span class="k">for</span> <span class="n">help</span> <span class="k">with</span> <span class="n">this</span>
+<span class="n">plugin</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">forum</span><span class="o">.</span><span class="n">qiime2</span><span class="o">.</span><span class="n">org</span>
+
+<span class="n">Options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">version</span>    <span class="n">Show</span> <span class="n">the</span> <span class="n">version</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+        <span class="o">--</span><span class="n">citations</span>  <span class="n">Show</span> <span class="n">citations</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+        <span class="o">--</span><span class="n">help</span>       <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+
+<span class="n">Commands</span><span class="p">:</span>
+<span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span>              <span class="n">Fit</span> <span class="n">OU</span> <span class="n">Models</span> <span class="n">to</span> <span class="n">PCoA</span> <span class="n">Ordination</span> <span class="n">output</span>
+<span class="n">spatial</span><span class="o">-</span><span class="n">ornstein</span><span class="o">-</span><span class="n">uhlenbeck</span>  <span class="n">Spatial</span> <span class="n">Ornstein</span> <span class="n">Uhlenbeck</span> <span class="n">microbial</span> <span class="n">community</span>
+                                                        <span class="n">simulation</span>
+<span class="n">visualization</span>               <span class="n">Generates</span> <span class="mi">3</span><span class="n">D</span> <span class="n">animations</span> <span class="n">of</span> <span class="n">PCoA</span> <span class="n">Timeseries</span>
+</pre></div>
+</div>
+<div class="section" id="qiime-karenina-spatial-ornstein-uhlenbeck">
+<h3>qiime karenina spatial-ornstein-uhlenbeck<a class="headerlink" href="#qiime-karenina-spatial-ornstein-uhlenbeck" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method is currently under construction and will be available for use in Qiime2 in the near future.
+to implement this method, please reference karenina spatial_ornstein_uhlenbeck.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">spatial</span><span class="o">-</span><span class="n">ornstein</span><span class="o">-</span><span class="n">uhlenbeck</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">qiime</span> <span class="n">karenina</span> <span class="n">spatial</span><span class="o">-</span><span class="n">ornstein</span><span class="o">-</span><span class="n">uhlenbeck</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+
+<span class="n">This</span> <span class="n">method</span> <span class="n">simulates</span> <span class="n">microbial</span> <span class="n">behavior</span> <span class="n">over</span> <span class="n">time</span> <span class="n">usingOrnstein</span> <span class="n">Uhlenbeck</span>
+<span class="n">models</span><span class="o">.</span> <span class="n">This</span> <span class="n">are</span> <span class="n">similar</span> <span class="n">to</span> <span class="n">Brownian</span> <span class="n">Motionwith</span> <span class="n">the</span> <span class="n">exception</span> <span class="n">that</span> <span class="n">they</span>
+<span class="n">include</span> <span class="n">reversion</span> <span class="n">to</span> <span class="n">a</span> <span class="n">mean</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">perturbation</span><span class="o">-</span><span class="n">fp</span> <span class="n">TEXT</span>
+                                                                <span class="n">filepath</span> <span class="k">for</span> <span class="n">perturbation</span> <span class="n">parameters</span> <span class="k">for</span>
+                                                                <span class="n">simulation</span> <span class="n">results</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">names</span> <span class="n">TEXT</span>
+                                                                <span class="p">[</span><span class="s1">&#39;control,destabilizing_treatment&#39;</span><span class="p">]</span> <span class="n">Names</span>
+                                                                <span class="k">for</span> <span class="n">simulation</span> <span class="n">treatments</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">individuals</span> <span class="n">TEXT</span>
+                                                                <span class="p">[</span><span class="s1">&#39;35,35&#39;</span><span class="p">]</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">individuals</span> <span class="n">per</span>
+                                                                <span class="n">treatment</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">timepoints</span> <span class="n">INTEGER</span>
+                                                                <span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">]</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">simulation</span> <span class="n">timepoints</span>
+                                                                <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">perturbation</span><span class="o">-</span><span class="n">timepoint</span> <span class="n">INTEGER</span>
+                                                                <span class="p">[</span><span class="s1">&#39;5&#39;</span><span class="p">]</span> <span class="n">Timepoint</span> <span class="n">at</span> <span class="n">which</span> <span class="n">to</span> <span class="nb">apply</span> <span class="n">treatment</span>
+                                                                <span class="p">(</span><span class="o">&lt;</span><span class="n">n_timepoints</span><span class="p">)</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">perturbation</span><span class="o">-</span><span class="n">duration</span> <span class="n">INTEGER</span>
+                                                                <span class="p">[</span><span class="s1">&#39;100&#39;</span><span class="p">]</span> <span class="n">Duration</span> <span class="n">of</span> <span class="n">perturbation</span><span class="o">.</span>
+                                                                <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">interindividual</span><span class="o">-</span><span class="n">variation</span> <span class="n">FLOAT</span>
+                                                                <span class="p">[</span><span class="s1">&#39;0.01&#39;</span><span class="p">]</span><span class="n">Starting</span> <span class="n">variability</span> <span class="n">between</span>
+                                                                <span class="n">individuals</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">delta</span> <span class="n">FLOAT</span>
+                                                                <span class="p">[</span><span class="s1">&#39;0.25&#39;</span><span class="p">]</span> <span class="n">Starting</span> <span class="n">Delta</span> <span class="n">parameter</span> <span class="k">for</span>
+                                                                <span class="n">Brownian</span> <span class="n">Motion</span><span class="o">/</span> <span class="n">OU</span> <span class="n">models</span><span class="o">.</span> <span class="n">Higher</span> <span class="n">values</span>
+                                                                <span class="n">indicate</span> <span class="n">greater</span> <span class="n">variability</span> <span class="n">over</span> <span class="n">time</span>
+                                                                <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">lam</span> <span class="n">FLOAT</span>
+                                                                <span class="p">[</span><span class="s1">&#39;0.20&#39;</span><span class="p">]</span> <span class="n">Starting</span> <span class="n">Lambda</span> <span class="n">value</span> <span class="k">for</span> <span class="n">OU</span>
+                                                                <span class="n">process</span><span class="o">.</span> <span class="n">Higher</span> <span class="n">values</span> <span class="n">indicate</span> <span class="n">a</span> <span class="n">greater</span>
+                                                                <span class="n">tendancy</span> <span class="n">to</span> <span class="n">revert</span> <span class="n">to</span> <span class="n">the</span> <span class="n">mean</span> <span class="n">value</span><span class="o">.</span>
+                                                                <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">fixed</span><span class="o">-</span><span class="n">start</span><span class="o">-</span><span class="n">pos</span> <span class="n">TEXT</span>
+                                                                <span class="n">Starting</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="n">position</span> <span class="k">for</span> <span class="n">each</span> <span class="n">point</span><span class="o">.</span> <span class="n">If</span>
+                                                                <span class="ow">not</span> <span class="n">defined</span><span class="p">,</span> <span class="n">starting</span> <span class="n">positions</span> <span class="n">will</span> <span class="n">be</span>
+                                                                <span class="n">randomized</span> <span class="n">based</span> <span class="n">on</span>
+                                                                <span class="n">interindividual_variation</span><span class="p">;</span> <span class="nb">type</span><span class="p">:</span> <span class="n">string</span><span class="p">,</span> <span class="n">eg</span><span class="p">:</span>
+                                                                <span class="p">[</span><span class="s1">&#39;0.0,0.1,0.2&#39;</span><span class="p">]</span><span class="o">.</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">o</span><span class="o">-</span><span class="n">ordination</span> <span class="n">ARTIFACT</span> <span class="n">PATH</span> <span class="n">PCoAResults</span>
+                                                                <span class="n">Sample</span> <span class="n">PCoA</span> <span class="nb">file</span> <span class="n">containing</span> <span class="n">simulation</span> <span class="n">data</span>
+                                                                <span class="p">[</span><span class="n">required</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">passing</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">o</span><span class="o">-</span><span class="n">distance</span><span class="o">-</span><span class="n">matrix</span> <span class="n">ARTIFACT</span> <span class="n">PATH</span> <span class="n">DistanceMatrix</span>
+                                                                <span class="n">Sample</span> <span class="n">Distance</span> <span class="n">Matrix</span> <span class="n">containing</span> <span class="n">simulation</span>
+                                                                <span class="n">data</span>  <span class="p">[</span><span class="n">required</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">passing</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="n">DIRECTORY</span>
+                                                                <span class="n">Output</span> <span class="n">unspecified</span> <span class="n">results</span> <span class="n">to</span> <span class="n">a</span> <span class="n">directory</span>
+        <span class="o">--</span><span class="n">cmd</span><span class="o">-</span><span class="n">config</span> <span class="n">PATH</span>
+                                                                <span class="n">Use</span> <span class="n">config</span> <span class="nb">file</span> <span class="k">for</span> <span class="n">command</span> <span class="n">options</span>
+        <span class="o">--</span><span class="n">verbose</span>
+                                                                <span class="n">Display</span> <span class="n">verbose</span> <span class="n">output</span> <span class="n">to</span> <span class="n">stdout</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span>
+                                                                <span class="n">stderr</span> <span class="n">during</span> <span class="n">execution</span> <span class="n">of</span> <span class="n">this</span> <span class="n">action</span><span class="o">.</span>
+                                                                <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">quiet</span>
+                                                                <span class="n">Silence</span> <span class="n">output</span> <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="n">successful</span>
+                                                                <span class="p">(</span><span class="n">silence</span> <span class="ow">is</span> <span class="n">golden</span><span class="p">)</span><span class="o">.</span>  <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">citations</span>
+                                                                <span class="n">Show</span> <span class="n">citations</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+        <span class="o">--</span><span class="n">help</span>
+                                                                <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The tutorial for this Q2 Method is being created and will be available in the future.</p>
+</div>
+</div>
+<div class="section" id="qiime-karenina-fit-timeseries">
+<h3>qiime karenina fit-timeseries<a class="headerlink" href="#qiime-karenina-fit-timeseries" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This visualization currently does not accept Qiime2 artifacts, and is currently being addressed. Please note that the input is the <strong>filepath</strong> to the PCoA Results qza file.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">qiime</span> <span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+
+<span class="n">This</span> <span class="n">visualizer</span> <span class="n">generates</span> <span class="n">OU</span> <span class="n">model</span> <span class="n">parameters</span> <span class="k">for</span> <span class="n">PCoA</span> <span class="n">outputdata</span><span class="p">,</span> <span class="k">for</span>
+<span class="n">each</span> <span class="n">individual</span> <span class="ow">and</span> <span class="n">each</span> <span class="n">defined</span> <span class="n">treatment</span> <span class="n">cohort</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="n">TEXT</span>
+                                                                <span class="n">filepath</span> <span class="n">to</span> <span class="n">PCoA</span> <span class="n">results</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="n">TEXT</span>
+                                                                <span class="n">filepath</span> <span class="n">to</span> <span class="n">Sample</span> <span class="n">metadata</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">method</span> <span class="p">[</span><span class="n">basinhopping</span><span class="p">]</span>
+                                                                <span class="k">global</span> <span class="n">optimization</span> <span class="n">method</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">TEXT</span>
+                                                                <span class="n">individual</span> <span class="n">column</span> <span class="n">identifier</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">TEXT</span>
+                                                                <span class="n">timepoint</span> <span class="n">column</span> <span class="n">identifier</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="n">TEXT</span>
+                                                                <span class="n">treatment</span> <span class="n">column</span> <span class="n">identifier</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">o</span><span class="o">-</span><span class="n">visualization</span> <span class="n">VISUALIZATION</span> <span class="n">PATH</span>
+                                                                <span class="p">[</span><span class="n">required</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">passing</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="n">DIRECTORY</span>
+                                                                <span class="n">Output</span> <span class="n">unspecified</span> <span class="n">results</span> <span class="n">to</span> <span class="n">a</span> <span class="n">directory</span>
+        <span class="o">--</span><span class="n">cmd</span><span class="o">-</span><span class="n">config</span> <span class="n">PATH</span>
+                                                                <span class="n">Use</span> <span class="n">config</span> <span class="nb">file</span> <span class="k">for</span> <span class="n">command</span> <span class="n">options</span>
+        <span class="o">--</span><span class="n">verbose</span>
+                                                                <span class="n">Display</span> <span class="n">verbose</span> <span class="n">output</span> <span class="n">to</span> <span class="n">stdout</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span>
+                                                                <span class="n">stderr</span> <span class="n">during</span> <span class="n">execution</span> <span class="n">of</span> <span class="n">this</span> <span class="n">action</span><span class="o">.</span>
+                                                                <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">quiet</span>
+                                                                <span class="n">Silence</span> <span class="n">output</span> <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="n">successful</span>
+                                                                <span class="p">(</span><span class="n">silence</span> <span class="ow">is</span> <span class="n">golden</span><span class="p">)</span><span class="o">.</span>  <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">citations</span>
+                                                                <span class="n">Show</span> <span class="n">citations</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+        <span class="o">--</span><span class="n">help</span>
+                                                                <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>The visualization allows for the use of Qiime 2 to fit Ornstein Uhlenbeck models
+to PCoA data. Utilizing previous simulation data which can be found at the following link,
+we will walk through the use of this plugin.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This script does not allow for optimization of single-point observations, where individuals are only measured or treated at one specific timepoint. If subjects are applied treatments at a single timepoint, it may be necessary to manually modify the metadata file to apply a boolean label to “treatment x applied” or not.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The optimal number of measured timepoints is roughly 50 per subject, based on benchmarking.</p>
+</div>
+<img alt="Benchmark Lambda Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_lambda_err.png?raw=true" />
+<img alt="Benchmark Sigma Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_sigma_err.png?raw=true" />
+<img alt="Benchmark Theta Error" class="align-center" src="https://github.com/SLPeoples/karenina/blob/master/data/outputs/benchmarking/benchmark_theta_err.png?raw=true" />
+<p>The data being used for this tutorial can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/simulation.qza?raw=true</a></p>
+<p>The following parameters are defined to fit the PCoA data to OU models:</p>
+<p>Notice the metadata is within the qza file, so the metadata parameter is defined as <em>None</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">pcoaResults</span><span class="o">.</span><span class="n">qza</span><span class="p">]</span>
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The only optimization method employed at this time is basinhopping</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">method</span> <span class="n">basinhopping</span>
+</pre></div>
+</div>
+<p>Within the metadata file, we see that the column identifying individuals, timepoints, and treatment are <em>Subject, Timepoint, Treatment</em>.</p>
+<p>We define the following parameters to match these identifiers</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">Subject</span>
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">Timepoint</span>
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="n">Treatment</span>
+</pre></div>
+</div>
+<p>The output directory is defined as such:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">qiime2</span><span class="o">/</span><span class="n">simulation_ou_fit_ts</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>After installing <strong>q2-karenina</strong> the following command may be used to generate OU model parameter output from within the same directory as <em>simulation.qza</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="o">./</span><span class="n">simulation</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="bp">None</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">method</span> <span class="n">basinhopping</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">Subject</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">Timepoint</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="n">Treatment</span> \
+<span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">qiime2</span><span class="o">/</span><span class="n">simulation_ou_fit_ts</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>A successful visualization provides the following output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Saved</span> <span class="n">Visualization</span> <span class="n">to</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">qiime2</span><span class="o">/</span><span class="n">simulation_ou_fit_ts</span><span class="o">/</span><span class="n">visualization</span><span class="o">.</span><span class="n">qzv</span>
+</pre></div>
+</div>
+<p>Within the visualization.qzv, we have two output data files which contain our modeled timeseries results. With input parameters being optimized to sigma/ delta: 0.25, lambda: 0.20, theta/ mu: 0.00 (from the OU simulation), the fit_timeseries modeled individuals and cohorts, which can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts">https://github.com/zaneveld/q2-karenina/blob/master/data/simulation_ou_fit_ts</a></p>
+<p>Below is a sample of the cohort output generated, which estimates the control cohort to have parameters approaching
+the input. The perturbation set <em>lambda</em> to zero, and the estimation clearly displays the parameter approaching zero in
+the destabilizing_treatment cohort.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="5%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subject</th>
+<th class="head">pc</th>
+<th class="head">sigma</th>
+<th class="head">lambda</th>
+<th class="head">theta</th>
+<th class="head">nLogLik</th>
+<th class="head">aic</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>control_pc1</td>
+<td>pc1</td>
+<td>0.25064</td>
+<td>0.20376</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
+</tr>
+<tr class="row-odd"><td>control_pc2</td>
+<td>pc2</td>
+<td>0.25064</td>
+<td>0.20379</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
+</tr>
+<tr class="row-even"><td>control_pc3</td>
+<td>pc3</td>
+<td>0.25064</td>
+<td>0.20378</td>
+<td>-0.0013</td>
+<td>-4625.3</td>
+<td>53.1213</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc1</td>
+<td>pc1</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09973</td>
+<td>-4563.9</td>
+<td>53.1482</td>
+</tr>
+<tr class="row-even"><td>destabilizing_treatment_pc2</td>
+<td>pc2</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09971</td>
+<td>-4563.9</td>
+<td>53.1482</td>
+</tr>
+<tr class="row-odd"><td>destabilizing_treatment_pc3</td>
+<td>pc3</td>
+<td>0.25289</td>
+<td>0.00647</td>
+<td>0.09974</td>
+<td>-4563.9</td>
+<td>53.1482</td>
+</tr>
+</tbody>
+</table>
+<p>Because the simulation data is quite large, and thus takes a long time to process, we can alternatively
+fit the timeseries from <strong>Moving Pictures</strong>. The weighted_unifract_pcoa_results.qza file will be used.</p>
+<p>The PCoA data can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true</a></p>
+<p>Because the Moving Pictures data contains single-point observations for their treatments, being that their treatments are applied at timepoint-0 only, fit_timeseries will fit OU models to only individuals if we do not define a treatment identifier.</p>
+<p>After installing <strong>q2-karenina</strong> the following command can be ran from the same directory as <em>weighted_unifrac_pcoa_results.qza</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The individual column combines the columns <strong>Subject</strong> and <strong>BodySite</strong>, this is entered as a comma-separated list.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The treatments are single-point observations, so fit_timeseries will fit to only individuals if <em>treatment-col</em> is <strong>None</strong>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">fit</span><span class="o">-</span><span class="n">timeseries</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="o">./</span><span class="n">weighted_unifrac_pcoa_results</span><span class="o">.</span><span class="n">qza</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="bp">None</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">method</span> <span class="n">basinhopping</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">Subject</span><span class="p">,</span><span class="n">BodySite</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">DaysSinceExperimentStart</span> \
+<span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="bp">None</span> \
+<span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="o">./</span><span class="n">moving_pictures_fit_ts</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>A successful visualization provides the following output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Saved</span> <span class="n">Visualization</span> <span class="n">to</span><span class="p">:</span> <span class="o">./</span><span class="n">moving_pictures_fit_ts</span><span class="o">/</span><span class="n">visualization</span><span class="o">.</span><span class="n">qzv</span>
+</pre></div>
+</div>
+<p>The output data from this execution can be found here:</p>
+<p><a class="reference external" href="https://github.com/zaneveld/q2-karenina/blob/master/data/moving_pictures_fit_ts">https://github.com/zaneveld/q2-karenina/blob/master/data/moving_pictures_fit_ts</a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="5%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subject_BodySite</th>
+<th class="head">pc</th>
+<th class="head">sigma</th>
+<th class="head">lambda</th>
+<th class="head">theta</th>
+<th class="head">nLogLik</th>
+<th class="head">aic</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>subject-1_gut</td>
+<td>pc1</td>
+<td>0.41463</td>
+<td>0.00360</td>
+<td>-0.5421</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_gut</td>
+<td>pc2</td>
+<td>-0.4051</td>
+<td>0.03268</td>
+<td>0.02503</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_gut</td>
+<td>pc3</td>
+<td>0.42444</td>
+<td>0.04177</td>
+<td>-0.0019</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_left-palm</td>
+<td>pc1</td>
+<td>-0.4043</td>
+<td>0.02676</td>
+<td>0.18309</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_left-palm</td>
+<td>pc2</td>
+<td>-0.4021</td>
+<td>-0.0245</td>
+<td>-0.2053</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_left-palm</td>
+<td>pc3</td>
+<td>0.39130</td>
+<td>-0.0246</td>
+<td>0.28571</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_right-palm</td>
+<td>pc1</td>
+<td>-0.4045</td>
+<td>0.03113</td>
+<td>0.15796</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_right-palm</td>
+<td>pc2</td>
+<td>0.41556</td>
+<td>0.00018</td>
+<td>-2.5981</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-1_right-palm</td>
+<td>pc3</td>
+<td>0.41527</td>
+<td>-0.2349</td>
+<td>0.13882</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-1_tongue</td>
+<td>pc1</td>
+<td>-0.8731</td>
+<td>0.04062</td>
+<td>0.27590</td>
+<td>-27.550</td>
+<td>3.36793</td>
+</tr>
+<tr class="row-even"><td>subject-1_tongue</td>
+<td>pc2</td>
+<td>-0.8970</td>
+<td>0.00520</td>
+<td>0.29044</td>
+<td>-24.257</td>
+<td>3.62250</td>
+</tr>
+<tr class="row-odd"><td>subject-1_tongue</td>
+<td>pc3</td>
+<td>-0.8792</td>
+<td>0.03174</td>
+<td>-0.0404</td>
+<td>-26.767</td>
+<td>3.42560</td>
+</tr>
+<tr class="row-even"><td>subject-2_gut</td>
+<td>pc1</td>
+<td>0.40325</td>
+<td>-0.0210</td>
+<td>-0.5796</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_gut</td>
+<td>pc2</td>
+<td>-0.4024</td>
+<td>0.00664</td>
+<td>0.01683</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_gut</td>
+<td>pc3</td>
+<td>-0.4132</td>
+<td>0.01286</td>
+<td>0.00126</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_left-palm</td>
+<td>pc1</td>
+<td>0.39737</td>
+<td>0.01596</td>
+<td>0.18911</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_left-palm</td>
+<td>pc2</td>
+<td>0.41552</td>
+<td>0.03488</td>
+<td>0.04242</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_left-palm</td>
+<td>pc3</td>
+<td>-0.4025</td>
+<td>-0.0174</td>
+<td>0.09704</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_right-palm</td>
+<td>pc1</td>
+<td>-0.4023</td>
+<td>0.00992</td>
+<td>0.33786</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_right-palm</td>
+<td>pc2</td>
+<td>-0.4132</td>
+<td>0.04034</td>
+<td>-0.0563</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_right-palm</td>
+<td>pc3</td>
+<td>0.41496</td>
+<td>0.00458</td>
+<td>-0.0590</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_tongue</td>
+<td>pc1</td>
+<td>-0.4038</td>
+<td>0.46210</td>
+<td>0.29795</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-even"><td>subject-2_tongue</td>
+<td>pc2</td>
+<td>-0.4145</td>
+<td>0.33915</td>
+<td>0.21338</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+<tr class="row-odd"><td>subject-2_tongue</td>
+<td>pc3</td>
+<td>0.41374</td>
+<td>-0.1617</td>
+<td>0.07803</td>
+<td>-30.398</td>
+<td>1.17122</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qiime-karenina-visualization">
+<h3>qiime karenina visualization<a class="headerlink" href="#qiime-karenina-visualization" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This visualization is currently under construction and will be available for use in Qiime2 in the near future.
+to implement this method, please reference karenina_visualization.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">qiime</span> <span class="n">karenina</span> <span class="n">visualization</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">qiime</span> <span class="n">karenina</span> <span class="n">visualization</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+
+<span class="n">This</span> <span class="n">visualizer</span> <span class="n">generates</span> <span class="mi">3</span><span class="n">D</span> <span class="n">animations</span> <span class="n">of</span> <span class="n">PCoA</span> <span class="n">Timeseries</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">pcoa</span> <span class="n">TEXT</span>
+                                                                <span class="n">filepath</span> <span class="n">to</span> <span class="n">PCoA</span> <span class="n">results</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">metadata</span> <span class="n">TEXT</span>
+                                                                <span class="n">filepath</span> <span class="n">to</span> <span class="n">Sample</span> <span class="n">metadata</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">individual</span><span class="o">-</span><span class="n">col</span> <span class="n">TEXT</span>
+                                                                <span class="n">individual</span> <span class="n">column</span> <span class="n">identifier</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">timepoint</span><span class="o">-</span><span class="n">col</span> <span class="n">TEXT</span>
+                                                                <span class="n">timepoint</span> <span class="n">column</span> <span class="n">identifier</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">p</span><span class="o">-</span><span class="n">treatment</span><span class="o">-</span><span class="n">col</span> <span class="n">TEXT</span>
+                                                                <span class="n">treatment</span> <span class="n">column</span> <span class="n">identifier</span>  <span class="p">[</span><span class="n">required</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">o</span><span class="o">-</span><span class="n">visualization</span> <span class="n">VISUALIZATION</span> <span class="n">PATH</span>
+                                                                <span class="p">[</span><span class="n">required</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">passing</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="nb">dir</span> <span class="n">DIRECTORY</span>
+                                                                <span class="n">Output</span> <span class="n">unspecified</span> <span class="n">results</span> <span class="n">to</span> <span class="n">a</span> <span class="n">directory</span>
+        <span class="o">--</span><span class="n">cmd</span><span class="o">-</span><span class="n">config</span> <span class="n">PATH</span>
+                                                                <span class="n">Use</span> <span class="n">config</span> <span class="nb">file</span> <span class="k">for</span> <span class="n">command</span> <span class="n">options</span>
+        <span class="o">--</span><span class="n">verbose</span>
+                                                                <span class="n">Display</span> <span class="n">verbose</span> <span class="n">output</span> <span class="n">to</span> <span class="n">stdout</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span>
+                                                                <span class="n">stderr</span> <span class="n">during</span> <span class="n">execution</span> <span class="n">of</span> <span class="n">this</span> <span class="n">action</span><span class="o">.</span>
+                                                                <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">quiet</span>
+                                                                <span class="n">Silence</span> <span class="n">output</span> <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="n">successful</span>
+                                                                <span class="p">(</span><span class="n">silence</span> <span class="ow">is</span> <span class="n">golden</span><span class="p">)</span><span class="o">.</span>  <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="bp">False</span><span class="p">]</span>
+        <span class="o">--</span><span class="n">citations</span>
+                                                                <span class="n">Show</span> <span class="n">citations</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+        <span class="o">--</span><span class="n">help</span>
+                                                                <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The tutorial for this Q2 Visualization is being created and will be available in the future.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="module-karenina.spatial_ornstein_uhlenbeck">
+<span id="spatial-ornstein-uhlenbeck-py"></span><h1>spatial_ornstein_uhlenbeck.py<a class="headerlink" href="#module-karenina.spatial_ornstein_uhlenbeck" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.check_perturbation_timepoint">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">check_perturbation_timepoint</code><span class="sig-paren">(</span><em>perturbation_timepoint</em>, <em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.check_perturbation_timepoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise ValueError if perturbation_timepoint is &lt; 0 or &gt;n_timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>perturbation_timepoint</strong> – defined timepoint for perturbation application</li>
+<li><strong>n_timepoints</strong> – number of timepoints</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.ensure_exists">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">ensure_exists</code><span class="sig-paren">(</span><em>output_dir</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.ensure_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that output_dir exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_dir</strong> – path to output directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.parse_perturbation_file">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">parse_perturbation_file</code><span class="sig-paren">(</span><em>pert_file_path</em>, <em>perturbation_timepoint</em>, <em>perturbation_duration</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.parse_perturbation_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of perturbations
+infile – a .tsv file describing one perturbation per line
+assume input file is correctly formatted (no warnings if not)</p>
+<p>NOTE: each pertubation should be in the format:</p>
+<p>set_xyz_lambda_low = {“start”:opts.perturbation_timepoint,
+“end”:opts.perturbation_timepoint + opts.perturbation_duration,
+“params”:{“lambda”:0.005}, “update_mode”:”replace”, “axes”:[“x”,”y”,”z”]}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pert_file_path</strong> – perturbation file path</li>
+<li><strong>perturbation_timepoint</strong> – timepoint to apply perturbation</li>
+<li><strong>perturbation_duration</strong> – duration of perturbation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">perturbation list parsed from pert file contents</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.spatial_ornstein_uhlenbeck.write_options_to_log">
+<code class="descclassname">karenina.spatial_ornstein_uhlenbeck.</code><code class="descname">write_options_to_log</code><span class="sig-paren">(</span><em>log</em>, <em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.spatial_ornstein_uhlenbeck.write_options_to_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes user’s input options to log file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>log</strong> – log filename</li>
+<li><strong>opts</strong> – options</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.fit_timeseries">
+<span id="fit-timeseries-py"></span><h1>fit_timeseries.py<a class="headerlink" href="#module-karenina.fit_timeseries" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.fit_timeseries.aic">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">aic</code><span class="sig-paren">(</span><em>n_param</em>, <em>nLogLik</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.aic" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates AIC with 2 * n_parameters - 2 * LN(-1 * nLogLik)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_param</strong> – number of parameters</li>
+<li><strong>nLogLik</strong> – negative log likelihood</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">aic score</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_cohorts">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_cohorts</code><span class="sig-paren">(</span><em>input</em>, <em>ind</em>, <em>tp</em>, <em>tx</em>, <em>method</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_cohorts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Completes the same operation as fit_input, for cohorts.
+Fit and minimize the timeseries for each subject and cohort defined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input</strong> – dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]</li>
+<li><strong>ind</strong> – subject column identifier</li>
+<li><strong>tp</strong> – timepoint column identifier</li>
+<li><strong>tx</strong> – treatment column identifier</li>
+<li><strong>method</strong> – “basinhopping” if not defined in opts</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataframe: [ind,”pc”,”sigma”,”lambda”,”theta”,”optimizer”,”nLogLik”,”n_parameters”,”aic”,tp,tx,”x”]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_input">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_input</code><span class="sig-paren">(</span><em>input</em>, <em>ind</em>, <em>tp</em>, <em>tx</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit and minimize the timeseries for each subject defined</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input</strong> – dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]</li>
+<li><strong>ind</strong> – subject column identifier</li>
+<li><strong>tp</strong> – timepoint column identifier</li>
+<li><strong>tx</strong> – treatment column identifier</li>
+<li><strong>method</strong> – “basinhopping” if not defined in opts</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataframe: [ind,”pc”,”sigma”,”lambda”,”theta”,”optimizer”,”nLogLik”,”n_parameters”,”aic”,tp,tx,”x”]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_normal">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_normal</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mean and standard deviation of normal data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – fit data to normal distribution</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mu, std, nLogLik</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.fit_timeseries">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_timeseries</code><span class="sig-paren">(</span><em>fn_to_optimize</em>, <em>x0</em>, <em>xmin=array([-inf</em>, <em>-inf</em>, <em>-inf])</em>, <em>xmax=array([inf</em>, <em>inf</em>, <em>inf])</em>, <em>global_optimizer='basinhopping'</em>, <em>local_optimizer='Nelder-Mead'</em>, <em>stepsize=0.01</em>, <em>niter=200</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize a function returning input &amp; result
+fn_to_optimize – the function to minimize. Must return a single value or array x.</p>
+<p>x0 – initial parameter value or array of parameter values
+xmax – max parameter values (use inf for infinite)
+xmin – min parameter values (use -inf for infinite)
+global_optimizer – the global optimization method (see scipy.optimize)
+local_optimizer – the local optimizer (must be supported by global method)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fn_to_optimize</strong> – function that is being optimized, generated from fn_to_optimize</li>
+<li><strong>x0</strong> – initial parameter value or array of parameter values</li>
+<li><strong>xmin</strong> – min parameter values (-inf for infinite)</li>
+<li><strong>xmax</strong> – max parameter values (inf for infinite)</li>
+<li><strong>global_optimizer</strong> – global optimization method</li>
+<li><strong>local_optimizer</strong> – local optimization method (must be supported by global)</li>
+<li><strong>stepsize</strong> – size for each step (.01)</li>
+<li><strong>niter</strong> – number of iterations (200)</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">global_min, f_at_global_min</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.gen_output">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">gen_output</code><span class="sig-paren">(</span><em>fit_ts</em>, <em>ind</em>, <em>tp</em>, <em>tx</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.gen_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate output dataframe for either cohort, or non-cohort data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fit_ts</strong> – dataframe [0: [[Sigma, Lambda, Theta], nLogLik], 1: Individuals, 2: Times 3: Treatments, 4: Values, 5: PC Axis</li>
+<li><strong>ind</strong> – individual identifier</li>
+<li><strong>tp</strong> – timepoint identifier</li>
+<li><strong>tx</strong> – treatment identifier</li>
+<li><strong>method</strong> – optimization method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Formatted dataframe for csv output</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.get_OU_nLogLik">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">get_OU_nLogLik</code><span class="sig-paren">(</span><em>x</em>, <em>times</em>, <em>Sigma</em>, <em>Lambda</em>, <em>Theta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.get_OU_nLogLik" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the negative log likelihood for an OU model given data x – an array of x values,
+which MUST be ordered by time times – the time values at which x was taken.
+MUST match x in order.</p>
+<p>OU model parameters</p>
+<ol class="arabic simple">
+<li>Sigma – estimated Sigma for OU model (extent of change over time)</li>
+<li>Lambda – estimated Lambda for OU model (tendency to return to average position)</li>
+<li>Theta – estimated Theta for OU model (average or ‘home’ position)</li>
+</ol>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – array of values ordered by time</li>
+<li><strong>times</strong> – times associated with x values</li>
+<li><strong>Sigma</strong> – initial sigma value</li>
+<li><strong>Lambda</strong> – initial lambda value</li>
+<li><strong>Theta</strong> – initial theta value</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nLogLik value</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.make_OU_objective_fn">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">make_OU_objective_fn</code><span class="sig-paren">(</span><em>x</em>, <em>times</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.make_OU_objective_fn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an objective function for use with basinhopping with data embedded</p>
+<p>scipy.optimize.basinhopping needs a single array p, a function, and will
+minimize f(p). So we want to embded or dx data and time data <em>in</em> the
+function, and use the values of p to represent parameter values that
+could produce the data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – individual x values for objective function</li>
+<li><strong>times</strong> – timepoints associated with passed-in x values</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fn_to_optimize</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.make_OU_objective_fn_cohort">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">make_OU_objective_fn_cohort</code><span class="sig-paren">(</span><em>x</em>, <em>times</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.make_OU_objective_fn_cohort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sums nLogLik and build objective function based on cohorts. Operates in the
+same manner as make_OU_objective_fn, except that it considers a treatment cohort,
+not just the individuals.</p>
+<p>Make an objective function for use with basinhopping with data embedded</p>
+<p>scipy.optimize.basinhopping needs a single array p, a function, and will
+minimize f(p). So we want to embded or dx data and time data <em>in</em> the
+function, and use the values of p to represent parameter values that
+could produce the data.</p>
+<p>Overall strategy: Treat this exactly like the per-individual
+fitting, BUT within the objective function loop over all individuals
+in a given treatment (not just one) to get nLogLiklihoods. The nLogLiklihood
+for the individuals in the treatment is then just the sum of the individual
+nLogLikelihoods for each individuals timeseries.</p>
+<p>data – a dict of {“individual1”: (fixed_x,fixed_times)}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – x values for cohort objective function</li>
+<li><strong>times</strong> – times associated with x values from cohort</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">fn_to_optimize</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.parse_metadata">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">parse_metadata</code><span class="sig-paren">(</span><em>metadata</em>, <em>individual</em>, <em>timepoint</em>, <em>treatment</em>, <em>site</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.parse_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse relevant contents from metadata file to complete input dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>metadata</strong> – tsv file location</li>
+<li><strong>individual</strong> – subject column identifier</li>
+<li><strong>timepoint</strong> – timepoint column identifier</li>
+<li><strong>treatment</strong> – treatment column identifier</li>
+<li><strong>site</strong> – [subjectID, x1, x2, x3]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">input dataframe: [#SampleID,individual,timepoint,treatment,pc1,pc2,pc3]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries.parse_pcoa">
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">parse_pcoa</code><span class="sig-paren">(</span><em>pcoa_qza</em>, <em>individual</em>, <em>timepoint</em>, <em>treatment</em>, <em>metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.parse_pcoa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data from PCoA output in Qiime2 Format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pcoa_qza</strong> – Location of PCoA file</li>
+<li><strong>individual</strong> – Subject column identifier(s) [ex: Subject; Subject,BodySite]</li>
+<li><strong>timepoint</strong> – Timepoint column identifier</li>
+<li><strong>treatment</strong> – Treatment column identifier</li>
+<li><strong>metadata</strong> – optionally defined metadata file location, if not defined, will use metadata from PCoA.qza</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">input dataframe, tsv filepath location</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.fit_timeseries_benchmark">
+<span id="fit-timeseries-benchmark-py"></span><h1>fit_timeseries_benchmark.py<a class="headerlink" href="#module-karenina.fit_timeseries_benchmark" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.fit_timeseries_benchmark.benchmark">
+<code class="descclassname">karenina.fit_timeseries_benchmark.</code><code class="descname">benchmark</code><span class="sig-paren">(</span><em>max_tp=300</em>, <em>output=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries_benchmark.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies that fit_timeseries recovers OU model params</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>output</strong> – location for output log</li>
+<li><strong>max_tp</strong> – maximum timepoints to test</li>
+<li><strong>verbose</strong> – verbosity</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">output dataframe of benchmarked data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.fit_timeseries_benchmark.vis">
+<code class="descclassname">karenina.fit_timeseries_benchmark.</code><code class="descname">vis</code><span class="sig-paren">(</span><em>df</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries_benchmark.vis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualizes benchmarking output error for various tested timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> – Dataframe containing model, timepoints, and list of errors</li>
+<li><strong>output</strong> – output directory</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.visualization">
+<span id="visualization-py"></span><h1>visualization.py<a class="headerlink" href="#module-karenina.visualization" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.visualization.get_timeseries_data">
+<code class="descclassname">karenina.visualization.</code><code class="descname">get_timeseries_data</code><span class="sig-paren">(</span><em>individuals, axes=['x', 'y', 'z']</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.get_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides timeseries data from list of individuals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>individuals</strong> – array of individual objects</li>
+<li><strong>axes</strong> – [x,y,z] axes to return</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array of timeseries data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.save_simulation_data">
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_data</code><span class="sig-paren">(</span><em>data</em>, <em>ids</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves simulation output data in PCoA format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> – data to save</li>
+<li><strong>ids</strong> – Sample_IDs</li>
+<li><strong>output</strong> – output filepath</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.save_simulation_figure">
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_figure</code><span class="sig-paren">(</span><em>individuals</em>, <em>output_folder</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>perturbation_timepoint</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a .pdf image of the simulated PCoA plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>individuals</strong> – array of individuals</li>
+<li><strong>output_folder</strong> – output filepath</li>
+<li><strong>n_individuals</strong> – number of individuals</li>
+<li><strong>n_timepoints</strong> – number of timepoints</li>
+<li><strong>perturbation_timepoint</strong> – timepoint of perturbation application</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.save_simulation_movie">
+<code class="descclassname">karenina.visualization.</code><code class="descname">save_simulation_movie</code><span class="sig-paren">(</span><em>individuals</em>, <em>output_folder</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>black_background=True</em>, <em>data_o=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.save_simulation_movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an .ffmpg move of the simulated community change</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>individuals</strong> – array of individuals to visualize</li>
+<li><strong>output_folder</strong> – output directory filepath</li>
+<li><strong>n_individuals</strong> – number of individuals</li>
+<li><strong>n_timepoints</strong> – number of timepoints</li>
+<li><strong>black_background</strong> – T/F, default = True</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.visualization.update_3d_plot">
+<code class="descclassname">karenina.visualization.</code><code class="descname">update_3d_plot</code><span class="sig-paren">(</span><em>end_t</em>, <em>timeseries_data</em>, <em>ax</em>, <em>lines</em>, <em>points=None</em>, <em>start_t=0</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.visualization.update_3d_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates visualization 3d plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>end_t</strong> – end timepoint</li>
+<li><strong>timeseries_data</strong> – data from timeseries</li>
+<li><strong>ax</strong> – visualization ax</li>
+<li><strong>lines</strong> – lines of data</li>
+<li><strong>points</strong> – values to update</li>
+<li><strong>start_t</strong> – start timepoint (0)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.experiment">
+<span id="experiment-py"></span><h1>experiment.py<a class="headerlink" href="#module-karenina.experiment" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.experiment.Experiment">
+<em class="property">class </em><code class="descclassname">karenina.experiment.</code><code class="descname">Experiment</code><span class="sig-paren">(</span><em>treatment_names</em>, <em>n_individuals</em>, <em>n_timepoints</em>, <em>individual_base_params</em>, <em>treatment_params</em>, <em>interindividual_variation</em>, <em>verbose</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class has responsibility for simulating an experimental design for simulation.</p>
+<p>A fixed number of individuals are simulated across experimental conditions called ‘treatments’
+Each treatment can have different numbers of individuals.
+All treatment must have the same number of timepoints.</p>
+<p>Each treatment can be associated with the imposition of one or more Perturbations.
+Each perturbation is inserted or removed from all individuals at a fixed time-point.</p>
+<dl class="method">
+<dt id="karenina.experiment.Experiment.check_n_timepoints_is_int">
+<code class="descname">check_n_timepoints_is_int</code><span class="sig-paren">(</span><em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.check_n_timepoints_is_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a ValueError if n_timepoints can’t be cast as an int</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n_timepoints</strong> – number of timepoints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.check_variable_specified_per_treatment">
+<code class="descname">check_variable_specified_per_treatment</code><span class="sig-paren">(</span><em>v</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.check_variable_specified_per_treatment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a ValueError if v is not the same length as the number of treatments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> – variable</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.q2_data">
+<code class="descname">q2_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.q2_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate output data from object’s self for Qiime2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">data, ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the experiment, simulating timesteps; saves the simulation figure and movie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.simulate_timestep">
+<code class="descname">simulate_timestep</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.simulate_timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate timestep t of the experiemnt</p>
+<p>Approach:</p>
+<ol class="arabic simple">
+<li>First apply any perturbations that should be active but aren’t yet</li>
+<li>Second, simulate the timestep</li>
+<li>Third, remove any perturbations that should be off</li>
+</ol>
+<p>NOTE: this means that a perturbation that starts and ends at t=1 will be active at t=1
+That is, the start and end times are inclusive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> – timestep</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.simulate_timesteps">
+<code class="descname">simulate_timesteps</code><span class="sig-paren">(</span><em>t_start</em>, <em>t_end</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.simulate_timesteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate multiple timesteps</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t_start</strong> – start timepoint</li>
+<li><strong>t_end</strong> – end timepoint</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.experiment.Experiment.write_to_movie_file">
+<code class="descname">write_to_movie_file</code><span class="sig-paren">(</span><em>output_folder</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.experiment.Experiment.write_to_movie_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write an MPG movie to output folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output_folder</strong> – output directory</li>
+<li><strong>verbose</strong> – verbose output, default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.individual">
+<span id="individual-py"></span><h1>individual.py<a class="headerlink" href="#module-karenina.individual" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.individual.Individual">
+<em class="property">class </em><code class="descclassname">karenina.individual.</code><code class="descname">Individual</code><span class="sig-paren">(</span><em>subject_id, coords=['x', 'y', 'z'], metadata={}, params={}, interindividual_variation=0.01, verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generates an individual for OU simulation</p>
+<dl class="method">
+<dt id="karenina.individual.Individual.apply_perturbation">
+<code class="descname">apply_perturbation</code><span class="sig-paren">(</span><em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.apply_perturbation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a perturbation to the appropriate axes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>perturbation</strong> – perturbation to apply</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.apply_perturbation_to_axis">
+<code class="descname">apply_perturbation_to_axis</code><span class="sig-paren">(</span><em>axis</em>, <em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.apply_perturbation_to_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a perturbation to a Processes objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>axis</strong> – Axis to apply perturbation to</li>
+<li><strong>perturbation</strong> – perturbation to apply</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.check_identity">
+<code class="descname">check_identity</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.check_identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check identity of movement process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> – verbose output, default = False</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if processes are equivalent, False if not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><em>n_timepoints</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>get data from movement processes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n_timepoints</strong> – number of timepoints to gather data for</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">data for timepoints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.remove_perturbation">
+<code class="descname">remove_perturbation</code><span class="sig-paren">(</span><em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.remove_perturbation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a perturbation from the appropriate axes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>perturbation</strong> – perturbation to remove</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.remove_perturbation_from_axis">
+<code class="descname">remove_perturbation_from_axis</code><span class="sig-paren">(</span><em>axis</em>, <em>perturbation</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.remove_perturbation_from_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a perturbation from one or more Process objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>axis</strong> – axis to remove perturbation from</li>
+<li><strong>perturbation</strong> – perturbation to remove from axis</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.individual.Individual.simulate_movement">
+<code class="descname">simulate_movement</code><span class="sig-paren">(</span><em>n_timepoints</em>, <em>params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.individual.Individual.simulate_movement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate movement over timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_timepoints</strong> – number of timepoints to simulate</li>
+<li><strong>params</strong> – parameters to change from baseparams</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.individual.random">
+<code class="descclassname">karenina.individual.</code><code class="descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; x in the interval [0, 1).<a class="headerlink" href="#karenina.individual.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-karenina.perturbation">
+<span id="perturbation-py"></span><h1>perturbation.py<a class="headerlink" href="#module-karenina.perturbation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.perturbation.Perturbation">
+<em class="property">class </em><code class="descclassname">karenina.perturbation.</code><code class="descname">Perturbation</code><span class="sig-paren">(</span><em>start, end, params, update_mode='replace', axes=['x', 'y', 'z']</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Alter a simulation to impose a press disturbance,
+shifting the microbiome torwards a new configuration</p>
+<p>start –inclusive timepoint to start perturbation.  Note that this is read at the
+Experiment level, not by underlying Process objects.</p>
+<p>end – inclusive timepoint to end perturbation. Note that this is read at the
+Experiment level, not by underlying Process objects.</p>
+<p>params – dict of parameter values altered by the disturbance</p>
+<ul class="simple">
+<li>‘mode’ – how the perturbation updates parameter values.</li>
+<li>‘replace’ – replace old value with new one</li>
+<li>‘add’ – add new value to old one</li>
+<li>‘multiply’ – multiply the two values</li>
+</ul>
+<p>axes – axes to which the perturbation applies.  Like Start and End this is a
+‘dumb’ value, read externally by the Experiment object</p>
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.is_active">
+<code class="descname">is_active</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.is_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>determines if timepoint is active</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> – timepoint</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if timepoint is active, False if not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_by_addition">
+<code class="descname">update_by_addition</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_addition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update parameters by addition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>curr_param</strong> – current parameter</li>
+<li><strong>perturbation_param</strong> – new parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">curr_param + perturbation_param</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_by_multiplication">
+<code class="descname">update_by_multiplication</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_multiplication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update parameters by multiplication</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>curr_param</strong> – current parameter</li>
+<li><strong>perturbation_param</strong> – new parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">curr_param * perturbation_param</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_by_replacement">
+<code class="descname">update_by_replacement</code><span class="sig-paren">(</span><em>curr_param</em>, <em>perturbation_param</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_by_replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update parameters by replacement</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>curr_param</strong> – current parameter</li>
+<li><strong>perturbation_param</strong> – new parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">perturbation_param</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.perturbation.Perturbation.update_params">
+<code class="descname">update_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.perturbation.Perturbation.update_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update baseparams</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> – params to update</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new_params</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-karenina.process">
+<span id="process-py"></span><h1>process.py<a class="headerlink" href="#module-karenina.process" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="karenina.process.Process">
+<em class="property">class </em><code class="descclassname">karenina.process.</code><code class="descname">Process</code><span class="sig-paren">(</span><em>start_coord</em>, <em>motion='Ornstein-Uhlenbeck'</em>, <em>history=None</em>, <em>params={'L': 0.2</em>, <em>'delta': 0.25}</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a 1d process in a Euclidean space</p>
+<dl class="method">
+<dt id="karenina.process.Process.bm_change">
+<code class="descname">bm_change</code><span class="sig-paren">(</span><em>dt</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.bm_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the Brownian motion process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>delta</strong> – delta value to adjust</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">change</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.bm_update">
+<code class="descname">bm_update</code><span class="sig-paren">(</span><em>dt</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.bm_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Brownian motion process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>delta</strong> – delta value to adjust</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">change</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.ou_change">
+<code class="descname">ou_change</code><span class="sig-paren">(</span><em>dt</em>, <em>mu</em>, <em>L</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.ou_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the Ornstein Uhlenbeck motion process</p>
+<p>The Ornstein Uhlenbeck process is modelled as:</p>
+<p>ds = lambda * (mu - s) * dt + dW</p>
+<p>ds – change in our process from the last timepoint
+L – lambda, the speed of reversion to mean
+(NOTE: lambda is a reserved keyword in Python so I use L)
+mu – mean position
+s – current position
+dt – how much time has elapsed since last update
+dW – the Weiner Process (basic Brownian motion)</p>
+<p>This says we update as usual for Brownian motion,
+but add in a term that reverts us to some
+mean position (mu) over time (dt) at some speed (lambda)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>delta</strong> – delta value to adjust</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">change in process since last timepoint</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.ou_update">
+<code class="descname">ou_update</code><span class="sig-paren">(</span><em>dt</em>, <em>mu</em>, <em>L</em>, <em>delta</em>, <em>min_bound=-1.0</em>, <em>max_bound=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.ou_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Brownian motion process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dt</strong> – time elapsed since last update</li>
+<li><strong>mu</strong> – mean position</li>
+<li><strong>L</strong> – speed of reversion to the mean</li>
+<li><strong>delta</strong> – variance from the mean</li>
+<li><strong>min_bound</strong> – minimum bound</li>
+<li><strong>max_bound</strong> – maximum bound</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="karenina.process.Process.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.process.Process.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt</strong> – time elapsed since last update</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Karenina</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#qiime2-users">Qiime2 Users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#id1">karenina</a><ul>
+<li><a class="reference internal" href="#spatial-ornstein-uhlenbeck">spatial_ornstein_uhlenbeck</a></li>
+<li><a class="reference internal" href="#fit-timeseries">fit_timeseries</a></li>
+<li><a class="reference internal" href="#karenina-visualization">karenina_visualization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#q2-karenina">q2-karenina</a><ul>
+<li><a class="reference internal" href="#qiime-karenina-spatial-ornstein-uhlenbeck">qiime karenina spatial-ornstein-uhlenbeck</a></li>
+<li><a class="reference internal" href="#qiime-karenina-fit-timeseries">qiime karenina fit-timeseries</a></li>
+<li><a class="reference internal" href="#qiime-karenina-visualization">qiime karenina visualization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-karenina.spatial_ornstein_uhlenbeck">spatial_ornstein_uhlenbeck.py</a></li>
+<li><a class="reference internal" href="#module-karenina.fit_timeseries">fit_timeseries.py</a></li>
+<li><a class="reference internal" href="#module-karenina.fit_timeseries_benchmark">fit_timeseries_benchmark.py</a></li>
+<li><a class="reference internal" href="#module-karenina.visualization">visualization.py</a></li>
+<li><a class="reference internal" href="#module-karenina.experiment">experiment.py</a></li>
+<li><a class="reference internal" href="#module-karenina.individual">individual.py</a></li>
+<li><a class="reference internal" href="#module-karenina.perturbation">perturbation.py</a></li>
+<li><a class="reference internal" href="#module-karenina.process">process.py</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">karenina 0.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Jesse Zaneveld.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
+    </div>
+  </body>
+</html>

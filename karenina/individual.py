@@ -16,6 +16,9 @@ from random import random,randint
 from copy import copy
 
 class Individual(object):
+    """
+    Generates an individual for OU simulation
+    """
     def __init__(self,subject_id,coords=["x","y","z"],metadata={},params={},interindividual_variation=0.01, verbose=False):
         self.SubjectId = subject_id
         self.Metadata = metadata
@@ -48,24 +51,48 @@ class Individual(object):
               motion = "Ornstein-Uhlenbeck")
 
     def apply_perturbation(self,perturbation):
-        """Apply a perturbation to the appropriate axes"""
+        """
+        Apply a perturbation to the appropriate axes
+
+        :param perturbation: perturbation to apply
+        """
         for axis in perturbation.Axes:
             self.apply_perturbation_to_axis(axis,perturbation)
 
     def remove_perturbation(self,perturbation):
+        """
+        Remove a perturbation from the appropriate axes
+
+        :param perturbation: perturbation to remove
+        """
         for axis in perturbation.Axes:
             self.remove_perturbation_from_axis(axis,perturbation)
 
     def remove_perturbation_from_axis(self,axis,perturbation):
-        """Remove a perturbation from one or more Process objects"""
+        """
+        Remove a perturbation from one or more Process objects
+
+        :param axis: axis to remove perturbation from
+        :param perturbation: perturbation to remove from axis
+        """
         self.MovementProcesses[axis].Perturbations.remove(perturbation)
 
     def apply_perturbation_to_axis(self,axis,perturbation):
-        """Apply a perturbation to a Processes objects"""
+        """
+        Apply a perturbation to a Processes objects
 
+        :param axis: Axis to apply perturbation to
+        :param perturbation: perturbation to apply
+        """
         self.MovementProcesses[axis].Perturbations.append(perturbation)
 
     def check_identity(self, verbose=False):
+        """
+        Check identity of movement process
+
+        :param verbose: verbose output, default = False
+        :return: True if processes are equivalent, False if not
+        """
         for coord_name,movement_process in self.MovementProcesses.iteritems():
             for coord_name2,movement_process2 in self.MovementProcesses.iteritems():
                 if coord_name == coord_name2:
@@ -78,6 +105,12 @@ class Individual(object):
         return False
 
     def simulate_movement(self,n_timepoints,params=None):
+        """
+        Simulate movement over timepoints
+
+        :param n_timepoints: number of timepoints to simulate
+        :param params: parameters to change from baseparams
+        """
         if not params:
             params = self.BaseParams
 
@@ -87,6 +120,12 @@ class Individual(object):
                 self.MovementProcesses[c].update(dt=1.0)
 
     def get_data(self,n_timepoints):
+        """
+        get data from movement processes
+
+        :param n_timepoints: number of timepoints to gather data for
+        :return: data for timepoints
+        """
         result = []
         coords = self.MovementProcesses.keys()
         for t in range(n_timepoints):

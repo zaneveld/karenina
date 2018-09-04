@@ -18,6 +18,7 @@ srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from karenina.spatial_ornstein_uhlenbeck import check_perturbation_timepoint, write_options_to_log, parse_perturbation_file
 import numpy.testing as npt
+from pkg_resources import resource_filename
 
 """
 Tests for spatial_ornstein_uhlenbeck.py
@@ -28,8 +29,7 @@ class TestPrimary(unittest.TestCase):
 
     def setUp(self):
         self.verbose = False
-        self.perturbation_file_path =\
-        join(dirname(dirname(realpath(__file__))),'data','perturbations','set_x_lambda_small.tsv')
+        self.perturbation_file_path = os.path.abspath(resource_filename('karenina.data', 'set_x_lambda_small.tsv'))
         self.perturbation_timepoint = 5
         self.perturbation_duration = 100
 

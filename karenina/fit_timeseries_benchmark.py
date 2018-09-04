@@ -57,6 +57,7 @@ def make_option_parser():
 def vis(df, output):
     """
     Visualizes benchmarking output error for various tested timepoints
+
     :param df: Dataframe containing model, timepoints, and list of errors
     :param output: output directory
     """
@@ -93,10 +94,11 @@ def vis(df, output):
 def benchmark(max_tp = 300, output = None, verbose = False):
     """
     Verifies that fit_timeseries recovers OU model params
+
     :param output: location for output log
     :param max_tp: maximum timepoints to test
     :param verbose: verbosity
-    :return output dataframe of benchmarked data
+    :return: output dataframe of benchmarked data
     """
     if output:
         f = open(output+"fit_timeseries_benchmark"+str(max_tp)+"_log.txt","w+")

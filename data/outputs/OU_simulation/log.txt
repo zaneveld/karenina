@@ -1,0 +1,11 @@
+#Karenina Simulation Logfile
+Output folder: ./
+Treatment names: control,destabilizing_treatment
+Number of individuals: 35,35
+Number of timepoints: 100
+Perturbation timepoint: 25
+Perturbation duration: 100
+Interindividual variation: 0.01
+Delta: 0.25
+Lambda: 0.2
+Fixed starting position: None

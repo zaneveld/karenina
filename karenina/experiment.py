@@ -19,7 +19,8 @@ from copy import copy
 
 
 class Experiment(object):
-    """This class has responsibility for simulating an experimental design for simulation.
+    """
+    This class has responsibility for simulating an experimental design for simulation.
 
     A fixed number of individuals are simulated across experimental conditions called 'treatments'
     Each treatment can have different numbers of individuals.
@@ -32,17 +33,8 @@ class Experiment(object):
     """
     def __init__(self,treatment_names,n_individuals,n_timepoints,\
         individual_base_params,treatment_params,interindividual_variation, verbose):
-        """Set up an experiment with multiple treatments
-
-        Parameters
-        ----------
-        treatments -- a list of treatment names. e.g. ['Control','Temperature Stress']
-        n_individuals -- a list of the number of individuals in each treatment. e.g. [10,4]
-        n_timepoints -- an integer number of timepoints
-        individual_base_params -- a default dict with the base parameters (pre-perturbation) to be
-          applied to each individual.
-        treatment_params -- a list of lists of perturbations to apply to each treatment. The form is a bit
-          complex to allow for more powerful specifications of experimental design.  See note below.
+        """
+        Set up an experiment with multiple treatments
 
         Specifying perturbations:
         Perturbations are specified as a dict with parameters matching a 'Perturbation' object: start,end,params,update_mode representing the
@@ -51,12 +43,22 @@ class Experiment(object):
         parameters of the perturbation are specified in a nested dict by axis. Mode can be set to "add", "multiply" or "replace"
 
         So for example:
+
         set_lambda_low_treatment = {"start":10, "end:"25,"params":{"x":{"lambda":0.005},"mode":"replace"}}
         treatment_names = ["control","destablizing_treatment"]
         treatments = [[],[set_lambda_low_treatment]]
+
         -- this will specify a two treatment experiment, in which the 'destabilizing treatment
 
-        interindividual_varation -- the amount of starting variation between individuals
+        :param treatment_names: a list of treatment names. e.g. ['Control','Temperature Stress']
+        :param n_individuals: a list of the number of individuals in each treatment. e.g. [10,4]
+        :param n_timepoints: an integer number of timepoints
+        :param individual_base_params: a default dict with the base parameters (pre-perturbation) to be
+          applied to each individual.
+        :param treatment_params: a list of lists of perturbations to apply to each treatment. The form is a bit
+          complex to allow for more powerful specifications of experimental design.
+        :param interindividual_variation: the amount of starting variation between individuals
+        :param verbose: verbose output
         """
         self.verbose = verbose
         self.TreatmentNames = [t for t in treatment_names]
@@ -127,12 +129,19 @@ class Experiment(object):
         self.Data = [headers]
 
     def run(self):
-        "Run the experiment, simulating timesteps"
+        """
+        Run the experiment, simulating timesteps; saves the simulation figure and movie
+        """
         visualization.save_simulation_figure(individuals,opts.output,n_individuals,n_timepoints,perturbation_timepoint)
         visualization.save_simulation_movie(individuals, opts.output,n_individuals,n_timepoints,perturbation_timepoint, verbose)
 
     def check_variable_specified_per_treatment(self,v,verbose=False):
-        """Raise a ValueError if v is not the same length as the number of treatments"""
+        """
+        Raise a ValueError if v is not the same length as the number of treatments
+
+        :param v: variable
+        :param verbose: verbose output, default = False
+        """
         if verbose:
             print([x for x in v])
             print(self.TreatmentNames)
@@ -140,14 +149,24 @@ class Experiment(object):
             raise ValueError('Must specify a list of n_individuals equal in length to the number of treatments. Note that n_individuals must be enclosed in quotes e.g. -n "35,35"  ')
 
     def check_n_timepoints_is_int(self,n_timepoints):
-        """Raise a ValueError if n_timepoints can't be cast as an int"""
+        """
+        Raise a ValueError if n_timepoints can't be cast as an int
+
+        :param n_timepoints: number of timepoints
+        """
         try:
             self.n_timepoints = int(n_timepoints)
         except:
             raise ValueError("n_timepoints must be a single integer that applies to all experiments (not a list per treatment for example).")
 
     def simulate_timesteps(self,t_start,t_end,verbose=False):
-        """Simulate multiple timesteps"""
+        """
+        Simulate multiple timesteps
+
+        :param t_start: start timepoint
+        :param t_end: end timepoint
+        :param verbose: verbose output, default = False
+        """
         for t in range(t_start,t_end):
             if verbose:
                 print ("Simulating timestep: %i" %t)
@@ -156,15 +175,19 @@ class Experiment(object):
 
 
     def simulate_timestep(self,t):
-        """Simulate timestep t of the experiemnt
+        """
+        Simulate timestep t of the experiemnt
 
         Approach:
-        First apply any perturbations that should be active but aren't yet
-        Second, simulate the timestep
-        Third, remove any perturbations that should be off
+
+        1. First apply any perturbations that should be active but aren't yet
+        2. Second, simulate the timestep
+        3. Third, remove any perturbations that should be off
 
         NOTE: this means that a perturbation that starts and ends at t=1 will be active at t=1
         That is, the start and end times are inclusive.
+
+        :param t: timestep
         """
 
         for treatment in self.Treatments:
@@ -197,8 +220,14 @@ class Experiment(object):
                 curr_subject.simulate_movement(1)
                 curr_data = curr_subject.get_data(1)
                 self.Data.append("\t".join(map(str,curr_data))+"\n")
+
     def write_to_movie_file(self,output_folder, verbose=False):
-        """Write an MPG movie to output folder"""
+        """
+        Write an MPG movie to output folder
+
+        :param output_folder: output directory
+        :param verbose: verbose output, default = False
+        """
         individuals = []
         for treatment in self.Treatments:
             for curr_subject in treatment["individuals"]:
@@ -210,6 +239,33 @@ class Experiment(object):
             individual.MovementProcesses["y"].History.pop(0)
             individual.MovementProcesses["z"].History.pop(0)
 
+        for item in individuals:
+            print(vars(item))
         visualization.save_simulation_movie(individuals, output_folder,
-                                            len(individuals),self.NTimepoints,black_background=True, verbose=self.verbose)
+                                            len(individuals),self.NTimepoints,
+                                            black_background=True,
+                                            data_o = True, verbose=self.verbose)
+    def q2_data(self):
+        """
+        generate output data from object's self for Qiime2
 
+        :return: data, ids
+        """
+        individuals = []
+        for treatment in self.Treatments:
+            for curr_subject in treatment["individuals"]:
+                individuals.append(curr_subject)
+            #print("individuals:",individuals)
+
+        for individual in individuals:
+            individual.MovementProcesses["x"].History.pop(0)
+            individual.MovementProcesses["y"].History.pop(0)
+            individual.MovementProcesses["z"].History.pop(0)
+
+        data = visualization.get_timeseries_data(individuals)
+        ids = []
+
+        for item in individuals:
+            ids.append(item.SubjectId)
+
+        return data,ids

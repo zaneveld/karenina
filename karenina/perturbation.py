@@ -14,26 +14,28 @@ __status__ = "Development"
 from copy import copy
 
 class Perturbation(object):
+    """
+    Alter a simulation to impose a press disturbance,
+    shifting the microbiome torwards a new configuration
+
+    start --inclusive timepoint to start perturbation.  Note that this is read at the
+    Experiment level, not by underlying Process objects.
+
+    end -- inclusive timepoint to end perturbation. Note that this is read at the
+    Experiment level, not by underlying Process objects.
+
+    params -- dict of parameter values altered by the disturbance
+
+    * 'mode' -- how the perturbation updates parameter values.
+    * 'replace' -- replace old value with new one
+    * 'add' -- add new value to old one
+    * 'multiply' -- multiply the two values
+
+    axes -- axes to which the perturbation applies.  Like Start and End this is a
+    'dumb' value, read externally by the Experiment object
+    """
     def __init__(self,start,end,params,update_mode="replace",axes=["x","y","z"]):
-        """Alter a simulation to impose a press disturbance,
-           shifting the microbiome torwards a new configuration
 
-           start --inclusive timepoint to start perturbation.  Note that this is read at the
-             Experiment level, not by underlying Process objects.
-
-           end -- inclusive timepoint to end perturbation. Note that this is read at the
-             Experiment level, not by underlying Process objects.
-
-           params -- dict of parameter values altered by the disturbance
-
-           mode -- how the perturbation updates parameter values.
-                'replace' -- replace old value with new one
-                'add' -- add new value to old one
-                'multiply' -- multiply the two values
-
-           axes -- axes to which the perturbation applies.  Like Start and End this is a
-            'dumb' value, read externally by the Experiment object
-        """
         self.Start = start
         self.End = end
         self.Params = params
@@ -41,9 +43,21 @@ class Perturbation(object):
         self.Axes = axes
 
     def is_active(self,t):
+        """
+        determines if timepoint is active
+
+        :param t: timepoint
+        :return: True if timepoint is active, False if not
+        """
         return self.Start <= t <= self.End
 
     def update_params(self,params):
+        """
+        Update baseparams
+
+        :param params: params to update
+        :return: new_params
+        """
         if self.UpdateMode == "replace":
             update_f = self.update_by_replacement
         elif self.UpdateMode == "add":
@@ -63,10 +77,31 @@ class Perturbation(object):
         return new_params
 
     def update_by_replacement(self,curr_param, perturbation_param):
+        """
+        Update parameters by replacement
+
+        :param curr_param: current parameter
+        :param perturbation_param: new parameter
+        :return: perturbation_param
+        """
         return perturbation_param
 
     def update_by_addition(self,curr_param, perturbation_param):
+        """
+        Update parameters by addition
+
+        :param curr_param: current parameter
+        :param perturbation_param: new parameter
+        :return: curr_param + perturbation_param
+        """
         return curr_param + perturbation_param
 
     def update_by_multiplication(self,curr_param, perturbation_param):
+        """
+        Update parameters by multiplication
+
+        :param curr_param: current parameter
+        :param perturbation_param: new parameter
+        :return: curr_param * perturbation_param
+        """
         return curr_param * perturbation_param

@@ -41,24 +41,24 @@ setup(
     keywords='karenina ornstein uhlenbeck brownian motion',
     packages=find_packages(exclude=['docs', 'tests', 'q2-karenina']),
     install_requires=['scipy'],
-    data_files=[('data/perturbations',
-                 ['data/perturbations/add_x_mu_high.tsv', 'data/perturbations/all_perturbations.tsv',
-                  'data/perturbations/double_xyz_delta.tsv', 'data/perturbations/double_z_delta.tsv',
-                  'data/perturbations/README.txt', 'data/perturbations/set_x_lambda_high.tsv',
-                  'data/perturbations/set_x_lambda_medium.tsv', 'data/perturbations/set_x_lambda_small.tsv',
-                  'data/perturbations/set_x_mu_high.tsv', 'data/perturbations/set_xyz_mu_high.tsv',
-                  'data/perturbations/set_xyz_mu_low.tsv', 'data/perturbations/set_y_lambda_high.tsv',
-                  'data/perturbations/set_yz_lambda_high.tsv', 'data/perturbations/set_z_lambda_zero.tsv',
-                  'data/perturbations/set_x_mu_low.tsv', 'data/perturbations/set_xyz_lambda_low.tsv',
-                  'data/perturbations/set_xyz_lambda_zero.tsv', 'data/perturbations/set_xyz_lambda_zero.tsv',
-                  'data/perturbations/set_y_lambda_medium.tsv', 'data/perturbations/set_yz_lambda_medium.tsv',])],
+    package_data={
+        "karenina.data":['add_x_mu_high.tsv', 'all_perturbations.tsv',
+                  'double_xyz_delta.tsv', 'double_z_delta.tsv',
+                  'README.txt', 'set_x_lambda_high.tsv',
+                  'set_x_lambda_medium.tsv', 'set_x_lambda_small.tsv',
+                  'set_x_mu_high.tsv', 'set_xyz_mu_high.tsv',
+                  'set_xyz_mu_low.tsv', 'set_y_lambda_high.tsv',
+                  'set_yz_lambda_high.tsv', 'set_z_lambda_zero.tsv',
+                  'set_x_mu_low.tsv', 'set_xyz_lambda_low.tsv',
+                  'set_xyz_lambda_zero.tsv', 'set_xyz_lambda_zero.tsv',
+                  'set_y_lambda_medium.tsv', 'set_yz_lambda_medium.tsv']},
 
     entry_points={
         'console_scripts': [
-            'spatial_ornstein_uhlenbeck.py=karenina.spatial_ornstein_uhlenbeck:main',
-            'fit_timeseries.py=karenina.fit_timeseries:main',
-            'fit_timeseries_benchmark.py = karenina.fit_timeseries_benchmark:main',
-            'karenina_visualization.py = karenina.visualization:main'
+            'spatial_ornstein_uhlenbeck=karenina.spatial_ornstein_uhlenbeck:main',
+            'fit_timeseries=karenina.fit_timeseries:main',
+            'fit_timeseries_benchmark = karenina.fit_timeseries_benchmark:main',
+            'karenina_visualization = karenina.visualization:main'
         ],
     },
 )

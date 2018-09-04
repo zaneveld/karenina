@@ -11,10 +11,13 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
+import karenina.visualization
 from karenina.experiment import Experiment
 from optparse import OptionParser
 from optparse import OptionGroup
 from os.path import join,isdir,realpath,dirname
+import os
+from pkg_resources import resource_filename
 from os import makedirs
 import pandas as pd
 
@@ -40,8 +43,7 @@ def make_option_parser():
     optional_options = OptionGroup(parser, "Optional options")
 
     optional_options.add_option('--pert_file_path',\
-      default = join(dirname(dirname(realpath(__file__))),'data',\
-      'perturbations','set_xyz_lambda_zero.tsv'),\
+      default = os.path.abspath(resource_filename('karenina.data','set_xyz_lambda_zero.tsv')),\
       type = "string",\
       help = 'file path to a perturbation file specifying parameters for' +
       ' the simulation results [default: %default]')
@@ -98,7 +100,13 @@ def make_option_parser():
 
 
 def check_perturbation_timepoint(perturbation_timepoint,n_timepoints):
-    """Raise ValueError if perturbation_timepoint is < 0 or >n_timepoints"""
+    """
+    Raise ValueError if perturbation_timepoint is < 0 or >n_timepoints
+
+    :param perturbation_timepoint: defined timepoint for perturbation application
+    :param n_timepoints: number of timepoints
+    """
+
     if perturbation_timepoint and perturbation_timepoint >= n_timepoints:
         raise ValueError("Perturbation timepoint must be before the last timepoint")
     if perturbation_timepoint < 0:
@@ -106,7 +114,11 @@ def check_perturbation_timepoint(perturbation_timepoint,n_timepoints):
 
 
 def ensure_exists(output_dir):
-    """Ensure that output_dir exists"""
+    """
+    Ensure that output_dir exists
+
+    :param output_dir: path to output directory
+    """
     try:
         makedirs(output_dir)
     except OSError:
@@ -115,7 +127,13 @@ def ensure_exists(output_dir):
 
 
 def write_options_to_log(log, opts):
-    """Writes user's input options to log file"""
+    """
+    Writes user's input options to log file
+
+    :param log: log filename
+    :param opts: options
+    """
+
 
     logfile = open(join(opts.output, log),"w+")
     logfile_header = "#Karenina Simulation Logfile\n"
@@ -143,18 +161,21 @@ def write_options_to_log(log, opts):
 
 
 def parse_perturbation_file(pert_file_path, perturbation_timepoint,perturbation_duration):
-
-    """Return a list of perturbations
+    """
+    Return a list of perturbations
     infile -- a .tsv file describing one perturbation per line
     assume input file is correctly formatted (no warnings if not)
 
     NOTE: each pertubation should be in the format:
-    set_xyz_lambda_low =
-       {"start":opts.perturbation_timepoint,\
-       "end":opts.perturbation_timepoint + opts.perturbation_duration,\
-      "params":{"lambda":0.005},\
-      "update_mode":"replace",\
-      "axes":["x","y","z"]}
+
+    set_xyz_lambda_low = {"start":opts.perturbation_timepoint,
+    "end":opts.perturbation_timepoint + opts.perturbation_duration,
+    "params":{"lambda":0.005}, "update_mode":"replace", "axes":["x","y","z"]}
+
+    :param pert_file_path: perturbation file path
+    :param perturbation_timepoint: timepoint to apply perturbation
+    :param perturbation_duration: duration of perturbation
+    :return: perturbation list parsed from pert file contents
     """
 
     perturbations_list = []
