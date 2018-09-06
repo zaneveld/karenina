@@ -16,6 +16,7 @@ from scipy.stats import norm
 from numpy import array
 from karenina.process import Process
 from karenina.fit_timeseries import make_OU_objective_fn, fit_timeseries, aic
+from os.path import join
 import numpy as np
 import os
 import pandas as pd
@@ -54,6 +55,210 @@ def make_option_parser():
     return parser
 
 
+def write_logfile(output_dir,log_lines):
+
+    f = open(output+"fit_timeseries_benchmark"+str(max_timepoints)+"_log.txt","w+")
+    for line in log:
+        f.write(str(line+"\n"))
+    f.close()
+
+
+def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None, verbose = False,\
+    simulation_type = "Ornstein-Uhlenbeck",\
+    simulation_params={"lambda": 0.12, "delta": 0.25, "mu": 0.5}):
+    """Test the ability of fit_timeseries to recover correct OU model params
+
+    :param output: location for output log
+    :param max_timepoints: maximum timepoints to test. The benchmark will test every number of timepoints up to this number. So specifying max_timpoints = 50 will test all numbers of timepoints between 2 and 50.
+    :param simulation_type: string describing the model for the simulation (passed to a Process object)
+    :param simulation_params: dict of parameters for the simulation (these will be passed on to the Process object).
+    :param verbose: verbosity
+    :return: output dataframe of benchmarked data
+    """
+
+    log = []   
+    final_errors = {}
+    dt = 0.1
+   
+    #model, n_timepoints, key, simulation_input,\
+    #inferred_parameters, simulation_parameters,\
+    # absolute_error, nLogLik, aic = ([] for i in range(9))
+    
+    results = []
+    
+    result_columns = ["model", "n_timepoints", "simulation_input", "inferred_parameters", "expected_parameters", "absolute_error", "AIC"]
+    
+    for curr_timepoint in list(range(1, max_timepoints+1)):
+        
+        
+        curr_log,curr_results = benchmark_simulated_dataset(n_timepoints=curr_timepoint,\
+          verbose = verbose,simulation_type=simulation_type,simulation_params=simulation_params,log=log,dt=dt)
+        
+        log.extend(curr_log)
+        results.extend(curr_results)
+
+
+    df = pd.DataFrame(results,columns = sorted(results[0].keys()))
+
+    for line in log:
+        if verbose:
+            print(line)
+
+    if output:
+        #Write logfile
+        log_filepath = output+"fit_timeseries_benchmark_log"+str(max_timepoints)+".txt"
+        write_logfile(log_filepath,log)
+        
+        #Write benchamrk results file
+        output_filepath = output+"fit_timeseries_benchmark_"+str(max_timepoints)+"_results.csv"
+        df.to_csv(output_filepath, index=False)
+
+        if verbose:
+            print("Output log saved to: %s" %log_filepath)
+            print("Benchmark results saved to: %s" %output_filepath)
+
+    #TODO: is it essential that we return this reduced df instead of the full one?
+    df = df[["model","n_timepoints","mag_err"]]
+    return df
+
+
+
+def generate_logfile_lines_from_result_dict(results):
+    """Return a list of result lines
+
+    :param results: a dict of results (all values must be able to be converted to strings)"""
+    #Ensure results appear in the log in same order each time
+    log = []
+    for key in sorted(list(results.keys())):
+        value = results[key]
+        log.append("%s:%s" %(str(key),str(value)))
+    
+    log.append(str("*" * 80))
+    return log
+
+
+def benchmark_simulated_dataset(n_timepoints,verbose = False,\
+    simulation_type = "Ornstein-Uhlenbeck",\
+    simulation_params={"lambda": 0.12, "delta": 0.25, "mu": 0.5},local_optimizer=['L-BFGS-B'],\
+    local_optimizer_niter=[5],local_optimizer_stepsize = 0.005,log=[],dt = 0.1):
+
+
+    
+    # run ou_process to get history
+    ou = Process(start_coord=0.20, motion=simulation_type,
+                 history=None, params= simulation_params)
+    for t in range(0, n_timepoints):
+        ou.update(dt)
+    
+    #Set timepoints and position (x) values
+    xs = array(ou.History)
+    ts = np.arange(0, len(ou.History)) * dt
+    
+    fn_to_optimize = make_OU_objective_fn(xs, ts)
+
+    results = []
+    
+    # Estimate correct parameters for each tested local optimizer/niter value
+    for local_optimizer in local_optimizer:
+        for niter in local_optimizer_niter:
+
+            #Set up simulation parameters 
+            #(Using intentionally kinda bad starting estimates for benchmark)
+            start_Sigma = 0.1
+            start_Lambda = 0.0
+            start_Theta = np.mean(xs)
+            x0 = array([start_Sigma, start_Lambda, start_Theta])
+            
+            #set optimizer min/max bounds for each parameter
+            xmax = array([1.0, 1.0, 1.0])
+            xmin = array([0.0, 0.0, -1.0])
+
+
+            #Results will be stored in the simulation_result dict
+            result = {}
+            result['benchmark_name'] = "_".join([local_optimizer,"niter",str(niter),"t",str(n_timepoints)])
+            result['xs'] = xs
+            result['ts'] = ts
+            result['n_timepoints'] = n_timepoints
+            result['local_optimizer']=local_optimizer
+            result['local_optimizer_niter']=niter
+            result['local_optimizer_param_names'] = ["Sigma","Lambda","Theta"]
+            result['local_optimizer_start_param_values']=[start_Sigma,start_Lambda,start_Theta]
+            result["expected_parameter_values"] = correct_values
+
+
+            #Look up expected values from user input simulation parameters
+            exp_Sigma,exp_Lambda,exp_Mu =\
+               (simulation_parameters[param] for param in ['sigma','lambda','mu'])
+            
+            #Fit the model to the data
+            inferred_params, nLogLik = \
+              fit_timeseries(fn_to_optimize, x0, xmin, xmax,\
+              stepsize= local_optimizer_stepsize,
+              niter=niter, local_optimizer=local_optimizer)
+ 
+            #Report inferred parameter values
+            result["nLogLik"]=f_at_global_min
+            result["AIC"]=aic(len(simulation_parameters),nLogLik)
+
+            #Add results to the log
+            log.extend(log_lines_from_result_dict(result))
+            #NOTE: we do this now so later log entries with final errors
+            #will appear last in the log
+            
+            #Calculate errors
+            expected = list(correct_values)
+            observed = list(inferred_params)
+            parameter_names = result['local_optimizer_param_names']
+            model_fit_error_results = calculate_errors(observed,expected,paramter_names)
+            
+            result.update(model_fit_error_results)
+            #Add error results to the log
+            log.extend(log_lines_from_result_dict(model_fit_error_results))
+
+            #Update results with 
+            results.append(result)
+
+    return log,results
+
+def calculate_errors(observed,expected,parameter_names=None):
+    """Return per-parameter absolute and squared errors to results
+    
+    :param parameter names: list of strings describing parameter names (in order)
+    :param observed: an array of observed values
+    :param expected: an array of expected values     
+    """
+    
+    if not parameter_names:
+    
+        #If we don't have informative parameter names, call them 'parameter_0', etc
+        parameter_names = ["parameter_%i" %i for i in range(len(list(observed)))]
+    
+    #Calculate errors for individual parameters and all parameters 
+    #together.
+    
+    result = {}
+
+    #Calculate absolute and squared error for each
+    #parameter individually
+    absolute_errors = []
+    squared_errors = []
+    for i,curr_parameter in enumerate(parameter_names):
+        absolute_error = abs(observed[i]-expected[i])
+        absolute_errors.append(absolute_error)
+        squared_error = absolute_error**2
+        squared_errors.append(squared_errors)
+        result['%s_absolute_error'%curr_parameter] = absolute_error
+        result['%s_squared_error'%curr_parameter] = squared_error
+    
+    result['all_parameters_absolute_error']=absolute_errors
+    result['all_parameters_squared_error']=squared_errors
+    result['all_parameters_total_absolute_error'] = sum(absolute_errors)
+    result['all_paramters_sum_of_squared_errors'] = sum(squared_errors)
+       
+    return result
+            
+ 
 def vis(df, output):
     """
     Visualizes benchmarking output error for various tested timepoints
@@ -92,122 +297,8 @@ def vis(df, output):
 
 
 
+           
 
-
-
-def benchmark(max_tp = 300, output = None, verbose = False):
-    """Test the ability of fit_timeseries to recover correct OU model params
-
-    :param output: location for output log
-    :param max_tp: maximum timepoints to test
-    :param verbose: verbosity
-    :return: output dataframe of benchmarked data
-    """
-    if output:
-        f = open(output+"fit_timeseries_benchmark"+str(max_tp)+"_log.txt","w+")
-    log = []
-
-    # generate OU process for testing
-    ou_process = Process(start_coord=0.20, motion="Ornstein-Uhlenbeck",
-                         history=None, params={"lambda": 0.20, "delta": 0.25, "mu": 0.0})
-    
-    # run ou_process to get history
-    for t in range(1, 30):
-        dt = 1
-        ou_process.update(dt)
-    OU = ou_process
-
-    final_errors = {}
-    dt = 1
-    model, n_tp, key, sim_i, sim_o, exp_o, err_o, nLogLik, aic_o = ([] for i in range(9))
-    columns = ["model", "n_timepoints", "sim_input", "sim_output", "exp_output", "error", "aic"]
-    for n_timepoints in list(range(1, max_tp+1)):
-        log.append(str("Building OU model for %i timepoints" % n_timepoints))
-        n_tp.append(n_timepoints)
-        # run ou_process to get history
-        ou = Process(start_coord=0.20, motion="Ornstein-Uhlenbeck",
-                     history=None, params= {"lambda": 0.12, "delta": 0.25, "mu": 0.5})
-        for t in range(0, n_timepoints):
-            ou.update(dt)
-        log.append(str(str(n_timepoints)+", "+str(ou.History)))
-        xs = array(ou.History)
-        ts = np.arange(0, len(ou.History)) * dt
-        log.append(str(str(xs)+", "+str(ts)+", "+str(dt)))
-        fn_to_optimize = make_OU_objective_fn(xs, ts)
-
-        # Estimate correct parameters
-        for niter in [5]:
-            for local_optimizer in ['L-BFGS-B']:
-                log.append(str("Running optimizer: "+str(local_optimizer)))
-                model.append(local_optimizer)
-                # Using intentionally kinda bad estimates
-                start_Sigma = 0.1
-                start_Lambda = 0.0
-                start_Theta = np.mean(xs)
-                log.append(str("niter: "+str(niter)))
-                log.append(str("start_Theta: "+str(start_Theta)))
-                key.append(["sigma","lambda","theta"])
-                sim_i.append([start_Sigma,start_Lambda,start_Theta])
-                log.append(str("n_timepoints: "+str(n_timepoints)))
-                xmax = array([1.0, 1.0, 1.0])
-                xmin = array([0.0, 0.0, -1.0])
-                x0 = array([start_Sigma, start_Lambda, start_Theta])
-
-                global_min, f_at_global_min = \
-                    fit_timeseries(fn_to_optimize, x0, xmin, xmax, stepsize=0.005,
-                                   niter=niter, local_optimizer=local_optimizer)
-
-                log.append("OU result:")
-                Sigma, Lambda, Theta = global_min
-                correct_values = array([0.25, 0.12, 0.5])
-                exp_o.append([0.25, 0.12, 0.5])
-                final_error = global_min - correct_values
-                log.append(str("Global min: "+str(global_min)))
-                sim_o.append([Sigma, Lambda, Theta])
-                log.append(str("f at Global min: "+str(f_at_global_min)))
-                nLogLik.append(f_at_global_min)
-                # aic calulated with 2*n_params-2*LN(-1*nLogLik)
-                aic_t = aic(niter,f_at_global_min)
-                log.append(str("aic: " +str(aic_t)))
-                aic_o.append(aic_t)
-
-                final_errors["%s_%i_%i" % (local_optimizer, niter, n_timepoints)] = final_error
-                log.append(str("*" * 80))
-                log.append(
-                    str("%s error: %.4f,%.4f,%.4f" % (local_optimizer,final_error[0],final_error[1],final_error[2])))
-                err_o.append([abs(final_error[0]),abs(final_error[1]),abs(final_error[2])])
-                log.append(str("*" * 80))
-                log.append("")
-
-    df = pd.DataFrame({
-        "model": model,
-        "n_timepoints": n_tp,
-        "key": key,
-        "sim_input": sim_i,
-        "sim_output": sim_o,
-        "exp_output": exp_o,
-        "mag_err": err_o,
-        "nLogLik": nLogLik,
-        "aic": aic_o},
-        columns = ["model", "n_timepoints", "key", "sim_input", "sim_output", "exp_output", "mag_err", "nLogLik", "aic"])
-    for opt, err in final_errors.items():
-        log.append(str("%s error: %.4f,%.4f,%.4f" % (opt, err[0], err[1], err[2])))
-
-    for line in log:
-        if verbose:
-            print(line)
-        if output:
-            f.write(str(line+"\n"))
-
-    if output:
-        if verbose:
-            print("Output log saved to: "+output+"fit_timeseries_benchmark_log"+str(max_tp)+".txt")
-            print("Output saved to: "+output+"fit_timeseries_benchmark"+str(max_tp)+".csv")
-        df.to_csv(output+"fit_timeseries_benchmark"+str(max_tp)+".csv", index=False)
-        f.close()
-
-    df = df[["model","n_timepoints","mag_err"]]
-    return df
 
 def main():
     parser = make_option_parser()

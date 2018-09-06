@@ -16,7 +16,7 @@ testdir = os.path.dirname(__file__)
 srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
-from karenina.benchmark import benchmark,vis
+from karenina.benchmark import benchmark_simulated_datasets,vis
 
 """
 Tests for fit_timeseries_benchmark.py
@@ -28,7 +28,7 @@ class TestFit(unittest.TestCase):
     def setUp(self):
         if not os.path.exists("./test_benchmark/"):
             os.makedirs("./test_benchmark/")
-        self.df = benchmark(3, output="./test_benchmark/", verbose=False)
+        self.df = benchmark_simulated_datasets(3, output_dir="./test_benchmark/", verbose=False)
 
     def test_benchmark(self):
         """Tests that the benchmarking output is complete and files are saved"""
