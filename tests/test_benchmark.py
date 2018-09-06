@@ -16,7 +16,7 @@ testdir = os.path.dirname(__file__)
 srcdir = '../karenina'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 from warnings import catch_warnings
-from karenina.fit_timeseries_benchmark import benchmark,vis
+from karenina.benchmark import benchmark,vis
 
 """
 Tests for fit_timeseries_benchmark.py

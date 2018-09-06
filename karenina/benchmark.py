@@ -91,9 +91,12 @@ def vis(df, output):
         the_plot.savefig(output + "benchmark_theta_err.png")
 
 
+
+
+
+
 def benchmark(max_tp = 300, output = None, verbose = False):
-    """
-    Verifies that fit_timeseries recovers OU model params
+    """Test the ability of fit_timeseries to recover correct OU model params
 
     :param output: location for output log
     :param max_tp: maximum timepoints to test
@@ -104,18 +107,10 @@ def benchmark(max_tp = 300, output = None, verbose = False):
         f = open(output+"fit_timeseries_benchmark"+str(max_tp)+"_log.txt","w+")
     log = []
 
-    # generate several normal distributions
-    test_normal_data = {}
-    n_obs = 1000
-    dt = 0.01
-    for delta in [float(i) / 100.0 for i in range(0, 100, 1)]:
-        curr_data = norm.rvs(loc=0, size=n_obs, scale=delta ** (2 * dt))
-        test_normal_data[delta ** (2 * dt)] = curr_data
-    BasicNormalData = test_normal_data
-
     # generate OU process for testing
     ou_process = Process(start_coord=0.20, motion="Ornstein-Uhlenbeck",
                          history=None, params={"lambda": 0.20, "delta": 0.25, "mu": 0.0})
+    
     # run ou_process to get history
     for t in range(1, 30):
         dt = 1
