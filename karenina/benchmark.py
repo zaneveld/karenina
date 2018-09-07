@@ -55,23 +55,30 @@ def make_option_parser():
     return parser
 
 
-def write_logfile(output_dir,log_lines):
+def write_logfile(output_fp,log_lines):
+    """Write logfile lines to output filepath
 
-    f = open(output+"fit_timeseries_benchmark"+str(max_timepoints)+"_log.txt","w+")
-    for line in log:
+    :param output_fp: a filepath (as string) for the output log file
+    :param log_lines: lines of the logfile (linebreaks will be appended)
+    """
+    f = open(output_fp,"w+")
+    for line in log_lines:
         f.write(str(line+"\n"))
     f.close()
 
 
-def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None, verbose = False,\
+def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None,\
     simulation_type = "Ornstein-Uhlenbeck",\
-    simulation_params={"lambda": 0.12, "delta": 0.25, "mu": 0.5}):
+    simulation_params={"lambda": 0.12, "delta": 0.25, "mu": 0.5},
+    local_optimizer=['L-BFGS-B'],niter=[5],verbose=False):
     """Test the ability of fit_timeseries to recover correct OU model params
 
     :param output: location for output log
     :param max_timepoints: maximum timepoints to test. The benchmark will test every number of timepoints up to this number. So specifying max_timpoints = 50 will test all numbers of timepoints between 2 and 50.
     :param simulation_type: string describing the model for the simulation (passed to a Process object)
     :param simulation_params: dict of parameters for the simulation (these will be passed on to the Process object).
+    :param local_optimizer: list of names of local optimizers to use
+    :param niter: list of niter values to try. This parameter controls the number of independent restarts for global optimizer
     :param verbose: verbosity
     :return: output dataframe of benchmarked data
     """
@@ -86,7 +93,8 @@ def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None, verbos
     
     results = []
     
-    result_columns = ["model", "n_timepoints", "simulation_input", "inferred_parameters", "expected_parameters", "absolute_error", "AIC"]
+    result_columns = ["model", "n_timepoints", "simulation_input",\
+      "inferred_parameters", "expected_parameters", "absolute_error", "AIC"]
     
     for curr_timepoint in list(range(1, max_timepoints+1)):
         
@@ -104,26 +112,28 @@ def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None, verbos
         if verbose:
             print(line)
 
-    if output:
+    if output_dir:
         #Write logfile
-        log_filepath = output+"fit_timeseries_benchmark_log"+str(max_timepoints)+".txt"
+        log_filepath = join(output_dir,"fit_timeseries_benchmark_log_{0}.txt".format(max_timepoints))
         write_logfile(log_filepath,log)
         
         #Write benchamrk results file
-        output_filepath = output+"fit_timeseries_benchmark_"+str(max_timepoints)+"_results.csv"
+        output_filepath = join(output_dir,"fit_timeseries_benchmark_{0}_results.csv".format(max_timepoints))
         df.to_csv(output_filepath, index=False)
+
 
         if verbose:
             print("Output log saved to: %s" %log_filepath)
             print("Benchmark results saved to: %s" %output_filepath)
 
     #TODO: is it essential that we return this reduced df instead of the full one?
-    df = df[["model","n_timepoints","mag_err"]]
+    
+    #df = df[["benchmark_name","n_timepoints","all_parameters_absolute_error"]]
     return df
 
 
 
-def generate_logfile_lines_from_result_dict(results):
+def log_lines_from_result_dict(results):
     """Return a list of result lines
 
     :param results: a dict of results (all values must be able to be converted to strings)"""
@@ -182,24 +192,26 @@ def benchmark_simulated_dataset(n_timepoints,verbose = False,\
             result['n_timepoints'] = n_timepoints
             result['local_optimizer']=local_optimizer
             result['local_optimizer_niter']=niter
-            result['local_optimizer_param_names'] = ["Sigma","Lambda","Theta"]
+            result['model_parameter_names'] = ["sigma","lambda","theta"]
             result['local_optimizer_start_param_values']=[start_Sigma,start_Lambda,start_Theta]
-            result["expected_parameter_values"] = correct_values
-
+            result["expected_parameter_values"] = [simulation_params[param] for param in ['delta','lambda','mu']]
 
             #Look up expected values from user input simulation parameters
             exp_Sigma,exp_Lambda,exp_Mu =\
-               (simulation_parameters[param] for param in ['sigma','lambda','mu'])
-            
+                result["expected_parameter_values"]
+ 
             #Fit the model to the data
             inferred_params, nLogLik = \
               fit_timeseries(fn_to_optimize, x0, xmin, xmax,\
               stepsize= local_optimizer_stepsize,
               niter=niter, local_optimizer=local_optimizer)
  
+            for i,p in enumerate(result['model_parameter_names']):
+                result["inferred_{}".format(p)] = inferred_params[i]
+            
             #Report inferred parameter values
-            result["nLogLik"]=f_at_global_min
-            result["AIC"]=aic(len(simulation_parameters),nLogLik)
+            result["nLogLik"]= nLogLik
+            result["AIC"]=aic(len(simulation_params),nLogLik)
 
             #Add results to the log
             log.extend(log_lines_from_result_dict(result))
@@ -207,10 +219,10 @@ def benchmark_simulated_dataset(n_timepoints,verbose = False,\
             #will appear last in the log
             
             #Calculate errors
-            expected = list(correct_values)
+            expected = list(result['expected_parameter_values'])
             observed = list(inferred_params)
-            parameter_names = result['local_optimizer_param_names']
-            model_fit_error_results = calculate_errors(observed,expected,paramter_names)
+            parameter_names = result['model_parameter_names']
+            model_fit_error_results = calculate_errors(observed,expected,parameter_names)
             
             result.update(model_fit_error_results)
             #Add error results to the log
@@ -247,54 +259,67 @@ def calculate_errors(observed,expected,parameter_names=None):
         absolute_error = abs(observed[i]-expected[i])
         absolute_errors.append(absolute_error)
         squared_error = absolute_error**2
-        squared_errors.append(squared_errors)
+        squared_errors.append(squared_error)
         result['%s_absolute_error'%curr_parameter] = absolute_error
         result['%s_squared_error'%curr_parameter] = squared_error
-    
+   
     result['all_parameters_absolute_error']=absolute_errors
     result['all_parameters_squared_error']=squared_errors
     result['all_parameters_total_absolute_error'] = sum(absolute_errors)
-    result['all_paramters_sum_of_squared_errors'] = sum(squared_errors)
+    result['all_parameters_sum_of_squared_errors'] = sum(squared_errors)
        
     return result
             
  
-def vis(df, output):
+def graph_absolute_errors(df, output_dir,benchmark_name_col="benchmark_name"):
     """
-    Visualizes benchmarking output error for various tested timepoints
+    Graph absolute error in simulated datasets with varying numbers of tested timepoints
 
     :param df: Dataframe containing model, timepoints, and list of errors
-    :param output: output directory
+    :param output_dir: output directory
+    :param benchmark_name_col: column of the datafram that has the name of each model/benchmark
     """
 
+    #TODO: we need to specify more clearly exactly what columns need to be in 
+    #the dataframe 
+
+
     # Generate visualizations for each model tested (Local optimizer)
-    for model in df.model.unique():
-        df_t = df.loc[df['model'] == model]
-        df_split = pd.DataFrame(df_t.mag_err.values.tolist(),index=df_t.index)
-        df_t = pd.concat([df_t.drop("mag_err", axis=1), df_split], axis=1)
-        df_t.columns = ["model","n_timepoints","sigma_err","lambda_err","theta_err"]
+    for model in df[benchmark_name_col].unique():
+        df_t = df.loc[df[benchmark_name_col] == model]
+        #df_split = pd.DataFrame(df_t.mag_err.values.tolist(),index=df_t.index)
+        #df_t = pd.concat([df_t.drop("mag_err", axis=1), df_split], axis=1)
+        #df_t.columns = ["model","n_timepoints","sigma_err","lambda_err","theta_err"]
+        curr_df = df_t
+        #Assign each parameter a seaborn palette name so graphs will be different colors
+        palettes_by_parameter = {"sigma":"firebrick","lambda":"dodgerblue","theta":"goldenrod"}
+        
+        model_parameters = df_t['model_parameter_names'] 
 
-        # Create individual dataframes for visualization
-        df_sig = df_t[["n_timepoints","sigma_err"]]
-        df_lam = df_t[["n_timepoints","lambda_err"]]
-        df_the = df_t[["n_timepoints", "theta_err"]]
+        for model_param in ['sigma','lambda','theta']:
+            #TODO: is the below line necessary? Can't we just pass seaborn the full df?
+            #curr_df = df_t[["n_timepoints",model_param]]  
+            # Create and save scatterplots with regression lines for each variable
+            curr_inferred_parameter_column = "inferred_{}".format(model_param)
+            curr_absolute_error_column = "{}_absolute_error".format(model_param)
+            curr_palette = palettes_by_parameter[model_param]
+            curr_title = "Obseved Error {}".format(model_param.capitalize()) 
 
-        # Create scatterplots with regression lines for each variable
-        sig_plot = sns.lmplot(x="n_timepoints", y="sigma_err", data=df_sig, fit_reg=False, palette=["firebrick"], hue="sigma_err", legend=False)
+            curr_outfile = join(output_dir,"benchmark_{}_error.png".format(model_param))
+
+            make_scatterplot(x_col='n_timepoints',y_col=curr_inferred_parameter_column,\
+              data=curr_df,hue = curr_absolute_error_column,palette= [curr_palette],\
+              outfile=curr_outfile,title = curr_title)
+
+def make_scatterplot(x_col,y_col,data,hue,palette=["firebrick"],title='',\
+        outfile='./results_scatter.png'):
+        
+        sig_plot = sns.lmplot(x=x_col, y=y_col, data=data,\
+          fit_reg=False, palette=palette, hue=hue, legend=False)
+        
         ax = plt.gca()
-        ax.set_title("Observed Sigma Error")
-        sig_plot.savefig(output+"benchmark_sigma_err.png")
-
-        lam_plot = sns.lmplot(x="n_timepoints", y="lambda_err", data=df_lam, fit_reg=False, palette=["dodgerblue"], hue="lambda_err", legend=False)
-        ax = plt.gca()
-        ax.set_title("Observed Lambda Error")
-        lam_plot.savefig(output + "benchmark_lambda_err.png")
-
-        the_plot = sns.lmplot(x="n_timepoints", y="theta_err", data=df_the, fit_reg=False, palette=["goldenrod"], hue="theta_err", legend=False)
-        ax = plt.gca()
-        ax.set_title("Observed Theta Error")
-        the_plot.savefig(output + "benchmark_theta_err.png")
-
+        ax.set_title(title)
+        sig_plot.savefig(outfile)
 
 
            
