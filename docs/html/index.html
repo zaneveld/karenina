@@ -7,12 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Karenina &#8212; karenina 0.0.0 documentation</title>
-    <link rel="stylesheet" href="classic.css" type="text/css" />
-    <link rel="stylesheet" href="pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="documentation_options.js"></script>
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="underscore.js"></script>
-    <script type="text/javascript" src="doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
@@ -1445,7 +1439,7 @@ Fit and minimize the timeseries for each subject and cohort defined.</p>
 
 <dl class="function">
 <dt id="karenina.fit_timeseries.fit_timeseries">
-<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_timeseries</code><span class="sig-paren">(</span><em>fn_to_optimize</em>, <em>x0</em>, <em>xmin=array([-inf</em>, <em>-inf</em>, <em>-inf])</em>, <em>xmax=array([inf</em>, <em>inf</em>, <em>inf])</em>, <em>global_optimizer='basinhopping'</em>, <em>local_optimizer='Nelder-Mead'</em>, <em>stepsize=0.01</em>, <em>niter=200</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_timeseries" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_timeseries</code><span class="sig-paren">(</span><em>fn_to_optimize</em>, <em>x0</em>, <em>xmin=array([-inf</em>, <em>-inf</em>, <em>-inf])</em>, <em>xmax=array([ inf</em>, <em>inf</em>, <em>inf])</em>, <em>global_optimizer='basinhopping'</em>, <em>local_optimizer='Nelder-Mead'</em>, <em>stepsize=0.01</em>, <em>niter=200</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_timeseries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimize a function returning input &amp; result
 fn_to_optimize – the function to minimize. Must return a single value or array x.</p>
 <p>x0 – initial parameter value or array of parameter values
@@ -1643,48 +1637,8 @@ nLogLikelihoods for each individuals timeseries.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-karenina.fit_timeseries_benchmark">
-<span id="fit-timeseries-benchmark-py"></span><h1>fit_timeseries_benchmark.py<a class="headerlink" href="#module-karenina.fit_timeseries_benchmark" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="karenina.fit_timeseries_benchmark.benchmark">
-<code class="descclassname">karenina.fit_timeseries_benchmark.</code><code class="descname">benchmark</code><span class="sig-paren">(</span><em>max_tp=300</em>, <em>output=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries_benchmark.benchmark" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verifies that fit_timeseries recovers OU model params</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>output</strong> – location for output log</li>
-<li><strong>max_tp</strong> – maximum timepoints to test</li>
-<li><strong>verbose</strong> – verbosity</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">output dataframe of benchmarked data</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="karenina.fit_timeseries_benchmark.vis">
-<code class="descclassname">karenina.fit_timeseries_benchmark.</code><code class="descname">vis</code><span class="sig-paren">(</span><em>df</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries_benchmark.vis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visualizes benchmarking output error for various tested timepoints</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>df</strong> – Dataframe containing model, timepoints, and list of errors</li>
-<li><strong>output</strong> – output directory</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+<div class="section" id="fit-timeseries-benchmark-py">
+<h1>fit_timeseries_benchmark.py<a class="headerlink" href="#fit-timeseries-benchmark-py" title="Permalink to this headline">¶</a></h1>
 </div>
 <div class="section" id="module-karenina.visualization">
 <span id="visualization-py"></span><h1>visualization.py<a class="headerlink" href="#module-karenina.visualization" title="Permalink to this headline">¶</a></h1>
@@ -2321,7 +2275,7 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
 </li>
 <li><a class="reference internal" href="#module-karenina.spatial_ornstein_uhlenbeck">spatial_ornstein_uhlenbeck.py</a></li>
 <li><a class="reference internal" href="#module-karenina.fit_timeseries">fit_timeseries.py</a></li>
-<li><a class="reference internal" href="#module-karenina.fit_timeseries_benchmark">fit_timeseries_benchmark.py</a></li>
+<li><a class="reference internal" href="#fit-timeseries-benchmark-py">fit_timeseries_benchmark.py</a></li>
 <li><a class="reference internal" href="#module-karenina.visualization">visualization.py</a></li>
 <li><a class="reference internal" href="#module-karenina.experiment">experiment.py</a></li>
 <li><a class="reference internal" href="#module-karenina.individual">individual.py</a></li>
@@ -2366,7 +2320,7 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Jesse Zaneveld.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.
     </div>
   </body>
 </html>
