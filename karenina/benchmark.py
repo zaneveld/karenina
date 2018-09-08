@@ -44,7 +44,7 @@ def make_option_parser():
     optional_options = OptionGroup(parser, "Optional options")
 
     optional_options.add_option('--n_timepoints', type=int, default=300,
-                                help='Benchmark the timeseries up to n_timepoints')
+                                help='Benchmark the timeseries up to n_timepoints [default: %default]')
 
     optional_options.add_option('-v', '--verbose', action="store_true", dest="verbose", default=False,
                                 help='-v, allows for verbose output' +
@@ -85,7 +85,7 @@ def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None,\
 
     log = []   
     final_errors = {}
-    dt = 0.1
+    dt = 1.0
    
     #model, n_timepoints, key, simulation_input,\
     #inferred_parameters, simulation_parameters,\
@@ -93,11 +93,14 @@ def benchmark_simulated_datasets(max_timepoints = 300, output_dir = None,\
     
     results = []
     
-    result_columns = ["model", "n_timepoints", "simulation_input",\
-      "inferred_parameters", "expected_parameters", "absolute_error", "AIC"]
-    
-    for curr_timepoint in list(range(1, max_timepoints+1)):
-        
+    #result_columns = ["model", "n_timepoints", "simulation_input",\
+    #  "inferred_parameters", "expected_parameters", "absolute_error", "AIC"]
+
+    timepoints_to_simulate = list(range(1,max_timepoints+1))
+
+    for curr_timepoint in timepoints_to_simulate:
+        if curr_timepoint <= 2:
+            continue    
         
         curr_log,curr_results = benchmark_simulated_dataset(n_timepoints=curr_timepoint,\
           verbose = verbose,simulation_type=simulation_type,simulation_params=simulation_params,log=log,dt=dt)
@@ -152,14 +155,18 @@ def benchmark_simulated_dataset(n_timepoints,verbose = False,\
     simulation_params={"lambda": 0.12, "delta": 0.25, "mu": 0.5},local_optimizer=['L-BFGS-B'],\
     local_optimizer_niter=[5],local_optimizer_stepsize = 0.005,log=[],dt = 0.1):
 
-
-    
     # run ou_process to get history
     ou = Process(start_coord=0.20, motion=simulation_type,
-                 history=None, params= simulation_params)
-    for t in range(0, n_timepoints):
+                 history=[0.20,0.20], params= simulation_params)
+
+    timepoints = list(range(0,n_timepoints))
+
+    for t in timepoints:
+        if verbose:
+            print("simulating timepoint t:",t)
+        
         ou.update(dt)
-    
+ 
     #Set timepoints and position (x) values
     xs = array(ou.History)
     ts = np.arange(0, len(ou.History)) * dt
@@ -186,6 +193,7 @@ def benchmark_simulated_dataset(n_timepoints,verbose = False,\
 
             #Results will be stored in the simulation_result dict
             result = {}
+            result['model'] = "_".join([simulation_type,local_optimizer,"niter",str(niter)])
             result['benchmark_name'] = "_".join([local_optimizer,"niter",str(niter),"t",str(n_timepoints)])
             result['xs'] = xs
             result['ts'] = ts
@@ -271,13 +279,13 @@ def calculate_errors(observed,expected,parameter_names=None):
     return result
             
  
-def graph_absolute_errors(df, output_dir,benchmark_name_col="benchmark_name"):
+def graph_absolute_errors(df, output_dir,model_name_col="model"):
     """
     Graph absolute error in simulated datasets with varying numbers of tested timepoints
 
     :param df: Dataframe containing model, timepoints, and list of errors
     :param output_dir: output directory
-    :param benchmark_name_col: column of the datafram that has the name of each model/benchmark
+    :param model_name_col: column of the datafram that has the name of each model/benchmark
     """
 
     #TODO: we need to specify more clearly exactly what columns need to be in 
@@ -285,8 +293,8 @@ def graph_absolute_errors(df, output_dir,benchmark_name_col="benchmark_name"):
 
 
     # Generate visualizations for each model tested (Local optimizer)
-    for model in df[benchmark_name_col].unique():
-        df_t = df.loc[df[benchmark_name_col] == model]
+    for model in df[model_name_col].unique():
+        df_t = df.loc[df[model_name_col] == model]
         #df_split = pd.DataFrame(df_t.mag_err.values.tolist(),index=df_t.index)
         #df_t = pd.concat([df_t.drop("mag_err", axis=1), df_split], axis=1)
         #df_t.columns = ["model","n_timepoints","sigma_err","lambda_err","theta_err"]
@@ -320,7 +328,7 @@ def make_scatterplot(x_col,y_col,data,hue,palette=["firebrick"],title='',\
         ax = plt.gca()
         ax.set_title(title)
         sig_plot.savefig(outfile)
-
+        plt.close()
 
            
 
@@ -341,8 +349,8 @@ def main():
     if not os.path.exists(output):
         os.makedirs(output)
 
-    df = benchmark(n_timepoints, output, verbose)
-    vis(df, output)
+    df = benchmark_simulated_datasets(n_timepoints, output, verbose=verbose)
+    graph_absolute_errors(df, output)
 
 if __name__ == "__main__":
     main()
