@@ -1,0 +1,11 @@
+#Karenina Simulation Logfile
+Output folder: C:/Users/Ripti/Desktop/smallSim/
+Treatment names: control,destabilizing_treatment
+Number of individuals: 3,3
+Number of timepoints: 50
+Perturbation timepoint: 15
+Perturbation duration: 100
+Interindividual variation: 0.01
+Delta: 0.25
+Lambda: 0.2
+Fixed starting position: None
