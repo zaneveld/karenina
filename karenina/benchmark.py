@@ -22,7 +22,8 @@ import os
 import pandas as pd
 import seaborn as sns
 import sys
-import matplotlib
+from matplotlib import use
+use('Agg')
 import matplotlib.pyplot as plt
 
 
