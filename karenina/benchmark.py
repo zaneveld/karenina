@@ -10,6 +10,8 @@ __maintainer__ = "Jesse Zaneveld"
 __email__ = "zaneveld@gmail.com"
 __status__ = "Development"
 
+from matplotlib import use
+use('Agg')
 from optparse import OptionParser
 from optparse import OptionGroup
 from scipy.stats import norm
@@ -22,8 +24,6 @@ import os
 import pandas as pd
 import seaborn as sns
 import sys
-from matplotlib import use
-use('Agg')
 import matplotlib.pyplot as plt
 
 
