@@ -43,12 +43,15 @@ class Process(object):
         curr_params = copy(self.Params)
         for p in self.Perturbations:
             curr_params = p.update_params(curr_params)
+        
         if self.ProcessType == "Brownian":
             self.bm_update(dt,delta=curr_params["delta"])
         elif self.ProcessType == "Ornstein-Uhlenbeck":
             self.ou_update(dt,mu=curr_params["mu"],\
             delta = curr_params["delta"],\
             L=curr_params["lambda"])
+        else:
+            raise ValueError("only 'Brownian' or 'Ornstein-Uhlenbeck' processes are supported, not %s"%self.ProcessType)
 
     def bm_change(self,dt,delta):
         """
