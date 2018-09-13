@@ -111,10 +111,7 @@ ______________________________
 	  Optional options:
 		--pert_file_path=PERT_FILE_PATH
 							file path to a perturbation file specifying parameters
-							for the simulation results [default:
-							C:\Users\Ripti\Anaconda3\lib\site-packages\karenina-0.
-							0.1-py3.6.egg\data\perturbations\set_xyz_lambda_zero.t
-							sv]
+							for the simulation results
 		--treatment_names=TREATMENT_NAMES
 							Comma seperated list of treatment named
 							[default:control,destabilizing_treatment]
@@ -158,8 +155,9 @@ The following parameters are used to generate a simulation using Ornstein Uhlenb
 .. code-block:: python
 
 	-o [Direct/filepath/to/output/dir/]
-	--n_timepoints 100 
-	--perturbation_timepoint 25
+	--n_timepoints 50 
+	--perturbation_timepoint 15
+	--n_individuals 3,3
 
 The following parameters were used as their default input:
 
@@ -167,7 +165,6 @@ The following parameters were used as their default input:
 
 	--treatment_names control,destabilizing_treatment
 	--pert_file_path os.path.abspath(resource_filename('karenina.data','set_xyz_lambda_zero.tsv'))
-	--n_individuals 35,35
 	--perturbation_duration 100
 	--interindividual_variation 0.01
 	--delta 0.25
@@ -177,7 +174,7 @@ After installing **karenina**, the following command is used to execute the simu
 
 .. code-block:: python
 
-	spatial_ornstein_uhlenbeck -o ./ --n_timepoints 100 --perturbation_timepoint 25
+	spatial_ornstein_uhlenbeck -o ./ --n_timepoints 50 --perturbation_timepoint 15 --n_individuals 3,3
 
 This generates the following files:
 
@@ -187,17 +184,13 @@ This generates the following files:
 * euclidean.txt : Euclidean distance-matrix of Simulation data
 * simulation_video.mp4 : Visualization of simulated data
 
-.. note::
-
-	euclidean.txt has been compressed due to large size.
-
 These files can be viewed here:
 
-https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation
+https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation_50.3.3
 
 .. raw:: html
 
-	<div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+	<div style="position:relative;height:0;padding-bottom:57.02%"><iframe src="https://www.youtube.com/embed/CIR-5lGLBOc?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="631" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
 
 fit_timeseries
 __________________
@@ -315,20 +308,20 @@ the destabilizing_treatment cohort.
 +----------------------------+---+-------+-------+-------+-------+-------+
 |Subject                     |pc |sigma  |lambda |theta  |nLogLik|aic    |
 +============================+===+=======+=======+=======+=======+=======+
-|control_pc1                 |pc1|0.25064|0.20376|-0.0013|-4625.3|53.1213|
+|control_pc1                 |pc1|0.25387|0.23143|-0.0109|-190.49|-4.4992|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|control_pc2                 |pc2|0.25064|0.20379|-0.0013|-4625.3|53.1213|
+|control_pc2                 |pc2|0.25388|0.23144|-0.0109|-190.49|-4.4992|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|control_pc3                 |pc3|0.25064|0.20378|-0.0013|-4625.3|53.1213|
+|control_pc3                 |pc3|0.25388|0.23144|-0.0109|-190.49|-4.4992|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|destabilizing_treatment_pc1 |pc1|0.25289|0.00647|0.09973|-4563.9|53.1482|
+|destabilizing_treatment_pc1 |pc1|0.24395|0.01951|-0.1203|-201.98|-4.6163|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|destabilizing_treatment_pc2 |pc2|0.25289|0.00647|0.09971|-4563.9|53.1482|
+|destabilizing_treatment_pc2 |pc2|0.24395|0.01951|-0.1203|-201.98|-4.6163|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|destabilizing_treatment_pc3 |pc3|0.25289|0.00647|0.09974|-4563.9|53.1482|
+|destabilizing_treatment_pc3 |pc3|0.24395|0.01951|-0.1203|-201.98|-4.6163|
 +----------------------------+---+-------+-------+-------+-------+-------+
 
-Because the simulation data is quite large, and thus takes a long time to process, we can alternatively fit 
+Because the simulation data is large, and thus takes some time to process, we can alternatively fit 
 the timeseries from **Moving Pictures**. The weighted_unifrac_pcoa_results.qza file will be used.
 
 The PCoA data can be found here:
@@ -750,20 +743,20 @@ the destabilizing_treatment cohort.
 +----------------------------+---+-------+-------+-------+-------+-------+
 |Subject                     |pc |sigma  |lambda |theta  |nLogLik|aic    |
 +============================+===+=======+=======+=======+=======+=======+
-|control_pc1                 |pc1|0.25064|0.20376|-0.0013|-4625.3|53.1213|
+|control_pc1                 |pc1|0.25387|0.23143|-0.0109|-190.49|-4.4992|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|control_pc2                 |pc2|0.25064|0.20379|-0.0013|-4625.3|53.1213|
+|control_pc2                 |pc2|0.25388|0.23144|-0.0109|-190.49|-4.4992|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|control_pc3                 |pc3|0.25064|0.20378|-0.0013|-4625.3|53.1213|
+|control_pc3                 |pc3|0.25388|0.23144|-0.0109|-190.49|-4.4992|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|destabilizing_treatment_pc1 |pc1|0.25289|0.00647|0.09973|-4563.9|53.1482|
+|destabilizing_treatment_pc1 |pc1|0.24395|0.01951|-0.1203|-201.98|-4.6163|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|destabilizing_treatment_pc2 |pc2|0.25289|0.00647|0.09971|-4563.9|53.1482|
+|destabilizing_treatment_pc2 |pc2|0.24395|0.01951|-0.1203|-201.98|-4.6163|
 +----------------------------+---+-------+-------+-------+-------+-------+
-|destabilizing_treatment_pc3 |pc3|0.25289|0.00647|0.09974|-4563.9|53.1482|
+|destabilizing_treatment_pc3 |pc3|0.24395|0.01951|-0.1203|-201.98|-4.6163|
 +----------------------------+---+-------+-------+-------+-------+-------+
 
-Because the simulation data is quite large, and thus takes a long time to process, we can alternatively
+Because the simulation data is large, and thus takes some time to process, we can alternatively
 fit the timeseries from **Moving Pictures**. The weighted_unifract_pcoa_results.qza file will be used.
 
 The PCoA data can be found here:

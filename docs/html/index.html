@@ -141,10 +141,7 @@ compatible with other Q2 plugins. <strong>q2-karenina</strong> requires both <st
   <span class="n">Optional</span> <span class="n">options</span><span class="p">:</span>
         <span class="o">--</span><span class="n">pert_file_path</span><span class="o">=</span><span class="n">PERT_FILE_PATH</span>
                                                 <span class="nb">file</span> <span class="n">path</span> <span class="n">to</span> <span class="n">a</span> <span class="n">perturbation</span> <span class="nb">file</span> <span class="n">specifying</span> <span class="n">parameters</span>
-                                                <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">results</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span>
-                                                <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Ripti</span>\<span class="n">Anaconda3</span>\<span class="n">lib</span>\<span class="n">site</span><span class="o">-</span><span class="n">packages</span>\<span class="n">karenina</span><span class="o">-</span><span class="mf">0.</span>
-                                                <span class="mf">0.1</span><span class="o">-</span><span class="n">py3</span><span class="o">.</span><span class="mf">6.</span><span class="n">egg</span>\<span class="n">data</span>\<span class="n">perturbations</span>\<span class="n">set_xyz_lambda_zero</span><span class="o">.</span><span class="n">t</span>
-                                                <span class="n">sv</span><span class="p">]</span>
+                                                <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">results</span>
         <span class="o">--</span><span class="n">treatment_names</span><span class="o">=</span><span class="n">TREATMENT_NAMES</span>
                                                 <span class="n">Comma</span> <span class="n">seperated</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">treatment</span> <span class="n">named</span>
                                                 <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="n">control</span><span class="p">,</span><span class="n">destabilizing_treatment</span><span class="p">]</span>
@@ -185,14 +182,14 @@ This tutorial will explore the functionality of the script, and provide sample i
 for fit_timeseries and karenina_visualization.</p>
 <p>The following parameters are used to generate a simulation using Ornstein Uhlenbeck and Brownian motion models:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">Direct</span><span class="o">/</span><span class="n">filepath</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="nb">dir</span><span class="o">/</span><span class="p">]</span>
-<span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span>
-<span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">25</span>
+<span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">50</span>
+<span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">15</span>
+<span class="o">--</span><span class="n">n_individuals</span> <span class="mi">3</span><span class="p">,</span><span class="mi">3</span>
 </pre></div>
 </div>
 <p>The following parameters were used as their default input:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">treatment_names</span> <span class="n">control</span><span class="p">,</span><span class="n">destabilizing_treatment</span>
 <span class="o">--</span><span class="n">pert_file_path</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;karenina.data&#39;</span><span class="p">,</span><span class="s1">&#39;set_xyz_lambda_zero.tsv&#39;</span><span class="p">))</span>
-<span class="o">--</span><span class="n">n_individuals</span> <span class="mi">35</span><span class="p">,</span><span class="mi">35</span>
 <span class="o">--</span><span class="n">perturbation_duration</span> <span class="mi">100</span>
 <span class="o">--</span><span class="n">interindividual_variation</span> <span class="mf">0.01</span>
 <span class="o">--</span><span class="n">delta</span> <span class="mf">0.25</span>
@@ -200,7 +197,7 @@ for fit_timeseries and karenina_visualization.</p>
 </pre></div>
 </div>
 <p>After installing <strong>karenina</strong>, the following command is used to execute the simulation from within the output directory.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spatial_ornstein_uhlenbeck</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">100</span> <span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">25</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spatial_ornstein_uhlenbeck</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">--</span><span class="n">n_timepoints</span> <span class="mi">50</span> <span class="o">--</span><span class="n">perturbation_timepoint</span> <span class="mi">15</span> <span class="o">--</span><span class="n">n_individuals</span> <span class="mi">3</span><span class="p">,</span><span class="mi">3</span>
 </pre></div>
 </div>
 <p>This generates the following files:</p>
@@ -211,13 +208,9 @@ for fit_timeseries and karenina_visualization.</p>
 <li>euclidean.txt : Euclidean distance-matrix of Simulation data</li>
 <li>simulation_video.mp4 : Visualization of simulated data</li>
 </ul>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">euclidean.txt has been compressed due to large size.</p>
-</div>
 <p>These files can be viewed here:</p>
-<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation">https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation</a></p>
-<div style="position:relative;height:0;padding-bottom:75%"><iframe src="https://www.youtube.com/embed/qxuL0E-0E5M?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
+<p><a class="reference external" href="https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation_50.3.3">https://github.com/zaneveld/karenina/tree/master/data/outputs/OU_simulation_50.3.3</a></p>
+<div style="position:relative;height:0;padding-bottom:57.02%"><iframe src="https://www.youtube.com/embed/CIR-5lGLBOc?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="631" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
 <div class="section" id="fit-timeseries">
 <h3>fit_timeseries<a class="headerlink" href="#fit-timeseries" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">fit_timeseries</span> <span class="o">-</span><span class="n">h</span>
@@ -329,55 +322,55 @@ the destabilizing_treatment cohort.</p>
 <tbody valign="top">
 <tr class="row-even"><td>control_pc1</td>
 <td>pc1</td>
-<td>0.25064</td>
-<td>0.20376</td>
-<td>-0.0013</td>
-<td>-4625.3</td>
-<td>53.1213</td>
+<td>0.25387</td>
+<td>0.23143</td>
+<td>-0.0109</td>
+<td>-190.49</td>
+<td>-4.4992</td>
 </tr>
 <tr class="row-odd"><td>control_pc2</td>
 <td>pc2</td>
-<td>0.25064</td>
-<td>0.20379</td>
-<td>-0.0013</td>
-<td>-4625.3</td>
-<td>53.1213</td>
+<td>0.25388</td>
+<td>0.23144</td>
+<td>-0.0109</td>
+<td>-190.49</td>
+<td>-4.4992</td>
 </tr>
 <tr class="row-even"><td>control_pc3</td>
 <td>pc3</td>
-<td>0.25064</td>
-<td>0.20378</td>
-<td>-0.0013</td>
-<td>-4625.3</td>
-<td>53.1213</td>
+<td>0.25388</td>
+<td>0.23144</td>
+<td>-0.0109</td>
+<td>-190.49</td>
+<td>-4.4992</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc1</td>
 <td>pc1</td>
-<td>0.25289</td>
-<td>0.00647</td>
-<td>0.09973</td>
-<td>-4563.9</td>
-<td>53.1482</td>
+<td>0.24395</td>
+<td>0.01951</td>
+<td>-0.1203</td>
+<td>-201.98</td>
+<td>-4.6163</td>
 </tr>
 <tr class="row-even"><td>destabilizing_treatment_pc2</td>
 <td>pc2</td>
-<td>0.25289</td>
-<td>0.00647</td>
-<td>0.09971</td>
-<td>-4563.9</td>
-<td>53.1482</td>
+<td>0.24395</td>
+<td>0.01951</td>
+<td>-0.1203</td>
+<td>-201.98</td>
+<td>-4.6163</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc3</td>
 <td>pc3</td>
-<td>0.25289</td>
-<td>0.00647</td>
-<td>0.09974</td>
-<td>-4563.9</td>
-<td>53.1482</td>
+<td>0.24395</td>
+<td>0.01951</td>
+<td>-0.1203</td>
+<td>-201.98</td>
+<td>-4.6163</td>
 </tr>
 </tbody>
 </table>
-<p>Because the simulation data is quite large, and thus takes a long time to process, we can alternatively fit
+<p>Because the simulation data is large, and thus takes some time to process, we can alternatively fit
 the timeseries from <strong>Moving Pictures</strong>. The weighted_unifrac_pcoa_results.qza file will be used.</p>
 <p>The PCoA data can be found here:</p>
 <p><a class="reference external" href="https://github.com/zaneveld/karenina/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true">https://github.com/zaneveld/karenina/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true</a></p>
@@ -923,55 +916,55 @@ the destabilizing_treatment cohort.</p>
 <tbody valign="top">
 <tr class="row-even"><td>control_pc1</td>
 <td>pc1</td>
-<td>0.25064</td>
-<td>0.20376</td>
-<td>-0.0013</td>
-<td>-4625.3</td>
-<td>53.1213</td>
+<td>0.25387</td>
+<td>0.23143</td>
+<td>-0.0109</td>
+<td>-190.49</td>
+<td>-4.4992</td>
 </tr>
 <tr class="row-odd"><td>control_pc2</td>
 <td>pc2</td>
-<td>0.25064</td>
-<td>0.20379</td>
-<td>-0.0013</td>
-<td>-4625.3</td>
-<td>53.1213</td>
+<td>0.25388</td>
+<td>0.23144</td>
+<td>-0.0109</td>
+<td>-190.49</td>
+<td>-4.4992</td>
 </tr>
 <tr class="row-even"><td>control_pc3</td>
 <td>pc3</td>
-<td>0.25064</td>
-<td>0.20378</td>
-<td>-0.0013</td>
-<td>-4625.3</td>
-<td>53.1213</td>
+<td>0.25388</td>
+<td>0.23144</td>
+<td>-0.0109</td>
+<td>-190.49</td>
+<td>-4.4992</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc1</td>
 <td>pc1</td>
-<td>0.25289</td>
-<td>0.00647</td>
-<td>0.09973</td>
-<td>-4563.9</td>
-<td>53.1482</td>
+<td>0.24395</td>
+<td>0.01951</td>
+<td>-0.1203</td>
+<td>-201.98</td>
+<td>-4.6163</td>
 </tr>
 <tr class="row-even"><td>destabilizing_treatment_pc2</td>
 <td>pc2</td>
-<td>0.25289</td>
-<td>0.00647</td>
-<td>0.09971</td>
-<td>-4563.9</td>
-<td>53.1482</td>
+<td>0.24395</td>
+<td>0.01951</td>
+<td>-0.1203</td>
+<td>-201.98</td>
+<td>-4.6163</td>
 </tr>
 <tr class="row-odd"><td>destabilizing_treatment_pc3</td>
 <td>pc3</td>
-<td>0.25289</td>
-<td>0.00647</td>
-<td>0.09974</td>
-<td>-4563.9</td>
-<td>53.1482</td>
+<td>0.24395</td>
+<td>0.01951</td>
+<td>-0.1203</td>
+<td>-201.98</td>
+<td>-4.6163</td>
 </tr>
 </tbody>
 </table>
-<p>Because the simulation data is quite large, and thus takes a long time to process, we can alternatively
+<p>Because the simulation data is large, and thus takes some time to process, we can alternatively
 fit the timeseries from <strong>Moving Pictures</strong>. The weighted_unifract_pcoa_results.qza file will be used.</p>
 <p>The PCoA data can be found here:</p>
 <p><a class="reference external" href="https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true">https://github.com/zaneveld/karenina/blob/master/data/fit_timeseries/weighted_unifrac_pcoa_results.qza?raw=true</a></p>
