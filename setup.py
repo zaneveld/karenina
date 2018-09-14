@@ -57,7 +57,7 @@ setup(
         'console_scripts': [
             'spatial_ornstein_uhlenbeck=karenina.spatial_ornstein_uhlenbeck:main',
             'fit_timeseries=karenina.fit_timeseries:main',
-            'fit_timeseries_benchmark = karenina.fit_timeseries_benchmark:main',
+            'benchmark = karenina.benchmark:main',
             'karenina_visualization = karenina.visualization:main'
         ],
     },
