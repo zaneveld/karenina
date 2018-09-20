@@ -69,3 +69,4 @@ target/
 *.iml
 .cache/v/cache/lastfailed
 data/outputs/OU_simulation/euclidean.txt
+data/outputs/OU_simulation_100.35.35/euclidean.txt
