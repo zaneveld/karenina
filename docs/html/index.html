@@ -7,6 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Karenina &#8212; karenina 0.0.0 documentation</title>
+    <link rel="stylesheet" href="classic.css" type="text/css" />
+    <link rel="stylesheet" href="pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="documentation_options.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript" src="doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
@@ -1432,7 +1438,7 @@ Fit and minimize the timeseries for each subject and cohort defined.</p>
 
 <dl class="function">
 <dt id="karenina.fit_timeseries.fit_timeseries">
-<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_timeseries</code><span class="sig-paren">(</span><em>fn_to_optimize</em>, <em>x0</em>, <em>xmin=array([-inf</em>, <em>-inf</em>, <em>-inf])</em>, <em>xmax=array([ inf</em>, <em>inf</em>, <em>inf])</em>, <em>global_optimizer='basinhopping'</em>, <em>local_optimizer='Nelder-Mead'</em>, <em>stepsize=0.01</em>, <em>niter=200</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_timeseries" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">karenina.fit_timeseries.</code><code class="descname">fit_timeseries</code><span class="sig-paren">(</span><em>fn_to_optimize</em>, <em>x0</em>, <em>xmin=array([-inf</em>, <em>-inf</em>, <em>-inf])</em>, <em>xmax=array([inf</em>, <em>inf</em>, <em>inf])</em>, <em>global_optimizer='basinhopping'</em>, <em>local_optimizer='Nelder-Mead'</em>, <em>stepsize=0.01</em>, <em>niter=200</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.fit_timeseries.fit_timeseries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimize a function returning input &amp; result
 fn_to_optimize – the function to minimize. Must return a single value or array x.</p>
 <p>x0 – initial parameter value or array of parameter values
@@ -1630,8 +1636,114 @@ nLogLikelihoods for each individuals timeseries.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="fit-timeseries-benchmark-py">
-<h1>fit_timeseries_benchmark.py<a class="headerlink" href="#fit-timeseries-benchmark-py" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-karenina.benchmark">
+<span id="benchmark-py"></span><h1>benchmark.py<a class="headerlink" href="#module-karenina.benchmark" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="karenina.benchmark.benchmark_simulated_dataset">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">benchmark_simulated_dataset</code><span class="sig-paren">(</span><em>n_timepoints, verbose=False, simulation_type='Ornstein-Uhlenbeck', simulation_params={'delta': 0.25, 'lambda': 0.12, 'mu': 0.5}, local_optimizer=['L-BFGS-B'], local_optimizer_niter=[5], local_optimizer_stepsize=0.005, log=[], dt=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.benchmark_simulated_dataset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="karenina.benchmark.benchmark_simulated_datasets">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">benchmark_simulated_datasets</code><span class="sig-paren">(</span><em>max_timepoints=300, output_dir=None, simulation_type='Ornstein-Uhlenbeck', simulation_params={'delta': 0.25, 'lambda': 0.12, 'mu': 0.5}, local_optimizer=['L-BFGS-B'], niter=[5], verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.benchmark_simulated_datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the ability of fit_timeseries to recover correct OU model params</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>output</strong> – location for output log</li>
+<li><strong>max_timepoints</strong> – maximum timepoints to test. The benchmark will test every number of timepoints up to this number. So specifying max_timpoints = 50 will test all numbers of timepoints between 2 and 50.</li>
+<li><strong>simulation_type</strong> – string describing the model for the simulation (passed to a Process object)</li>
+<li><strong>simulation_params</strong> – dict of parameters for the simulation (these will be passed on to the Process object).</li>
+<li><strong>local_optimizer</strong> – list of names of local optimizers to use</li>
+<li><strong>niter</strong> – list of niter values to try. This parameter controls the number of independent restarts for global optimizer</li>
+<li><strong>verbose</strong> – verbosity</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">output dataframe of benchmarked data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.benchmark.calculate_errors">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">calculate_errors</code><span class="sig-paren">(</span><em>observed</em>, <em>expected</em>, <em>parameter_names=None</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.calculate_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return per-parameter absolute and squared errors to results</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>names</strong> (<em>parameter</em>) – list of strings describing parameter names (in order)</li>
+<li><strong>observed</strong> – an array of observed values</li>
+<li><strong>expected</strong> – an array of expected values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.benchmark.graph_absolute_errors">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">graph_absolute_errors</code><span class="sig-paren">(</span><em>df</em>, <em>output_dir</em>, <em>model_name_col='model'</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.graph_absolute_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Graph absolute error in simulated datasets with varying numbers of tested timepoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> – Dataframe containing model, timepoints, and list of errors</li>
+<li><strong>output_dir</strong> – output directory</li>
+<li><strong>model_name_col</strong> – column of the datafram that has the name of each model/benchmark</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.benchmark.log_lines_from_result_dict">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">log_lines_from_result_dict</code><span class="sig-paren">(</span><em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.log_lines_from_result_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of result lines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>results</strong> – a dict of results (all values must be able to be converted to strings)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="karenina.benchmark.make_scatterplot">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">make_scatterplot</code><span class="sig-paren">(</span><em>x_col, y_col, data, hue, palette=['firebrick'], title='', outfile='./results_scatter.png'</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.make_scatterplot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="karenina.benchmark.write_logfile">
+<code class="descclassname">karenina.benchmark.</code><code class="descname">write_logfile</code><span class="sig-paren">(</span><em>output_fp</em>, <em>log_lines</em><span class="sig-paren">)</span><a class="headerlink" href="#karenina.benchmark.write_logfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write logfile lines to output filepath</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output_fp</strong> – a filepath (as string) for the output log file</li>
+<li><strong>log_lines</strong> – lines of the logfile (linebreaks will be appended)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-karenina.visualization">
 <span id="visualization-py"></span><h1>visualization.py<a class="headerlink" href="#module-karenina.visualization" title="Permalink to this headline">¶</a></h1>
@@ -2268,7 +2380,7 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
 </li>
 <li><a class="reference internal" href="#module-karenina.spatial_ornstein_uhlenbeck">spatial_ornstein_uhlenbeck.py</a></li>
 <li><a class="reference internal" href="#module-karenina.fit_timeseries">fit_timeseries.py</a></li>
-<li><a class="reference internal" href="#fit-timeseries-benchmark-py">fit_timeseries_benchmark.py</a></li>
+<li><a class="reference internal" href="#module-karenina.benchmark">benchmark.py</a></li>
 <li><a class="reference internal" href="#module-karenina.visualization">visualization.py</a></li>
 <li><a class="reference internal" href="#module-karenina.experiment">experiment.py</a></li>
 <li><a class="reference internal" href="#module-karenina.individual">individual.py</a></li>
@@ -2313,7 +2425,7 @@ mean position (mu) over time (dt) at some speed (lambda)</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Jesse Zaneveld.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
     </div>
   </body>
 </html>

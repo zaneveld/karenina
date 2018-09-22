@@ -919,10 +919,10 @@ fit_timeseries.py
 	:show-inheritance:
 	:private-members:
 
-fit_timeseries_benchmark.py
+benchmark.py
 ===========================
 
-.. automodule:: karenina.fit_timeseries_benchmark
+.. automodule:: karenina.benchmark
 	:exclude-members: main, make_option_parser
 	:members:
 	:undoc-members:
